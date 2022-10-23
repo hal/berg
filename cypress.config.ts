@@ -1,17 +1,4 @@
 import { defineConfig } from "cypress";
-import {
-  GenericContainer,
-  StartedTestContainer,
-  Wait
-} from 'testcontainers';
-
-const halContainer = new GenericContainer('quay.io/halconsole/wildfly')
-            .withExposedPorts({container: 9990, host: 9990 })
-            .withStartupTimeout(333000)
-            .withWaitStrategy(Wait.forLogMessage(new RegExp(".*WildFly Full.*started in.*")))
-            .withCmd(["-c", "standalone-insecure.xml"])
-            .withReuse()
-let startedHalContainer: StartedTestContainer;
 
 export default defineConfig({
   videoCompression: false,
@@ -27,15 +14,6 @@ export default defineConfig({
           launchOptions.args.push('--height=1200')
         }
         return launchOptions;
-      })
-      on('task',  {
-        async "start:container"() {
-          startedHalContainer =  await halContainer.start();
-          return startedHalContainer
-        },
-        async "stop:container"() {
-          return await startedHalContainer.stop()
-        }
       })
     },
   },
