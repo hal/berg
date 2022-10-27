@@ -1,9 +1,5 @@
 describe('TESTS: Configuration => System Properties', () => {
 
-    before(() => {
-        cy.re
-    })
-
     beforeEach(() => {
       cy.visit('#system-properties')
     })

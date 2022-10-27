@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["cypress", "node"],                                      /* Specify type package names to be included without being referenced in a source file. */
+    "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
+  }
+}
