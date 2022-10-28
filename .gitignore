@@ -1,7 +1,9 @@
 .vscode
 node_modules
 package-lock.json
-cypress/videos
-cypress/screenshots
+videos
+downloads
+screenshots
 dist
 .DS_Store
+tsconfig.tsbuildinfo

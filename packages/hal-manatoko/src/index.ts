@@ -1,0 +1,1 @@
+export { Manatoko } from './manatoko'

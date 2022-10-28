@@ -1,6 +1,7 @@
 {
   "files": [],
   "references": [
-    { "path": "packages/hal-testsuite" }
+    { "path": "packages/hal-testsuite" },
+    { "path": "packages/hal-manatoko"}
   ]
 }
