@@ -9,7 +9,8 @@
   "author": "spriadka",
   "license": "MIT",
   "dependencies": {
-    "@hal/manatoko" : "^1.0.0"
+    "@hal/manatoko": "^1.0.0",
+    "wait-port": "^1.0.4"
   },
   "devDependencies": {
     "cypress": "^10.10.0"

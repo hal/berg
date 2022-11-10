@@ -41,34 +41,8 @@ export class Manatoko {
     return this._halContainer
   }
 
-  public async startWildflyContainer() : Promise<StartedTestContainer> {
-    this._wildflyContainer = await new GenericContainer('quay.io/halconsole/wildfly:latest')
-      .withNetworkMode(this._network.getName())
-      .withNetworkAliases('wildfly')
-      .withExposedPorts(9990)
-      .withWaitStrategy(Wait.forLogMessage(new RegExp(".*WildFly Full.*started in.*")))
-      .withStartupTimeout(333000)
-      .withCmd(["-c", "standalone-insecure.xml"]).start()
-    let managementApi = "http://localhost:" + this._wildflyContainer.getMappedPort(9990) + "/management"
-    await axios.post(managementApi, {
-      operation: 'list-add',
-      address: ['core-service', 'management', 'management-interface', 'http-interface'],
-      name: 'allowed-origins',
-      value: 'http://localhost:' + this._halContainer.getMappedPort(9090)
-    })
-    await axios.post(managementApi, {
-      operation: 'reload',
-    })
-    return this._wildflyContainer
-  }
-
-  public getBaseUrl() : string {
-    return 'http://localhost:' + this._halContainer.getMappedPort(9090) + "?connect=http://localhost:" + this._wildflyContainer.getMappedPort(9990)
-  }
-
   public async stop() {
     await this._halContainer.stop()
-    await this._wildflyContainer.stop()
     await this._network.stop()
   }
 }

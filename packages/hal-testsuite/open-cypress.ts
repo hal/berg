@@ -4,11 +4,14 @@ import { Manatoko } from '@hal/manatoko'
 
 ( async () => {
     let manatoko = await Manatoko.getInstance()
-    await manatoko.startWildflyContainer()
     await cypress.open({
+      env: {
+        NETWORK_NAME: manatoko.getNetwork().getName(),
+        HAL_CONTAINER_PORT: manatoko.getHalContainer().getMappedPort(9090)
+      },
       config: {
         e2e: {
-          baseUrl: manatoko.getBaseUrl()
+          baseUrl: 'http://localhost:' + manatoko.getHalContainer().getMappedPort(9090)
         }
       }
     })
