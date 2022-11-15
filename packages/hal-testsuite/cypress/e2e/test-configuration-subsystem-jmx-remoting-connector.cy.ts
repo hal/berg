@@ -1,14 +1,13 @@
-describe('TESTS: Configuration => Subsystems => JMX => Remoting Connector', () => {
-  let containerEndpoint: (string | unknown)
+describe('TESTS: Configuration => Subsystem => JMX => Remoting Connector', () => {
+  let managementEndpoint: (string | unknown)
+  const configurationFormId = 'jmx-remoting-connector-form'
+  const address = ['subsystem', 'jmx', 'remoting-connector', 'jmx']
+  const useManagementEndpoint = 'use-management-endpoint'
 
   before(() => {
     cy.task('start:wildfly:container').then((result) => {
-      containerEndpoint = result
+      managementEndpoint = result
     })
-  })
-
-  beforeEach(() => {
-    cy.visit('?connect=' + containerEndpoint + '#jmx')
   })
 
   after(() => {
@@ -16,24 +15,25 @@ describe('TESTS: Configuration => Subsystems => JMX => Remoting Connector', () =
   })
 
   it('Toggle use-management-endpoint',() => {
-    const configurationFormId = 'jmx-remoting-connector-form'
-    const useManagementEndpoint = 'use-management-endpoint'
     let value: boolean = false
     cy.task('execute:cli', {
-      managementApi: containerEndpoint + '/management',
+      managementApi: managementEndpoint + '/management',
       operation: 'read-attribute',
-      address: ['subsystem', 'jmx', 'remoting-connector', 'jmx'],
+      address: address,
       name: useManagementEndpoint
     }).then((result: any) => {
       cy.log(result)
       value = result.result
+      cy.navigateTo(managementEndpoint, 'jmx')
       cy.get('#jmx-remoting-connector-item').click()
+      cy.editForm(configurationFormId)
       cy.flip(configurationFormId, useManagementEndpoint, value)
+      cy.saveForm(configurationFormId)
       cy.verifySuccess()
       cy.task('execute:cli', {
-        managementApi: containerEndpoint + '/management',
+        managementApi: managementEndpoint + '/management',
         operation: 'read-attribute',
-        address: ['subsystem', 'jmx', 'remoting-connector', 'jmx'],
+        address: address,
         name: useManagementEndpoint
       }).then((result: any) => {
         cy.log(result)
@@ -41,6 +41,12 @@ describe('TESTS: Configuration => Subsystems => JMX => Remoting Connector', () =
         expect(result.result).to.equal(!value)
       })
       })
+  })
+
+  it('Reset Remoting Connector', () => {
+    cy.navigateTo(managementEndpoint, 'jmx')
+    cy.get('#jmx-remoting-connector-item').click()
+    cy.resetForm(configurationFormId, managementEndpoint + '/management', address)
   })
 
 })

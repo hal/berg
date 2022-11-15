@@ -1,4 +1,7 @@
 describe('TESTS: Configuration => System Properties', () => {
+
+    const configurationFormId = 'system-property-form'
+
     const systemPropertyToCreate = {
       name: 'toCreate',
       value: 'creating-values'
@@ -15,11 +18,11 @@ describe('TESTS: Configuration => System Properties', () => {
       name: 'toUpdate',
       value: 'updating-values'
     }
-    let containerEndpoint: (string | unknown)
+    let managementEndpoint: (string | unknown)
 
     before(() => {
       cy.task('start:wildfly:container').then((result) => {
-        containerEndpoint = result
+        managementEndpoint = result
         return Promise.all([
             cy.task('execute:cli', {
               managementApi: result + '/management',
@@ -41,7 +44,7 @@ describe('TESTS: Configuration => System Properties', () => {
     })
 
     beforeEach(() => {
-      cy.visit('?connect=' + containerEndpoint + '#system-properties')
+      cy.navigateTo(managementEndpoint, 'system-properties')
     })
 
     after(() => {
@@ -49,13 +52,24 @@ describe('TESTS: Configuration => System Properties', () => {
     })
   
   
-    it('create', () => {
+    it('Create System Property', () => {
       cy.get('button.btn.btn-default > span:contains("Add")').click()
-        .get('input#system-property-add-name-editing').type(systemPropertyToCreate.name, {force: true})
-        .get('input#system-property-add-value-editing').type(systemPropertyToCreate.value, {force: true})
-        .get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")').click()
-        .task('execute:cli', {
-          managementApi: containerEndpoint + '/management',
+      cy.get('input#system-property-add-name-editing')
+          .click()
+          .clear()
+          .type(systemPropertyToCreate.name)
+          .should('have.value', systemPropertyToCreate.name)
+          .trigger('change')
+      cy.get('input#system-property-add-value-editing')
+          .click()
+          .clear()
+          .type(systemPropertyToCreate.value)
+          .should('have.value', systemPropertyToCreate.value)
+          .trigger('change')
+      cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")').click()
+      cy.verifySuccess()
+      cy.task('execute:cli', {
+          managementApi: managementEndpoint + '/management',
           operation: 'validate-address',
           value: ['system-property', systemPropertyToCreate.name],
         }).then((result: any) => {
@@ -65,9 +79,9 @@ describe('TESTS: Configuration => System Properties', () => {
       })
     })
 
-    it('delete', () => {
+    it('Delete System Property', () => {
       cy.task('execute:cli', {
-        managementApi: containerEndpoint + '/management',
+        managementApi: managementEndpoint + '/management',
         operation: 'validate-address',
         value: ['system-property', systemPropertyToDelete.name],
       }).then((result: any) => {
@@ -75,11 +89,12 @@ describe('TESTS: Configuration => System Properties', () => {
         expect(result.outcome).to.equal('success')
         expect(result.result.valid).to.be.true
       })
-      .get('table#system-property-table td:contains("' + systemPropertyToDelete.name + '")').click()
-      .get('button.btn.btn-default > span:contains("Remove")').click()
-      .get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")').click()
-      .task('execute:cli', {
-        managementApi: containerEndpoint + '/management',
+      cy.get('table#system-property-table td:contains("' + systemPropertyToDelete.name + '")').click()
+      cy.get('button.btn.btn-default > span:contains("Remove")').click()
+      cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")').click()
+      cy.verifySuccess()
+      cy.task('execute:cli', {
+        managementApi: managementEndpoint + '/management',
         operation: 'validate-address',
         value: ['system-property', systemPropertyToDelete.name],
       }).then((result: any) => {
@@ -89,18 +104,24 @@ describe('TESTS: Configuration => System Properties', () => {
       })
     })
 
-    it('read', () => {
+    it('Read System Property', () => {
       cy.get('table#system-property-table td:contains("' + systemPropertyToRead.name + '")').click()
-      .get('table#system-property-table tr.selected').children('td').should('include.text', systemPropertyToRead.value)
+      cy.get('table#system-property-table tr.selected').children('td').should('include.text', systemPropertyToRead.value)
     })
 
-    it('update', () => {
+    it('Update System Property', () => {
       cy.get('table#system-property-table td:contains("' + systemPropertyToUpdate.name + '")').click()
-      .get('section#system-property-form a.clickable[data-operation="edit"]').click()
-      .get('input#system-property-form-value-editing').clear().type('newValue', {force: true})
-      .get('button.btn.btn-hal.btn-primary:contains("Save")').click()
-      .task('execute:cli', {
-        managementApi: containerEndpoint + '/management',
+      cy.editForm(configurationFormId)
+      cy.get('input#system-property-form-value-editing')
+        .click()
+        .clear()
+        .type('newValue')
+        .should('have.value', 'newValue')
+        .trigger('change')
+      cy.saveForm(configurationFormId)
+      cy.verifySuccess()
+      cy.task('execute:cli', {
+        managementApi: managementEndpoint + '/management',
         operation: 'read-attribute',
         address: ['system-property', systemPropertyToUpdate.name],
         name: 'value'

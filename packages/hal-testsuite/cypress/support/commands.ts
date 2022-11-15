@@ -36,10 +36,34 @@
 //   }
 // 
 
-Cypress.Commands.add('flip', (configurationFormId, attributeName, value) => {
+Cypress.Commands.add('navigateTo', (managementEndpoint, token) => {
+  cy.intercept('POST', 'https://www.google-analytics.com/j/collect*').as('loadPage')
+  cy.visit('?connect=' + managementEndpoint + '#' + token)
+  cy.wait('@loadPage').its('response.statusCode').should('eq', 200)
+  cy.get('#hal-root-container').should('be.visible')
+})
+
+Cypress.Commands.add('navigateToGenericSubsystemPage', (managementEndpoint, address) => {
+  const rootSeparator = '%255C0'
+  const subsystemSeparator = '%255C2'
+  cy.intercept('POST', 'https://www.google-analytics.com/j/collect*').as('loadPage')
+  cy.visit('?connect=' + managementEndpoint + '#generic-subsystem;address=' + rootSeparator + address.join(subsystemSeparator))
+  cy.wait('@loadPage').its('response.statusCode').should('eq', 200)
+  cy.get('#hal-root-container').should('be.visible')
+})
+
+Cypress.Commands.add('editForm', (configurationFormId) => {
   const editButton = '#' + configurationFormId + ' a.clickable[data-operation="edit"'
-  const switchSelector = '#' + configurationFormId + '-' + attributeName + '-editing'
   cy.get(editButton).click()
+})
+
+Cypress.Commands.add('saveForm', (configurationFormId) => {
+  const saveButton = '#' + configurationFormId + '-editing button.btn.btn-hal.btn-primary:contains("Save")'
+  cy.get(saveButton).click()
+})
+
+Cypress.Commands.add('flip', (configurationFormId, attributeName, value) => {
+  const switchSelector = '#' + configurationFormId + '-' + attributeName + '-editing'
   cy.get(switchSelector).wait(1000).should(($input) => {
     if (value) {
       expect($input).to.be.checked
@@ -53,7 +77,38 @@ Cypress.Commands.add('flip', (configurationFormId, attributeName, value) => {
       expect($input).to.be.checked
     }
   })
-  cy.get('#' + configurationFormId + '-editing button.btn.btn-hal.btn-primary:contains("Save")').click()
+})
+
+Cypress.Commands.add('resetForm', (configurationFormId, managementApi, address) => {
+  const resetButton = '#' + configurationFormId + ' a.clickable[data-operation="reset"'
+  cy.get(resetButton).click()
+  cy.get('.modal-footer .btn-primary').click({force: true})
+  cy.verifySuccess()
+  cy.task('execute:cli', {
+    managementApi: managementApi,
+    operation: 'read-resource-description',
+    address: address
+  }).then((result: any) => {
+    expect(result.outcome).to.equal('success')
+    let attributes = result.result.attributes
+    let attributesWithDefaultValues = Object.keys(attributes).filter((key: string) => attributes[key].hasOwnProperty('default')).map((key) => {
+      let obj: {[index: string]:any} = {}
+      obj['name'] = key
+      obj['defaultValue'] = attributes[key].default
+      return obj
+    })
+    attributesWithDefaultValues.forEach(attributeWithDefaultValue => {
+      cy.task('execute:cli', {
+        managementApi: managementApi,
+        operation: 'read-attribute',
+        address: address,
+        name: attributeWithDefaultValue.name
+      }).then((result:any) => {
+        expect(result.outcome).to.equal('success')
+        expect(result.result).to.equal(attributeWithDefaultValue.defaultValue)
+      })
+    })
+  })
 })
 
 Cypress.Commands.add('verifySuccess', () => {
@@ -65,6 +120,11 @@ declare global {
   namespace Cypress {
     interface Chainable {
       flip(configurationFormId: string, attributeName: string, value: boolean): Chainable<void>
+      editForm(configurationFormId: string): Chainable<void>
+      saveForm(configurationFormId: string) : Chainable<void>
+      resetForm(configurationFormId: string, managementApi: string, address: string[]): Chainable<void>
+      navigateTo(managementEndpoint: any, token: string) : Chainable<void>
+      navigateToGenericSubsystemPage(managementEndpoint: any, address: string[]) : Chainable<void>
       verifySuccess(): Chainable<void>
     }
   }

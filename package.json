@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile" : "tsc",
+    "compile": "tsc",
     "test": "ts-mocha --timeout 0 test/*.ts"
   },
   "workspaces": [
