@@ -1,6 +1,8 @@
 describe('TESTS: Configuration => Subsystem => Batch => Thread Pool', () => {
 
   const configurationFormId = 'batch-thread-pool-form'
+  const threadFactory = 'thread-factory'
+  const maxThreads = 'max-threads'
 
   const threadPools =  {
     create: {
@@ -99,12 +101,7 @@ describe('TESTS: Configuration => Subsystem => Batch => Thread Pool', () => {
     cy.get('#batch-thread-pool-item').click()
     cy.get('table#batch-thread-pool-table td:contains("' + threadPools.edit.name + '")').click()
     cy.editForm(configurationFormId)
-    cy.get('input#batch-thread-pool-form-max-threads-editing')
-        .click()
-        .clear()
-        .type('5')
-        .should('have.value', '5')
-        .trigger('change')
+    cy.text(configurationFormId, maxThreads, '5')
     cy.saveForm(configurationFormId)
     cy.verifySuccess()
     cy.task('execute:cli', {
@@ -123,11 +120,7 @@ describe('TESTS: Configuration => Subsystem => Batch => Thread Pool', () => {
     cy.get('#batch-thread-pool-item').click()
     cy.get('table#batch-thread-pool-table td:contains("' + threadPools.edit.name + '")').click()
     cy.editForm(configurationFormId)
-    cy.get('input#batch-thread-pool-form-thread-factory-editing')
-        .click()
-        .type(threadFactoryEdit)
-        .should('have.value', threadFactoryEdit)
-        .trigger('change')
+    cy.text(configurationFormId, threadFactory, threadFactoryEdit)
     cy.saveForm(configurationFormId)
     cy.verifySuccess()
     cy.task('execute:cli', {

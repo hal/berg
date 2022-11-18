@@ -59,12 +59,15 @@ Cypress.Commands.add('editForm', (configurationFormId) => {
 
 Cypress.Commands.add('saveForm', (configurationFormId) => {
   const saveButton = '#' + configurationFormId + '-editing button.btn.btn-hal.btn-primary:contains("Save")'
-  cy.get(saveButton).click()
+  cy.get(saveButton).scrollIntoView().click()
 })
 
+Cypress.Commands.add('formInput', (configurationFormId, attributeName) => {
+  return cy.get('#' + configurationFormId + '-' + attributeName + '-editing')
+}) 
+
 Cypress.Commands.add('flip', (configurationFormId, attributeName, value) => {
-  const switchSelector = '#' + configurationFormId + '-' + attributeName + '-editing'
-  cy.get(switchSelector).wait(1000).should(($input) => {
+  cy.formInput(configurationFormId, attributeName).wait(1000).should(($input) => {
     if (value) {
       expect($input).to.be.checked
     } else {
@@ -111,6 +114,18 @@ Cypress.Commands.add('resetForm', (configurationFormId, managementApi, address) 
   })
 })
 
+Cypress.Commands.add('text', (configurationFormId, attributeName, value) => {
+  cy.formInput(configurationFormId, attributeName).click().then(($textInput) => {
+    if ($textInput.val()) {
+      cy.formInput(configurationFormId, attributeName).clear()
+    }
+  }).type(value).should('have.value', value).trigger('change')
+})
+
+Cypress.Commands.add('clearAttribute', (configurationFormId, attributeName) => {
+  cy.formInput(configurationFormId, attributeName).clear().trigger('change')
+})
+
 Cypress.Commands.add('verifySuccess', () => {
   cy.get('.toast-notifications-list-pf .alert-success').should('be.visible')
 })
@@ -120,7 +135,10 @@ declare global {
   namespace Cypress {
     interface Chainable {
       flip(configurationFormId: string, attributeName: string, value: boolean): Chainable<void>
+      text(configurationFormId: string, attributeName: string, value: string) : Chainable<void>
+      clearAttribute(configurationFormId: string, attributeName: string) : Chainable<void>
       editForm(configurationFormId: string): Chainable<void>
+      formInput(configurationFormId: string, attributeName: string) : Chainable<JQuery<HTMLElement>>
       saveForm(configurationFormId: string) : Chainable<void>
       resetForm(configurationFormId: string, managementApi: string, address: string[]): Chainable<void>
       navigateTo(managementEndpoint: any, token: string) : Chainable<void>

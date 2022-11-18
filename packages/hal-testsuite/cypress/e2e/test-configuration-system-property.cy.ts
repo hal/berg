@@ -2,6 +2,8 @@ describe('TESTS: Configuration => System Properties', () => {
 
     const configurationFormId = 'system-property-form'
 
+    const value = 'value'
+
     const systemPropertyToCreate = {
       name: 'toCreate',
       value: 'creating-values'
@@ -112,12 +114,7 @@ describe('TESTS: Configuration => System Properties', () => {
     it('Update System Property', () => {
       cy.get('table#system-property-table td:contains("' + systemPropertyToUpdate.name + '")').click()
       cy.editForm(configurationFormId)
-      cy.get('input#system-property-form-value-editing')
-        .click()
-        .clear()
-        .type('newValue')
-        .should('have.value', 'newValue')
-        .trigger('change')
+      cy.text(configurationFormId, value, 'newValue')
       cy.saveForm(configurationFormId)
       cy.verifySuccess()
       cy.task('execute:cli', {

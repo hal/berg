@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
-    "test": "ts-mocha --timeout 0 test/*.ts"
+    "compile": "npx tsc --build --clean && tsc --build",
+    "pretest": "npm run compile",
+    "test": "npm run run-e2e-tests --prefix packages/hal-testsuite",
+    "predevelop" : "npm run compile",
+    "develop" : "npm run develop --prefix packages/hal-testsuite"
   },
   "workspaces": [
     "./packages/*"

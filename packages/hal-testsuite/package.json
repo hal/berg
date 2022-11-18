@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "spriadka",
   "license": "MIT",
   "dependencies": {
     "@hal/manatoko": "^1.0.0",
     "wait-port": "^1.0.4"
+  },
+  "scripts": {
+    "run-e2e-tests": "node dist/run-e2e-tests.js",
+    "develop" : "node dist/open-cypress.js"
   },
   "devDependencies": {
     "cypress": "^10.10.0"

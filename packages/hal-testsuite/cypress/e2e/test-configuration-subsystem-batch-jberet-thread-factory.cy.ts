@@ -1,6 +1,9 @@
 describe('TESTS: Configuration => Subsystem => Batch => Thread Factory', () => {
 
   const configurationFormId = 'batch-thread-factory-form'
+  const priority = 'priority'
+  const groupName = 'group-name'
+  const threadNamePattern = 'thread-name-pattern'
 
   const threadFactories =  {
     create: {
@@ -82,18 +85,14 @@ describe('TESTS: Configuration => Subsystem => Batch => Thread Factory', () => {
     cy.get('#batch-thread-factory-item').click()
     cy.get('table#batch-thread-factory-table td:contains("' + threadFactories.edit.name + '")').click()
     cy.editForm(configurationFormId)
-    cy.get('input#batch-thread-factory-form-group-name-editing')
-        .click()
-        .type('newValue')
-        .should('have.value', 'newValue')
-        .trigger('change')
+    cy.text(configurationFormId, groupName, 'newValue')
     cy.saveForm(configurationFormId)
     cy.verifySuccess()
     cy.task('execute:cli', {
       managementApi: managementEndpoint + '/management',
       operation: 'read-attribute',
       address: ['subsystem', 'batch-jberet', 'thread-factory', threadFactories.edit.name],
-      name: 'group-name'
+      name: groupName
     }).then((result: any) => {
       expect(result.outcome).to.equal('success')
       expect(result.result).to.be.equal('newValue')
@@ -106,18 +105,14 @@ describe('TESTS: Configuration => Subsystem => Batch => Thread Factory', () => {
     cy.get('#batch-thread-factory-item').click()
     cy.get('table#batch-thread-factory-table td:contains("' + threadFactories.edit.name + '")').click()
     cy.editForm(configurationFormId)
-    cy.get('input#batch-thread-factory-form-priority-editing')
-        .click()
-        .type('10')
-        .should('have.value', '10')
-        .trigger('change')
+    cy.text(configurationFormId, priority, '10')
     cy.saveForm(configurationFormId)
     cy.verifySuccess()
     cy.task('execute:cli', {
       managementApi: managementEndpoint + '/management',
       operation: 'read-attribute',
       address: ['subsystem', 'batch-jberet', 'thread-factory', threadFactories.edit.name],
-      name: 'priority'
+      name: priority
     }).then((result: any) => {
       expect(result.outcome).to.equal('success')
       expect(result.result).to.be.equal(10)
@@ -129,18 +124,14 @@ describe('TESTS: Configuration => Subsystem => Batch => Thread Factory', () => {
     cy.get('#batch-thread-factory-item').click()
     cy.get('table#batch-thread-factory-table td:contains("' + threadFactories.edit.name + '")').click()
     cy.editForm(configurationFormId)
-    cy.get('input#batch-thread-factory-form-thread-name-pattern-editing')
-        .click()
-        .type('newValue')
-        .should('have.value', 'newValue')
-        .trigger('change')
+    cy.text(configurationFormId, threadNamePattern, 'newValue')
     cy.saveForm(configurationFormId)
     cy.verifySuccess()
     cy.task('execute:cli', {
       managementApi: managementEndpoint + '/management',
       operation: 'read-attribute',
       address: ['subsystem', 'batch-jberet', 'thread-factory', threadFactories.edit.name],
-      name: 'thread-name-pattern'
+      name: threadNamePattern
     }).then((result: any) => {
       expect(result.outcome).to.equal('success')
       expect(result.result).to.be.equal('newValue')

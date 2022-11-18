@@ -1,6 +1,7 @@
 describe('TESTS: Configuration => Subsystem => Batch => Configuration', () => {
   const configurationFormId = 'batch-configuration-form'
   const restartJobsOnResume = 'restart-jobs-on-resume'
+  const defaultJobRepository = 'default-job-repository'
   let managementEndpoint: (string | unknown)
 
   before(() => {
@@ -54,12 +55,7 @@ describe('TESTS: Configuration => Subsystem => Batch => Configuration', () => {
     cy.navigateTo(managementEndpoint, 'batch-jberet-configuration')
     cy.get('#batch-configuration-item').click()
     cy.editForm(configurationFormId)
-    cy.get('#batch-configuration-form-default-job-repository-editing')
-      .click()
-      .clear()
-      .type(jobRepository)
-      .should('have.value', jobRepository)
-      .trigger('change')
+    cy.text(configurationFormId, defaultJobRepository, jobRepository)
     cy.saveForm(configurationFormId)
     cy.verifySuccess()
     cy.task('execute:cli', {
