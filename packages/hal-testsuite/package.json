@@ -11,9 +11,9 @@
   },
   "scripts": {
     "run-e2e-tests": "node dist/run-e2e-tests.js",
-    "develop" : "node dist/open-cypress.js"
+    "develop": "node dist/open-cypress.js"
   },
   "devDependencies": {
-    "cypress": "^10.10.0"
+    "cypress": "^11.1.0"
   }
 }
