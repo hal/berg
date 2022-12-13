@@ -14,7 +14,7 @@ describe('TESTS: Configuration => Subsystem => Batch => JDBC', () => {
   let managementEndpoint: (string | unknown)
 
   before(() => {
-    cy.task('start:wildfly:container').then((result) => {
+    cy.startWildflyContainer().then((result) => {
       managementEndpoint = result
     })
   })

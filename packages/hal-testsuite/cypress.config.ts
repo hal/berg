@@ -6,18 +6,23 @@ export default defineConfig({
   videoCompression: false,
   e2e: {
     setupNodeEvents(on, config) {
-      let startedContainers: StartedTestContainer[] = []
+      let startedContainers: Map<string, StartedTestContainer> = new Map<string, StartedTestContainer>()
       on('task', {
-        'start:wildfly:container': () => {
+        'start:wildfly:container': ({name}) => {
           return new Promise((resolve, reject) => {
             new GenericContainer('quay.io/halconsole/wildfly:latest')
+              .withName(name)
               .withNetworkMode(config.env.NETWORK_NAME)
               .withNetworkAliases('wildfly')
               .withExposedPorts(9990)
-              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*WildFly Full.*started in.*")))
+              .withBindMounts([{
+                source: __dirname + '/cypress/fixtures',
+                target: '/home/fixtures'
+              }])
+              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")))
               .withStartupTimeout(333000)
-              .withCmd(["-c", "standalone-insecure.xml"]).start().then((wildflyContainer) => {
-                startedContainers.push(wildflyContainer)
+              .withCommand(["-c", "standalone-insecure.xml"]).start().then((wildflyContainer) => {
+                startedContainers.set(name, wildflyContainer)
                 let managementApi = "http://localhost:" + wildflyContainer.getMappedPort(9990) + "/management"
                 return axios.post(managementApi, {
                   operation: 'list-add',
@@ -25,15 +30,11 @@ export default defineConfig({
                   name: 'allowed-origins',
                   value: 'http://localhost:' + config.env.HAL_CONTAINER_PORT
                 }).then((response) => {
-                  console.log(response.data)
-                  console.log('Added http://localhost:' + config.env.HAL_CONTAINER_PORT + ' as allowed-origin')
                   return axios.post(managementApi, {
                     operation: 'reload',
                   })
                 })
                 .then((response) => {
-                  console.log('Reloading configuration')
-                  console.log(response.data)
                   let startTime = new Date().getTime()
                   let interval = setInterval(() => {
                     if (new Date().getTime() - startTime > 10000) {
@@ -50,9 +51,94 @@ export default defineConfig({
                         }
                     }).catch((err) => {})}, 500)
                 })
-            })
+            }).catch(err => reject(err))
           })
-          
+        },
+        'start:postgres:container': ({name, environmentProperties}) => {
+          let postgreContainerBuilder = new GenericContainer('postgres')
+              .withName(name)
+              .withNetworkAliases(name)
+              .withNetworkMode(config.env.NETWORK_NAME)
+              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*PostgreSQL init process complete; ready for start up.*")))
+              .withExposedPorts(5432)
+              .withEnvironment(environmentProperties)
+          return new Promise((resolve,reject) => {
+            postgreContainerBuilder.start().then((postgreContainer) => {
+                  console.log(postgreContainer)
+                  startedContainers.set('postgres', postgreContainer)
+                  resolve(postgreContainer)
+              }).catch(err => {
+                console.log(err)
+                reject(err)
+              })
+          })
+        },
+        'start:mysql:container': ({name, environmentProperties}) => {
+          let mysqlContainerBuilder = new GenericContainer('mysql')
+              .withName(name)
+              .withNetworkAliases(name)
+              .withExposedPorts(3306)
+              .withEnvironment(environmentProperties)
+              .withNetworkMode(config.env.NETWORK_NAME)
+              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*MySQL init process done. Ready for start up.*")))
+          console.log(mysqlContainerBuilder)
+          return new Promise((resolve,reject) => {
+            mysqlContainerBuilder.start().then((mysqlContainer) => {
+                  console.log(mysqlContainer)
+                  startedContainers.set('mysql', mysqlContainer)
+                  resolve(mysqlContainer)
+              }).catch(err => {
+                console.log(err)
+                reject(err)
+              })
+          })
+        },
+        'start:mariadb:container': ({name, environmentProperties}) => {
+          let mariadbContainerBuilder = new GenericContainer('mariadb')
+              .withName(name)
+              .withNetworkAliases(name)
+              .withExposedPorts(3306)
+              .withNetworkMode(config.env.NETWORK_NAME)
+              .withEnvironment(environmentProperties)
+              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*MariaDB init process done. Ready for start up.*")))
+          return new Promise((resolve,reject) => {
+            mariadbContainerBuilder.start().then((mariadbContainer) => {
+                  console.log(mariadbContainer)
+                  startedContainers.set('mariadb', mariadbContainer)
+                  resolve(mariadbContainer)
+              }).catch(err => {
+                console.log(err)
+                reject(err)
+              })
+          })
+        },
+        'start:sqlserver:container': ({name, environmentProperties}) => {
+          let sqlserverContainerBuilder = new GenericContainer('mcr.microsoft.com/mssql/server:2022-latest')
+            .withName(name)
+            .withNetworkAliases(name)
+            .withNetworkMode(config.env.NETWORK_NAME)
+            .withExposedPorts(1433)
+            .withEnvironment(environmentProperties)
+            .withWaitStrategy(Wait.forLogMessage(new RegExp(".*SQL Server is now ready for client connections.*")))
+          return new Promise((resolve,reject) => {
+              sqlserverContainerBuilder.start().then((sqlServerContainer) => {
+                  startedContainers.set('sqlserver', sqlServerContainer)
+                  resolve(sqlServerContainer)
+              }).catch(err => {
+                console.log(err)
+                reject(err)
+              })
+          })
+        },
+        'execute:in:container': ({containerName, command}) => {
+          return new Promise((resolve, reject) => {
+            let containerToExec = startedContainers.get(containerName)
+            containerToExec?.exec(['/bin/bash', '-c', '$JBOSS_HOME/bin/jboss-cli.sh -c --command=' + command])
+              .then(value => {
+                console.log(value.output)
+                resolve(value.output)
+              }).catch(err => reject(err))
+          })
         },
         'execute:cli': ({ managementApi, operation, address, ...args }) => {
           return new Promise((resolve, reject) => {
@@ -70,14 +156,15 @@ export default defineConfig({
         },
         'stop:containers': () => {
           let promises: Promise<StoppedTestContainer>[] = []
-          startedContainers.forEach((container) => {
+          startedContainers.forEach((container, key) => {
+            console.log("Stopping container for test " + key)
+            startedContainers.delete(key)
             promises.push(container.stop())
-            startedContainers.pop()
           })
-          console.log("Started containers length: ", startedContainers.length)
           return Promise.all(promises)
         }
       })
+      return config
     },
   },
 });

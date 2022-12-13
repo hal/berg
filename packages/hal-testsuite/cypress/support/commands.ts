@@ -73,7 +73,9 @@ Cypress.Commands.add('flip', (configurationFormId, attributeName, value) => {
     } else {
       expect($input).to.not.be.checked
     }
-  }).invoke('click').wait(1000).should(($input) => {
+  })
+  cy.get('div[data-form-item-group="' + configurationFormId + '-' + attributeName + '-editing"] .bootstrap-switch-label').click().wait(1000)
+  cy.formInput(configurationFormId, attributeName).should(($input) => {
     if (value) {
       expect($input).to.not.be.checked
     } else {
@@ -115,7 +117,7 @@ Cypress.Commands.add('resetForm', (configurationFormId, managementApi, address) 
 })
 
 Cypress.Commands.add('text', (configurationFormId, attributeName, value) => {
-  cy.formInput(configurationFormId, attributeName).click().then(($textInput) => {
+  cy.formInput(configurationFormId, attributeName).click({force: true}).then(($textInput) => {
     if ($textInput.val()) {
       cy.formInput(configurationFormId, attributeName).clear()
     }
@@ -128,6 +130,14 @@ Cypress.Commands.add('clearAttribute', (configurationFormId, attributeName) => {
 
 Cypress.Commands.add('verifySuccess', () => {
   cy.get('.toast-notifications-list-pf .alert-success').should('be.visible')
+})
+
+Cypress.Commands.add('startWildflyContainer', () => {
+  return cy.task('start:wildfly:container', {name: Cypress.spec.name.replace(/\.cy\.ts/g,'').replace(/-/g,'_') })
+})
+
+Cypress.Commands.add('executeInWildflyContainer', (command) => {
+  return cy.task('execute:in:container', {containerName: Cypress.spec.name.replace(/\.cy\.ts/g,'').replace(/-/g,'_'), command: command})
 })
 
 export {};
@@ -144,6 +154,8 @@ declare global {
       navigateTo(managementEndpoint: any, token: string) : Chainable<void>
       navigateToGenericSubsystemPage(managementEndpoint: any, address: string[]) : Chainable<void>
       verifySuccess(): Chainable<void>
+      startWildflyContainer() : Chainable<unknown>
+      executeInWildflyContainer(command: string) : Chainable<unknown>
     }
   }
 }

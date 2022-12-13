@@ -5,7 +5,7 @@ describe('TESTS: Configuration => Subsystem => JMX => Configuration', () => {
   let managementEndpoint: (string | unknown)
 
   before(() => {
-    cy.task('start:wildfly:container').then((result) => {
+    cy.startWildflyContainer().then((result) => {
       managementEndpoint = result
     })
   })

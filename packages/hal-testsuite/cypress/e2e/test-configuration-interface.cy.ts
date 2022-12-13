@@ -16,7 +16,7 @@ describe('TESTS: Configuration => Interface', () => {
   let managementEndpoint: (string | any)
 
   before(() => {
-    cy.task('start:wildfly:container').then((result) => {
+    cy.startWildflyContainer().then((result) => {
       managementEndpoint = result
           cy.task('execute:cli', {
             managementApi: result + '/management',

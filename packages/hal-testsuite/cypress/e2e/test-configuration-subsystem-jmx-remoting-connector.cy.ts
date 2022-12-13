@@ -5,7 +5,7 @@ describe('TESTS: Configuration => Subsystem => JMX => Remoting Connector', () =>
   const useManagementEndpoint = 'use-management-endpoint'
 
   before(() => {
-    cy.task('start:wildfly:container').then((result) => {
+    cy.startWildflyContainer().then((result) => {
       managementEndpoint = result
     })
   })

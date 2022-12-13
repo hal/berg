@@ -1,7 +1,8 @@
 {
   "files": [],
   "references": [
-    { "path": "packages/hal-testsuite" },
-    { "path": "packages/hal-manatoko"}
+    { "path": "packages/hal-commands"},
+    { "path": "packages/hal-manatoko"},
+    { "path": "packages/hal-testsuite" }
   ]
 }

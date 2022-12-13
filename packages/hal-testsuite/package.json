@@ -6,6 +6,7 @@
   "author": "spriadka",
   "license": "MIT",
   "dependencies": {
+    "@hal/commands": "^1.0.0",
     "@hal/manatoko": "^1.0.0",
     "wait-port": "^1.0.4"
   },
@@ -14,6 +15,6 @@
     "develop": "node dist/open-cypress.js"
   },
   "devDependencies": {
-    "cypress": "^11.1.0"
+    "cypress": "^12.1.0"
   }
 }

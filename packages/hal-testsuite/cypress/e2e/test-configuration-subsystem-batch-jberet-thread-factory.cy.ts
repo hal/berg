@@ -20,7 +20,7 @@ describe('TESTS: Configuration => Subsystem => Batch => Thread Factory', () => {
   let managementEndpoint: (string | unknown)
 
   before(() => {
-    cy.task('start:wildfly:container').then((result) => {
+    cy.startWildflyContainer().then((result) => {
       managementEndpoint = result
       cy.task('execute:cli', {
         managementApi: managementEndpoint + '/management',

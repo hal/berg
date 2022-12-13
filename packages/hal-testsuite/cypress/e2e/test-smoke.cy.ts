@@ -1,65 +1,8 @@
-describe('TESTS: Homepage navigation', () => {
-
-  let managementEndpoint: (string | unknown)
-  
-  before(() => {
-    cy.task('start:wildfly:container').then((result) => {
-      managementEndpoint = result
-    })
-  })
-
-  after(() => {
-    cy.task('stop:containers')
-  })
-
-  beforeEach(() => {
-    cy.navigateTo(managementEndpoint, 'home')
-  })
-
-
-  it('Should display About info', () => {
-    cy.get('a.tool.clickable > span.pficon').click({force: true})
-    cy.get('div.product-versions-pf').contains('Product Version').siblings('dd').should('include.text', '26.1.0.Final')
-  })
-
-  it('Should load Deployments page', () => {
-    cy.get('#tlc-deployments').click()
-    cy.get('#hal-finder-preview').should('be.visible')
-    cy.url().should((url) => {
-        expect(url).to.contain('#deployments')
-    })
-  })
-
-  
-  it('Should load Configuration page', () => {
-    cy.get('#tlc-configuration').click()
-    cy.get('#hal-finder-preview').should('be.visible')
-    cy.url().should((url) => {
-      expect(url).to.contain('#configuration')
-  })
-  })
-
-  it('Should load Runtime page', () => {
-    cy.get('#tlc-runtime').click()
-    cy.get('#hal-finder-preview').should('be.visible')
-    cy.url().should((url) => {
-      expect(url).to.contain('#runtime')
-  })
-  })
-
-  it('Should load Patching page', () => {
-    cy.get('#tlc-patching').click()
-    cy.get('#hal-finder-preview').should('be.visible')
-    cy.url().should((url) => {
-      expect(url).to.contain('#patching')
-  })
-  })
-
-  it('Should load Access Control page', () => {
-    cy.get('#tlc-access-control').click()
-    cy.get('#hal-finder-preview').should('be.visible')
-    cy.url().should((url) => {
-      expect(url).to.contain('#access-control')
-  })
+describe('TESTS: Smoke', () => {
+  it ('Contains management interfaces table', () => {
+    cy.visit('')
+    cy.get('#hal-modal').should('be.visible')
+    cy.get('#endpoint-select_wrapper').should('be.visible')
+    cy.get('button.btn.btn-default[aria-controls="endpoint-select"] span:contains("Add")').should('be.visible')
   })
 })

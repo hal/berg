@@ -2,7 +2,7 @@ describe('TESTS: Configuration => Paths', () => {
   let managementEndpoint: (string | unknown)
 
   before(() => {
-    cy.task('start:wildfly:container').then((result) => {
+    cy.startWildflyContainer().then((result) => {
       managementEndpoint = result
     })
   })

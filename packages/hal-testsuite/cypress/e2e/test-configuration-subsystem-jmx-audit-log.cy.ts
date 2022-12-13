@@ -6,7 +6,7 @@ describe('TESTS: Configuration => Subsystem => JMX => Audit Log', () => {
   const enabled = 'enabled'
 
   before(() => {
-    cy.task('start:wildfly:container').then((result) => {
+    cy.startWildflyContainer().then((result) => {
       managementEndpoint = result
     })
   })

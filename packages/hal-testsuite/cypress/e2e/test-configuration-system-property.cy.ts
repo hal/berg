@@ -23,7 +23,7 @@ describe('TESTS: Configuration => System Properties', () => {
     let managementEndpoint: (string | unknown)
 
     before(() => {
-      cy.task('start:wildfly:container').then((result) => {
+      cy.startWildflyContainer().then((result) => {
         managementEndpoint = result
         return Promise.all([
             cy.task('execute:cli', {
