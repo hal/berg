@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "strictPropertyInitialization": false,
-    "rootDir": "src",                                     /* Specify type package names to be included without being referenced in a source file. */
-    "outDir": "dist",                                   /* Specify an output folder for all emitted files. */
+    "rootDir": "src" /* Specify type package names to be included without being referenced in a source file. */,
+    "outDir": "dist" /* Specify an output folder for all emitted files. */
   }
 }

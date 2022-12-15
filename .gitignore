@@ -7,3 +7,5 @@ screenshots
 dist
 .DS_Store
 tsconfig.tsbuildinfo
+jdbc-drivers/*
+target

@@ -1,19 +1,21 @@
-import { Manatoko } from '@hal/manatoko'
-import * as cypress from 'cypress'
+import { Manatoko } from "@hal/manatoko";
+import * as cypress from "cypress";
 
-( async () => {
-  let manatoko = await Manatoko.getInstance()
+(async () => {
+  const manatoko = await Manatoko.getInstance();
   await cypress.run({
-    browser: 'chrome',
+    browser: "chrome",
     env: {
       NETWORK_NAME: manatoko.getNetwork().getName(),
-      HAL_CONTAINER_PORT: manatoko.getHalContainer().getMappedPort(9090)
+      HAL_CONTAINER_PORT: manatoko.getHalContainer().getMappedPort(9090),
     },
     config: {
       e2e: {
-        baseUrl: 'http://localhost:' + manatoko.getHalContainer().getMappedPort(9090)
-      }
-    }
-  })
-  await manatoko.stop()
-})()
+        baseUrl: `http://localhost:${manatoko
+          .getHalContainer()
+          .getMappedPort(9090)}`,
+      },
+    },
+  });
+  await manatoko.stop();
+})();
