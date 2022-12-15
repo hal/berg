@@ -1,1 +1,1 @@
-export { Manatoko } from './manatoko'
+export { Manatoko } from "./manatoko";

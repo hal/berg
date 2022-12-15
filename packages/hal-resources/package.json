@@ -1,0 +1,18 @@
+{
+  "name": "@hal/resources",
+  "version": "1.0.0",
+  "description": "Creates resources for the testsuite",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.hosts.mwqe.eng.bos.redhat.com/spriadka/hal-cypress.git"
+  },
+  "author": "spriadka",
+  "license": "MIT",
+  "dependencies": {
+    "maven": "^5.0.0"
+  }
+}
