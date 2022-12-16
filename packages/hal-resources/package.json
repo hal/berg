@@ -4,7 +4,7 @@
   "description": "Creates resources for the testsuite",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "resources": "node dist/index.js"
   },
   "repository": {
     "type": "git",

@@ -7,5 +7,5 @@ screenshots
 dist
 .DS_Store
 tsconfig.tsbuildinfo
-jdbc-drivers/*
+packages/hal-testsuite/cypress/fixtures/jdbc-drivers/*.jar
 target
