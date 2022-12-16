@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "format": "npx prettier --write .",
+    "prelint": "npm run format",
+    "lint": "npx eslint .",
+    "precompile": "npm run lint",
+    "resources": "npm run resources --prefix packages/hal-resources",
     "compile": "npx tsc --build --clean && npx tsc --build",
+    "postcompile": "npm run resources",
     "pretest": "npm run compile",
     "test": "npm run run-e2e-tests --prefix packages/hal-testsuite",
     "predevelop": "npm run compile",
