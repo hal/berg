@@ -11,13 +11,14 @@ const fixturesDirectory = path.resolve(
 );
 
 const jdbcDriversDirectory = path.resolve(fixturesDirectory, "jdbc-drivers");
+const modulesDirectory = path.resolve(fixturesDirectory, "modules");
 
 const mavenInstance = maven.create({
   cwd: path.resolve(__dirname, ".."),
 });
 (async () => {
-  await mavenInstance.execute(["dependency:copy-dependencies"], {
-    excludeTransitive: "true",
-    outputDirectory: jdbcDriversDirectory,
+  await mavenInstance.execute(["clean", "install"], {
+    "jdbc.drivers.copy.dependencies.output.directory": jdbcDriversDirectory,
+    "modules.copy.dependencies.output.directory": modulesDirectory,
   });
 })();

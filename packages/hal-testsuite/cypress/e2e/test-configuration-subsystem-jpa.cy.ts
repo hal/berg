@@ -15,12 +15,19 @@ describe("TESTS: Configuration => Subsystem => JPA", () => {
 
   it("Edit default-extended-persistence-inheritance", () => {
     cy.navigateTo(managementEndpoint, "jpa-configuration");
-    cy.get("#jpa-form-editing").should("not.be.visible");
     cy.editForm(configurationFormId);
-    cy.get("#jpa-form-editing").should("be.visible");
-    cy.get("#jpa-form-default-extended-persistence-inheritance-editing")
-      .select("SHALLOW", { force: true })
-      .should("have.value", "SHALLOW");
+    cy.formInput(
+      configurationFormId,
+      "default-extended-persistence-inheritance"
+    ).select("SHALLOW", { force: true });
+    cy.formInput(
+      configurationFormId,
+      "default-extended-persistence-inheritance"
+    ).trigger("change", { force: true });
+    cy.formInput(
+      configurationFormId,
+      "default-extended-persistence-inheritance"
+    ).should("have.value", "SHALLOW");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(

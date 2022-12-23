@@ -8,4 +8,6 @@ dist
 .DS_Store
 tsconfig.tsbuildinfo
 packages/hal-testsuite/cypress/fixtures/jdbc-drivers/*.jar
+packages/hal-testsuite/cypress/fixtures/modules/*.jar
 target
+.idea

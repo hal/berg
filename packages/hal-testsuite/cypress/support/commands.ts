@@ -65,7 +65,9 @@ Cypress.Commands.add(
 Cypress.Commands.add("editForm", (configurationFormId) => {
   const editButton =
     "#" + configurationFormId + ' a.clickable[data-operation="edit"';
+  cy.get(`#${configurationFormId}-editing`).should("not.be.visible");
   cy.get(editButton).click();
+  cy.get(`#${configurationFormId}-editing`).should("be.visible");
 });
 
 Cypress.Commands.add("saveForm", (configurationFormId) => {
@@ -162,10 +164,13 @@ Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
     .click({ force: true })
     .then(($textInput) => {
       if ($textInput.val()) {
-        cy.formInput(configurationFormId, attributeName).clear();
+        cy.clearAttribute(configurationFormId, attributeName);
       }
-    })
-    .type(value)
+    });
+  cy.formInput(configurationFormId, attributeName)
+    .click({ force: true })
+    .type(value);
+  cy.formInput(configurationFormId, attributeName)
     .should("have.value", value)
     .trigger("change");
 });
