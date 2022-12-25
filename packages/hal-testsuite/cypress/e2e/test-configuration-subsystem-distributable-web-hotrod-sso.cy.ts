@@ -293,7 +293,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
         hotRodSingleSignOnManagements.reset.name +
         '")'
     ).click();
-    cy.resetForm(configurationFormId, `${managementEndpoint}/management`, [
+    cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",
       "hotrod-single-sign-on-management",

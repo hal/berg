@@ -133,7 +133,7 @@ describe("TESTS: Configuration => System Properties", () => {
         systemProperties.reset.name +
         '")'
     ).click();
-    cy.resetForm(configurationFormId, `${managementEndpoint}/management`, [
+    cy.resetForm(configurationFormId, managementEndpoint, [
       "system-property",
       systemProperties.reset.name,
     ]);

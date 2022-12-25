@@ -103,10 +103,6 @@ describe("TESTS: Configuration => Subsystems => Weld", () => {
     cy.get(
       '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
     ).click();
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint + "/management",
-      address
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address);
   });
 });

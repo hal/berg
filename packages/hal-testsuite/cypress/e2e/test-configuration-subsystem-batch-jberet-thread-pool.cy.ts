@@ -141,7 +141,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
         threadPools.edit.name +
         '")'
     ).click();
-    cy.resetForm(configurationFormId, managementEndpoint + "/management", [
+    cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "batch-jberet",
       "thread-pool",

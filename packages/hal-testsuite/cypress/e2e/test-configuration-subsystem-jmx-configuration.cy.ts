@@ -17,11 +17,7 @@ describe("TESTS: Configuration => Subsystem => JMX => Configuration", () => {
   it("Reset configuration", () => {
     cy.navigateTo(managementEndpoint, "jmx");
     cy.get("#jmx-configuration-item").click();
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint + "/management",
-      address
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address);
   });
 
   it("Toggle non-core-mbean-sensitivity", () => {

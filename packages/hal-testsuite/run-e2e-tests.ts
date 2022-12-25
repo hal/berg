@@ -4,7 +4,7 @@ import * as cypress from "cypress";
 (async () => {
   const manatoko = await Manatoko.getInstance();
   await cypress.run({
-    browser: "chrome",
+    browser: "firefox",
     env: {
       NETWORK_NAME: manatoko.getNetwork().getName(),
       HAL_CONTAINER_PORT: manatoko.getHalContainer().getMappedPort(9090),

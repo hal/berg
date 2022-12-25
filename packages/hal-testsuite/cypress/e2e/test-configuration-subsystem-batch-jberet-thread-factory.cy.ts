@@ -177,7 +177,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
         threadFactories.edit.name +
         '")'
     ).click();
-    cy.resetForm(configurationFormId, managementEndpoint + "/management", [
+    cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "batch-jberet",
       "thread-factory",

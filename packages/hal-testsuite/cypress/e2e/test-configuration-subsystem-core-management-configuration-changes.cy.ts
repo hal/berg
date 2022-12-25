@@ -70,10 +70,6 @@ describe("TESTS: Configuration => Subsystem => Core Management => Configuration 
     });
     cy.navigateTo(managementEndpoint, "core-management");
     cy.get("#core-mgmt-conf-change-item").click();
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint + "/management",
-      address
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address);
   });
 });

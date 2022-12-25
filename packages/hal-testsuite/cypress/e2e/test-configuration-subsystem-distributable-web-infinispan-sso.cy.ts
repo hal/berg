@@ -214,6 +214,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "cache", cacheToUpdate);
     cy.saveForm(configurationFormId);
+    cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
       [
@@ -242,6 +243,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
       cacheContainers.update.name
     );
     cy.saveForm(configurationFormId);
+    cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
       [
@@ -263,7 +265,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         infinispanSingleSignOnManagements.reset.name +
         '")'
     ).click();
-    cy.resetForm(configurationFormId, `${managementEndpoint}/management`, [
+    cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",
       "infinispan-single-sign-on-management",

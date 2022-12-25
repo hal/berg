@@ -64,10 +64,6 @@ describe("TESTS: Configuration => Subsystem => JMX => Audit Log", () => {
     cy.addAddressIfDoesntExist(managementEndpoint, address);
     cy.navigateTo(managementEndpoint, "jmx");
     cy.get("#jmx-audit-log-item").click();
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint + "/management",
-      address
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address);
   });
 });

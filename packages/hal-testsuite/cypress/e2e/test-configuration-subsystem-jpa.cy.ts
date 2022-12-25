@@ -40,9 +40,6 @@ describe("TESTS: Configuration => Subsystem => JPA", () => {
 
   it("Reset", () => {
     cy.navigateTo(managementEndpoint, "jpa-configuration");
-    cy.resetForm(configurationFormId, managementEndpoint + "/management", [
-      "subsystem",
-      "jpa",
-    ]);
+    cy.resetForm(configurationFormId, managementEndpoint, ["subsystem", "jpa"]);
   });
 });

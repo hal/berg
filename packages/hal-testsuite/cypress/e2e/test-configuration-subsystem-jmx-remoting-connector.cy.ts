@@ -41,10 +41,6 @@ describe("TESTS: Configuration => Subsystem => JMX => Remoting Connector", () =>
   it("Reset Remoting Connector", () => {
     cy.navigateTo(managementEndpoint, "jmx");
     cy.get("#jmx-remoting-connector-item").click();
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint + "/management",
-      address
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address);
   });
 });

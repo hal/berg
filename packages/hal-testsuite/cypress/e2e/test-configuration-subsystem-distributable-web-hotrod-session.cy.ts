@@ -206,7 +206,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
         hotRodSessionManagements.reset.name +
         '")'
     ).click();
-    cy.resetForm(configurationFormId, `${managementEndpoint}/management`, [
+    cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",
       "hotrod-session-management",

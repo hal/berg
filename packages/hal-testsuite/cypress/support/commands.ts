@@ -120,7 +120,7 @@ Cypress.Commands.add(
     cy.get(".modal-footer .btn-primary").click({ force: true });
     cy.verifySuccess();
     cy.task("execute:cli", {
-      managementApi: managementApi,
+      managementApi: `${managementApi}/management`,
       operation: "read-resource-description",
       address: address,
     }).then((result) => {
@@ -144,7 +144,7 @@ Cypress.Commands.add(
         });
       attributesWithDefaultValues.forEach((attributeWithDefaultValue) => {
         cy.task("execute:cli", {
-          managementApi: managementApi,
+          managementApi: `${managementApi}/management`,
           operation: "read-attribute",
           address: address,
           name: attributeWithDefaultValue.name,
@@ -160,23 +160,23 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
-  cy.formInput(configurationFormId, attributeName)
-    .click({ force: true })
-    .then(($textInput) => {
-      if ($textInput.val()) {
-        cy.clearAttribute(configurationFormId, attributeName);
-      }
-    });
-  cy.formInput(configurationFormId, attributeName)
-    .click({ force: true })
-    .type(value);
-  cy.formInput(configurationFormId, attributeName)
-    .should("have.value", value)
-    .trigger("change");
+  cy.formInput(configurationFormId, attributeName).click({ force: true });
+  cy.formInput(configurationFormId, attributeName).then(($textInput) => {
+    if ($textInput.val()) {
+      cy.clearAttribute(configurationFormId, attributeName);
+    }
+  });
+  cy.formInput(configurationFormId, attributeName).click({ force: true });
+  cy.formInput(configurationFormId, attributeName).type(value);
+  cy.formInput(configurationFormId, attributeName).should("have.value", value);
+  cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("clearAttribute", (configurationFormId, attributeName) => {
-  cy.formInput(configurationFormId, attributeName).clear().trigger("change");
+  cy.formInput(configurationFormId, attributeName).click({ force: true });
+  cy.formInput(configurationFormId, attributeName).clear();
+  cy.formInput(configurationFormId, attributeName).should("have.value", "");
+  cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("verifySuccess", () => {
