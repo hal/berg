@@ -2,6 +2,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   let managementEndpoint: string;
 
   const configurationFormId = "dw-hotrod-sso-management-form";
+  const hotrodSsoManagementTableId = "dw-hotrod-sso-management-table";
 
   const outBoundSocketBinding = {
     name: "custom-outbound-socket-binding",
@@ -165,9 +166,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   it("Create HotRod SSO Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.get(
-      '#dw-hotrod-sso-management-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
+    cy.addInTable(hotrodSsoManagementTableId);
     cy.text(
       "dw-hotrod-sso-management-table-add",
       "name",
@@ -197,11 +196,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   it("Edit cache-configuration", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.get(
-      '#dw-hotrod-sso-management-table_wrapper td:contains("' +
-        hotRodSingleSignOnManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      hotrodSsoManagementTableId,
+      hotRodSingleSignOnManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "cache-configuration", "example");
     cy.saveForm(configurationFormId);
@@ -222,11 +220,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   it("Edit remote-cache-container", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.get(
-      '#dw-hotrod-sso-management-table_wrapper td:contains("' +
-        hotRodSingleSignOnManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      hotrodSsoManagementTableId,
+      hotRodSingleSignOnManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.text(
       configurationFormId,
@@ -261,17 +258,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.get(
-      '#dw-hotrod-sso-management-table_wrapper td:contains("' +
-        hotRodSingleSignOnManagements.delete.name +
-        '")'
-    ).click();
-    cy.get(
-      '#dw-hotrod-sso-management-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(
+      hotrodSsoManagementTableId,
+      hotRodSingleSignOnManagements.delete.name
+    );
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
@@ -288,11 +278,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   it("Reset HotRod SSO Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.get(
-      '#dw-hotrod-sso-management-table_wrapper td:contains("' +
-        hotRodSingleSignOnManagements.reset.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      hotrodSsoManagementTableId,
+      hotRodSingleSignOnManagements.reset.name
+    );
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",

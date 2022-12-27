@@ -159,22 +159,38 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add("addInTable", (tableId) => {
+  const tableWrapper = `#${tableId}_wrapper`;
+  cy.get(
+    `${tableWrapper} button.btn.btn-default > span:contains("Add")`
+  ).click();
+});
+
+Cypress.Commands.add("selectInTable", (tableId, resourceName) => {
+  const tableWrapper = `#${tableId}_wrapper`;
+  cy.get(`${tableWrapper} td:contains("${resourceName}")`).click();
+});
+
+Cypress.Commands.add("removeFromTable", (tableId, resourceName) => {
+  const tableWrapper = `#${tableId}_wrapper`;
+  cy.selectInTable(tableId, resourceName);
+  cy.get(
+    `${tableWrapper} button.btn.btn-default > span:contains("Remove")`
+  ).click();
+  cy.get(
+    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
+  ).click();
+});
+
 Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
-  cy.formInput(configurationFormId, attributeName).click({ force: true });
-  cy.formInput(configurationFormId, attributeName).then(($textInput) => {
-    if ($textInput.val()) {
-      cy.clearAttribute(configurationFormId, attributeName);
-    }
-  });
-  cy.formInput(configurationFormId, attributeName).click({ force: true });
-  cy.formInput(configurationFormId, attributeName).type(value);
+  cy.clearAttribute(configurationFormId, attributeName);
+  cy.formInput(configurationFormId, attributeName).click({force: true}).type(value);
   cy.formInput(configurationFormId, attributeName).should("have.value", value);
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("clearAttribute", (configurationFormId, attributeName) => {
-  cy.formInput(configurationFormId, attributeName).click({ force: true });
-  cy.formInput(configurationFormId, attributeName).clear();
+  cy.formInput(configurationFormId, attributeName).click({force: true}).clear();
   cy.formInput(configurationFormId, attributeName).should("have.value", "");
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
@@ -283,6 +299,40 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add(
+  "verifyListAttributeContains",
+  (managementEndpoint, address, attributeName, expectedValue) => {
+    cy.task("execute:cli", {
+      managementApi: managementEndpoint + "/management",
+      operation: "read-attribute",
+      address: address,
+      name: attributeName,
+    }).then((result) => {
+      expect((result as { outcome: string }).outcome).to.equal("success");
+      expect(
+        (result as { result: object[] | string[] }).result
+      ).to.deep.include(expectedValue);
+    });
+  }
+);
+
+Cypress.Commands.add(
+  "verifyListAttributeDoesNotContain",
+  (managementEndpoint, address, attributeName, expectedValue) => {
+    cy.task("execute:cli", {
+      managementApi: managementEndpoint + "/management",
+      operation: "read-attribute",
+      address: address,
+      name: attributeName,
+    }).then((result) => {
+      expect((result as { outcome: string }).outcome).to.equal("success");
+      expect(
+        (result as { result: object[] | string[] }).result
+      ).to.not.deep.include(expectedValue);
+    });
+  }
+);
+
 export {};
 /* eslint @typescript-eslint/no-namespace: off */
 declare global {
@@ -346,6 +396,21 @@ declare global {
         attributeName: string,
         expectedVaue: string | number | boolean
       ): void;
+      verifyListAttributeContains(
+        managementEndpoint: string,
+        address: string[],
+        attributeName: string,
+        expectedVaue: object | string
+      ): void;
+      verifyListAttributeDoesNotContain(
+        managementEndpoint: string,
+        address: string[],
+        attributeName: string,
+        expectedVaue: object | string
+      ): void;
+      addInTable(tableId: string): void;
+      selectInTable(tableId: string, resourceName: string): void;
+      removeFromTable(tableId: string, resourceName: string): void;
     }
   }
 }

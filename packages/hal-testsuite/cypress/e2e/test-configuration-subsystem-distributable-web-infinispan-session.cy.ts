@@ -2,6 +2,8 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   let managementEndpoint: string;
 
   const configurationFormId = "dw-infinispan-session-management-form";
+  const infinispanSessionManagementTableId =
+    "dw-infinispan-session-management-table";
   const granularity = "granularity";
 
   const cacheToUpdate = "cache-to-update";
@@ -178,9 +180,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Create Infinispan Session Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.get(
-      '#dw-infinispan-session-management-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
+    cy.addInTable(infinispanSessionManagementTableId);
     cy.text(
       "dw-infinispan-session-management-table-add",
       "name",
@@ -210,11 +210,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit cache", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.get(
-      '#dw-infinispan-session-management-table_wrapper td:contains("' +
-        infinispanSessionManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      infinispanSessionManagementTableId,
+      infinispanSessionManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "cache", cacheToUpdate);
     cy.saveForm(configurationFormId);
@@ -235,11 +234,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit cache-container", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.get(
-      '#dw-infinispan-session-management-table_wrapper td:contains("' +
-        infinispanSessionManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      infinispanSessionManagementTableId,
+      infinispanSessionManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.text(
       configurationFormId,
@@ -264,11 +262,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit granularity", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.get(
-      '#dw-infinispan-session-management-table_wrapper td:contains("' +
-        infinispanSessionManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      infinispanSessionManagementTableId,
+      infinispanSessionManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.formInput(configurationFormId, granularity).select("ATTRIBUTE", {
       force: true,
@@ -297,11 +294,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Reset Infinispan Session Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.get(
-      '#dw-infinispan-session-management-table_wrapper td:contains("' +
-        infinispanSessionManagements.reset.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      infinispanSessionManagementTableId,
+      infinispanSessionManagements.reset.name
+    );
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",
@@ -323,17 +319,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.get(
-      '#dw-infinispan-session-management-table_wrapper td:contains("' +
-        infinispanSessionManagements.delete.name +
-        '")'
-    ).click();
-    cy.get(
-      '#dw-infinispan-session-management-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(
+      infinispanSessionManagementTableId,
+      infinispanSessionManagements.delete.name
+    );
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

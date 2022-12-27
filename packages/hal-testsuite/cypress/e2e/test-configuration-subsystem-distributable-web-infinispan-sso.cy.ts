@@ -1,6 +1,7 @@
 describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan SSO", () => {
   let managementEndpoint: string;
 
+  const infinispanSsoManagementTableId = "dw-infinispan-sso-management-table";
   const configurationFormId = "dw-infinispan-sso-management-form";
 
   const cacheToUpdate = "cache-to-update";
@@ -174,9 +175,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Create Infinispan SSO Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.get(
-      '#dw-infinispan-sso-management-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
+    cy.addInTable(infinispanSsoManagementTableId);
     cy.text(
       "dw-infinispan-sso-management-table-add",
       "name",
@@ -206,11 +205,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit cache", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.get(
-      '#dw-infinispan-sso-management-table_wrapper td:contains("' +
-        infinispanSingleSignOnManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      infinispanSsoManagementTableId,
+      infinispanSingleSignOnManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "cache", cacheToUpdate);
     cy.saveForm(configurationFormId);
@@ -231,11 +229,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit cache-container", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.get(
-      '#dw-infinispan-sso-management-table_wrapper td:contains("' +
-        infinispanSingleSignOnManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      infinispanSsoManagementTableId,
+      infinispanSingleSignOnManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.text(
       configurationFormId,
@@ -260,11 +257,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Reset Infinispan SSO Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.get(
-      '#dw-infinispan-sso-management-table_wrapper td:contains("' +
-        infinispanSingleSignOnManagements.reset.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      infinispanSsoManagementTableId,
+      infinispanSingleSignOnManagements.reset.name
+    );
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",
@@ -286,17 +282,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.get(
-      '#dw-infinispan-sso-management-table_wrapper td:contains("' +
-        infinispanSingleSignOnManagements.delete.name +
-        '")'
-    ).click();
-    cy.get(
-      '#dw-infinispan-sso-management-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(
+      infinispanSsoManagementTableId,
+      infinispanSingleSignOnManagements.delete.name
+    );
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

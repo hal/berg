@@ -9,6 +9,10 @@ import {
 import { Environment } from "testcontainers/dist/docker/types";
 
 export default defineConfig({
+  reporter: "../../node_modules/cypress-multi-reporters/index.js",
+  reporterOptions: {
+    configFile: "reporter-config.json",
+  },
   videoCompression: false,
   e2e: {
     setupNodeEvents(on, config) {

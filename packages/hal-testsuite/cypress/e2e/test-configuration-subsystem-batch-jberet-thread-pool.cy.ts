@@ -1,4 +1,5 @@
 describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
+  const threadPoolTableId = "batch-thread-pool-table";
   const configurationFormId = "batch-thread-pool-form";
   const threadFactory = "thread-factory";
   const maxThreads = "max-threads";
@@ -51,9 +52,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
   it("Create Thread Pool", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-pool-item").click();
-    cy.get(
-      '#batch-thread-pool-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
+    cy.addInTable(threadPoolTableId);
     cy.text("batch-thread-pool-table-add", "name", threadPools.create.name);
     cy.text(
       "batch-thread-pool-table-add",
@@ -74,17 +73,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
   it("Remove Thread Pool", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-pool-item").click();
-    cy.get(
-      'table#batch-thread-pool-table td:contains("' +
-        threadPools.remove.name +
-        '")'
-    ).click();
-    cy.get(
-      '#batch-thread-pool-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(threadPoolTableId, threadPools.remove.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
@@ -96,11 +85,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
   it("Edit max-threads", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-pool-item").click();
-    cy.get(
-      'table#batch-thread-pool-table td:contains("' +
-        threadPools.edit.name +
-        '")'
-    ).click();
+    cy.selectInTable(threadPoolTableId, threadPools.edit.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, maxThreads, "5");
     cy.saveForm(configurationFormId);
@@ -116,11 +101,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
   it("Edit thread-factory", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-pool-item").click();
-    cy.get(
-      'table#batch-thread-pool-table td:contains("' +
-        threadPools.edit.name +
-        '")'
-    ).click();
+    cy.selectInTable(threadPoolTableId, threadPools.edit.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, threadFactory, threadFactoryEdit);
     cy.saveForm(configurationFormId);
@@ -136,11 +117,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
   it("Reset Thread Pool", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-pool-item").click();
-    cy.get(
-      'table#batch-thread-pool-table td:contains("' +
-        threadPools.edit.name +
-        '")'
-    ).click();
+    cy.selectInTable(threadPoolTableId, threadPools.edit.name);
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "batch-jberet",

@@ -1,6 +1,7 @@
 describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Session", () => {
   let managementEndpoint: string;
   const configurationFormId = "dw-hotrod-session-management-form";
+  const hotrodSessionManagementTableId = "dw-hotrod-session-management-table";
   const granularity = "granularity";
   const outBoundSocketBinding = {
     name: "custom-outbound-socket-binding",
@@ -169,9 +170,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
   it("Create HotRod Session Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-session-management-item").click();
-    cy.get(
-      '#dw-hotrod-session-management-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
+    cy.addInTable(hotrodSessionManagementTableId);
     cy.text(
       "dw-hotrod-session-management-table-add",
       "name",
@@ -201,11 +200,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
   it("Reset HotRod Session Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-session-management-item").click();
-    cy.get(
-      '#dw-hotrod-session-management-table_wrapper td:contains("' +
-        hotRodSessionManagements.reset.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      hotrodSessionManagementTableId,
+      hotRodSessionManagements.reset.name
+    );
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",
@@ -217,11 +215,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
   it("Edit cache-configuration", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-session-management-item").click();
-    cy.get(
-      '#dw-hotrod-session-management-table_wrapper td:contains("' +
-        hotRodSessionManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      hotrodSessionManagementTableId,
+      hotRodSessionManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "cache-configuration", "example");
     cy.saveForm(configurationFormId);
@@ -242,11 +239,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
   it("Edit granularity", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-session-management-item").click();
-    cy.get(
-      '#dw-hotrod-session-management-table_wrapper td:contains("' +
-        hotRodSessionManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      hotrodSessionManagementTableId,
+      hotRodSessionManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.formInput(configurationFormId, granularity).select("ATTRIBUTE", {
       force: true,
@@ -276,11 +272,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
   it("Edit remote-cache-container", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-session-management-item").click();
-    cy.get(
-      '#dw-hotrod-session-management-table_wrapper td:contains("' +
-        hotRodSessionManagements.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(
+      hotrodSessionManagementTableId,
+      hotRodSessionManagements.update.name
+    );
     cy.editForm(configurationFormId);
     cy.text(
       configurationFormId,
@@ -315,17 +310,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-session-management-item").click();
-    cy.get(
-      '#dw-hotrod-session-management-table_wrapper td:contains("' +
-        hotRodSessionManagements.delete.name +
-        '")'
-    ).click();
-    cy.get(
-      '#dw-hotrod-session-management-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(
+      hotrodSessionManagementTableId,
+      hotRodSessionManagements.delete.name
+    );
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

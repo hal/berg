@@ -10,17 +10,19 @@
     "lint": "npx eslint .",
     "precompile": "npm run lint",
     "preresources": "npm run clean",
-    "resources": "npm run resources --prefix packages/hal-resources",
+    "resources": "npm run resources -w @hal/resources",
     "compile": "npx tsc --build --clean && npx tsc --build",
     "postcompile": "npm run resources",
     "pretest": "npm run compile",
-    "test": "npm run run-e2e-tests --prefix packages/hal-testsuite",
+    "test": "npm run run-e2e-tests -w @hal/testsuite",
     "predevelop": "npm run compile",
-    "develop": "npm run develop --prefix packages/hal-testsuite"
+    "develop": "npm run develop -w @hal/testsuite"
   },
-  "workspaces": [
-    "./packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "./packages/*"
+    ]
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {

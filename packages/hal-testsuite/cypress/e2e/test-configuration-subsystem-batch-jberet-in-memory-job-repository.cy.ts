@@ -1,4 +1,6 @@
 describe("TESTS: Configuration => Subsystem => Batch => In Memory", () => {
+  const batchInMemoryTableId = "batch-in-memory-job-repo-table";
+
   const inMemoryJobRepositories = {
     create: {
       name: "in-memory-job-repository-create",
@@ -23,9 +25,7 @@ describe("TESTS: Configuration => Subsystem => Batch => In Memory", () => {
   it("Create In Memory Job Repository", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-in-memory-job-repo-item").click();
-    cy.get(
-      '#batch-in-memory-job-repo-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
+    cy.addInTable(batchInMemoryTableId);
     cy.text(
       "batch-in-memory-job-repo-table-add",
       "name",
@@ -56,17 +56,10 @@ describe("TESTS: Configuration => Subsystem => Batch => In Memory", () => {
     ]);
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-in-memory-job-repo-item").click();
-    cy.get(
-      'table#batch-in-memory-job-repo-table td:contains("' +
-        inMemoryJobRepositories.remove.name +
-        '")'
-    ).click();
-    cy.get(
-      '#batch-in-memory-job-repo-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(
+      batchInMemoryTableId,
+      inMemoryJobRepositories.remove.name
+    );
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

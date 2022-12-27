@@ -1,4 +1,5 @@
 describe("TESTS: Configuration => System Properties", () => {
+  const systemPropertyTableId = "system-property-table";
   const configurationFormId = "system-property-form";
 
   const value = "value";
@@ -63,7 +64,7 @@ describe("TESTS: Configuration => System Properties", () => {
   });
 
   it("Create System Property", () => {
-    cy.get('button.btn.btn-default > span:contains("Add")').click();
+    cy.addInTable(systemPropertyTableId);
     cy.text("system-property-add", "name", systemProperties.create.name);
     cy.text("system-property-add", value, systemProperties.create.value);
     cy.get(
@@ -83,15 +84,7 @@ describe("TESTS: Configuration => System Properties", () => {
       ["system-property", systemProperties.delete.name],
       true
     );
-    cy.get(
-      '#system-property-table td:contains("' +
-        systemProperties.delete.name +
-        '")'
-    ).click();
-    cy.get('button.btn.btn-default > span:contains("Remove")').click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(systemPropertyTableId, systemProperties.delete.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
@@ -101,20 +94,14 @@ describe("TESTS: Configuration => System Properties", () => {
   });
 
   it("Read System Property", () => {
-    cy.get(
-      '#system-property-table td:contains("' + systemProperties.read.name + '")'
-    ).click();
+    cy.selectInTable(systemPropertyTableId, systemProperties.read.name);
     cy.get("table#system-property-table tr.selected")
       .children("td")
       .should("include.text", systemProperties.read.value);
   });
 
   it("Update System Property", () => {
-    cy.get(
-      '#system-property-table td:contains("' +
-        systemProperties.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(systemPropertyTableId, systemProperties.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, value, "newValue");
     cy.saveForm(configurationFormId);
@@ -128,11 +115,7 @@ describe("TESTS: Configuration => System Properties", () => {
   });
 
   it("Reset System Property", () => {
-    cy.get(
-      '#system-property-table td:contains("' +
-        systemProperties.reset.name +
-        '")'
-    ).click();
+    cy.selectInTable(systemPropertyTableId, systemProperties.reset.name);
     cy.resetForm(configurationFormId, managementEndpoint, [
       "system-property",
       systemProperties.reset.name,

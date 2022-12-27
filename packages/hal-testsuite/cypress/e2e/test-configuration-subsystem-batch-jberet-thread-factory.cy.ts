@@ -1,4 +1,5 @@
 describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
+  const threadFactoryTableId = "batch-thread-factory-table";
   const configurationFormId = "batch-thread-factory-form";
   const priority = "priority";
   const groupName = "group-name";
@@ -43,14 +44,12 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
   it("Create Thread Factory", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-factory-item").click();
-    cy.get(
-      '#batch-thread-factory-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
-    cy.get("input#batch-thread-factory-table-add-name-editing")
-      .click()
-      .type(threadFactories.create.name)
-      .should("have.value", threadFactories.create.name)
-      .trigger("change");
+    cy.addInTable(threadFactoryTableId);
+    cy.text(
+      "batch-thread-factory-table-add",
+      "name",
+      threadFactories.create.name
+    );
     cy.get(
       'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
     ).click();
@@ -70,17 +69,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
   it("Remove Thread Factory", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-factory-item").click();
-    cy.get(
-      'table#batch-thread-factory-table td:contains("' +
-        threadFactories.remove.name +
-        '")'
-    ).click();
-    cy.get(
-      '#batch-thread-factory-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(threadFactoryTableId, threadFactories.remove.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
@@ -97,11 +86,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
   it("Edit group-name", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-factory-item").click();
-    cy.get(
-      'table#batch-thread-factory-table td:contains("' +
-        threadFactories.edit.name +
-        '")'
-    ).click();
+    cy.selectInTable(threadFactoryTableId, threadFactories.edit.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, groupName, "newValue");
     cy.saveForm(configurationFormId);
@@ -122,11 +107,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
   it("Edit priority", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-factory-item").click();
-    cy.get(
-      'table#batch-thread-factory-table td:contains("' +
-        threadFactories.edit.name +
-        '")'
-    ).click();
+    cy.selectInTable(threadFactoryTableId, threadFactories.edit.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, priority, "10");
     cy.saveForm(configurationFormId);
@@ -147,11 +128,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
   it("Edit thread-name-pattern", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-factory-item").click();
-    cy.get(
-      'table#batch-thread-factory-table td:contains("' +
-        threadFactories.edit.name +
-        '")'
-    ).click();
+    cy.selectInTable(threadFactoryTableId, threadFactories.edit.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, threadNamePattern, "newValue");
     cy.saveForm(configurationFormId);
@@ -172,11 +149,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
   it("Reset Thread Factory", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-thread-factory-item").click();
-    cy.get(
-      'table#batch-thread-factory-table td:contains("' +
-        threadFactories.edit.name +
-        '")'
-    ).click();
+    cy.selectInTable(threadFactoryTableId, threadFactories.edit.name);
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "batch-jberet",

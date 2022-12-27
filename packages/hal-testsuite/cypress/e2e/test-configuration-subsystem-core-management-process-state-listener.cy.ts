@@ -1,6 +1,7 @@
 import { AddModuleCommandBuilder } from "@hal/commands";
 
 describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => Process State Listener", () => {
+  const processStateListenerTableId = "core-mgmt-prc-state-table";
   const processStateListenerModuleName = "org.jboss.hal.cypress.resources";
   const processStateListenerClass =
     "org.jboss.hal.cypress.resources.SimpleProcessStateListener";
@@ -57,9 +58,7 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
   it("Create Process State Listener", () => {
     cy.navigateTo(managementEndpoint, "core-management");
     cy.get("#core-mgmt-prc-state-item").click();
-    cy.get(
-      '#core-mgmt-prc-state-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
+    cy.addInTable(processStateListenerTableId);
     cy.text(
       "core-mgmt-prc-state-table-add",
       "name",
@@ -104,17 +103,10 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
     );
     cy.navigateTo(managementEndpoint, "core-management");
     cy.get("#core-mgmt-prc-state-item").click();
-    cy.get(
-      '#core-mgmt-prc-state-table td:contains("' +
-        processStateListeners.delete.name +
-        '")'
-    ).click();
-    cy.get(
-      '#core-mgmt-prc-state-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(
+      processStateListenerTableId,
+      processStateListeners.delete.name
+    );
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
