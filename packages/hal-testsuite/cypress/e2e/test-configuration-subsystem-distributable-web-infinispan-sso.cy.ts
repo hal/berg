@@ -186,9 +186,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
       "cache-container",
       infinispanSingleSignOnManagements.create["cache-container"]
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

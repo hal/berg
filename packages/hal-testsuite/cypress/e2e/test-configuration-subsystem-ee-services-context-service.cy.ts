@@ -73,9 +73,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
       "jndi-name",
       contextServices.create["jndi-name"]
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

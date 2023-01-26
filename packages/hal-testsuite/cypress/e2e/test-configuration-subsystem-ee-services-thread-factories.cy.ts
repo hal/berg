@@ -101,9 +101,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
       "jndi-name",
       threadFactories.create["jndi-name"]
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

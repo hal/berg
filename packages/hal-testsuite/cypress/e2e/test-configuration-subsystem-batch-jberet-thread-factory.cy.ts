@@ -50,9 +50,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
       "name",
       threadFactories.create.name
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

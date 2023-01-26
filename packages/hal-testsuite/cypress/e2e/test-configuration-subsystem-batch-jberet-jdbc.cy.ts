@@ -38,9 +38,7 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
       "data-source",
       jdbcJobRepositories.create.dataSource
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

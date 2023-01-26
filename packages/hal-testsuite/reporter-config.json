@@ -1,6 +1,11 @@
 {
-  "reporterEnabled": "spec, mocha-junit-reporter",
+  "reporterEnabled": "mocha-junit-reporter, mochawesome",
   "mochaJunitReporterReporterOptions": {
     "mochaFile": "results/[suiteFilename].xml"
+  },
+  "mochawesomeReporterOptions": {
+    "reportDir": "results",
+    "html": false,
+    "reportFilename": "cypress/e2e/[name]_[status]"
   }
 }

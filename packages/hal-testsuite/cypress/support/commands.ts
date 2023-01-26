@@ -98,7 +98,7 @@ Cypress.Commands.add("flip", (configurationFormId, attributeName, value) => {
       configurationFormId +
       "-" +
       attributeName +
-      '-editing"] .bootstrap-switch-label'
+      '-editing"] .bootstrap-switch-label:visible'
   )
     .click()
     .wait(1000);
@@ -117,7 +117,7 @@ Cypress.Commands.add(
     const resetButton =
       "#" + configurationFormId + ' a.clickable[data-operation="reset"';
     cy.get(resetButton).click();
-    cy.get(".modal-footer .btn-primary").click({ force: true });
+    cy.get(".modal-footer .btn-hal.btn-primary").click({ force: true });
     cy.verifySuccess();
     cy.task("execute:cli", {
       managementApi: `${managementApi}/management`,
@@ -184,13 +184,17 @@ Cypress.Commands.add("removeFromTable", (tableId, resourceName) => {
 
 Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
   cy.clearAttribute(configurationFormId, attributeName);
-  cy.formInput(configurationFormId, attributeName).click({force: true}).type(value);
+  cy.formInput(configurationFormId, attributeName)
+    .click({ force: true })
+    .type(value);
   cy.formInput(configurationFormId, attributeName).should("have.value", value);
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("clearAttribute", (configurationFormId, attributeName) => {
-  cy.formInput(configurationFormId, attributeName).click({force: true}).clear();
+  cy.formInput(configurationFormId, attributeName)
+    .click({ force: true })
+    .clear();
   cy.formInput(configurationFormId, attributeName).should("have.value", "");
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
@@ -333,6 +337,27 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add("confirmAddResourceWizard", () => {
+  cy.get(
+    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
+  ).click();
+});
+
+Cypress.Commands.add("addSingletonResource", (emptyConfigurationFormId) => {
+  cy.get(
+    "#" + emptyConfigurationFormId + ' .btn-primary:contains("Add")'
+  ).click();
+});
+
+Cypress.Commands.add("removeSingletonResource", (configurationFormId) => {
+  const removeButton =
+    "#" + configurationFormId + ' a.clickable[data-operation="remove"';
+  cy.get(removeButton).click();
+  cy.get(
+    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
+  ).click();
+});
+
 export {};
 /* eslint @typescript-eslint/no-namespace: off */
 declare global {
@@ -409,8 +434,11 @@ declare global {
         expectedVaue: object | string
       ): void;
       addInTable(tableId: string): void;
+      addSingletonResource(emptyConfigurationFormId: string): void;
+      removeSingletonResource(configurationFormId: string): void;
       selectInTable(tableId: string, resourceName: string): void;
       removeFromTable(tableId: string, resourceName: string): void;
+      confirmAddResourceWizard(): void;
     }
   }
 }

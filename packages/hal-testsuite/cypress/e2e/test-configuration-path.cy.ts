@@ -19,9 +19,7 @@ describe("TESTS: Configuration => Paths", () => {
     cy.addInTable("path-table");
     cy.text("path-table-add", "name", "newPath");
     cy.text("path-table-add", "path", "somePath");
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(managementEndpoint, ["path", "newPath"], true);
   });

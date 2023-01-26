@@ -20,6 +20,10 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     },
   };
 
+  const deploymentScannerTableId = "deployment-scanner-table";
+
+  const address = ["subsystem", "deployment-scanner", "scanner"];
+
   const autoDeployExploded = "auto-deploy-exploded";
   const autoDeployXml = "auto-deploy-xml";
   const autoDeployZipped = "auto-deploy-zipped";
@@ -36,36 +40,21 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
       managementEndpoint = result as string;
       cy.addAddress(
         managementEndpoint,
-        [
-          "subsystem",
-          "deployment-scanner",
-          "scanner",
-          deploymentScanners.delete.name,
-        ],
+        address.concat(deploymentScanners.delete.name),
         {
           path: deploymentScanners.delete.path,
         }
       );
       cy.addAddress(
         managementEndpoint,
-        [
-          "subsystem",
-          "deployment-scanner",
-          "scanner",
-          deploymentScanners.update.name,
-        ],
+        address.concat(deploymentScanners.update.name),
         {
           path: deploymentScanners.update.path,
         }
       );
       cy.addAddress(
         managementEndpoint,
-        [
-          "subsystem",
-          "deployment-scanner",
-          "scanner",
-          deploymentScanners.reset.name,
-        ],
+        address.concat(deploymentScanners.reset.name),
         {
           path: deploymentScanners.reset.path,
         }
@@ -77,38 +66,49 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.task("stop:containers");
   });
 
+  it("Create Deployment Scanner", () => {
+    cy.navigateTo(managementEndpoint, "deployment-scanner");
+    cy.addInTable(deploymentScannerTableId);
+    cy.text(
+      "deployment-scanner-table-add",
+      "name",
+      deploymentScanners.create.name
+    );
+    cy.text(
+      "deployment-scanner-table-add",
+      "path",
+      deploymentScanners.create.path
+    );
+    cy.confirmAddResourceWizard();
+    cy.verifySuccess();
+    cy.validateAddress(
+      managementEndpoint,
+      address.concat(deploymentScanners.create.name),
+      true
+    );
+  });
+
   it("Toggle auto-deploy-exploded", () => {
     let value = false;
     cy.task("execute:cli", {
       managementApi: managementEndpoint + "/management",
       operation: "read-attribute",
-      address: [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address: address.concat(deploymentScanners.update.name),
       name: autoDeployExploded,
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.get(
-        '#deployment-scanner-table td:contains("' +
-          deploymentScanners.update.name +
-          '")'
-      ).click();
+      cy.selectInTable(
+        deploymentScannerTableId,
+        deploymentScanners.update.name
+      );
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, autoDeployExploded, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
       cy.verifyAttribute(
         managementEndpoint,
-        [
-          "subsystem",
-          "deployment-scanner",
-          "scanner",
-          deploymentScanners.update.name,
-        ],
+        address.concat(deploymentScanners.update.name),
         autoDeployExploded,
         !value
       );
@@ -120,33 +120,22 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.task("execute:cli", {
       managementApi: managementEndpoint + "/management",
       operation: "read-attribute",
-      address: [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address: address.concat(deploymentScanners.update.name),
       name: autoDeployXml,
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.get(
-        '#deployment-scanner-table td:contains("' +
-          deploymentScanners.update.name +
-          '")'
-      ).click();
+      cy.selectInTable(
+        deploymentScannerTableId,
+        deploymentScanners.update.name
+      );
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, autoDeployXml, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
       cy.verifyAttribute(
         managementEndpoint,
-        [
-          "subsystem",
-          "deployment-scanner",
-          "scanner",
-          deploymentScanners.update.name,
-        ],
+        address.concat(deploymentScanners.update.name),
         autoDeployXml,
         !value
       );
@@ -158,33 +147,22 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.task("execute:cli", {
       managementApi: managementEndpoint + "/management",
       operation: "read-attribute",
-      address: [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address: address.concat(deploymentScanners.update.name),
       name: autoDeployZipped,
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.get(
-        '#deployment-scanner-table td:contains("' +
-          deploymentScanners.update.name +
-          '")'
-      ).click();
+      cy.selectInTable(
+        deploymentScannerTableId,
+        deploymentScanners.update.name
+      );
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, autoDeployZipped, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
       cy.verifyAttribute(
         managementEndpoint,
-        [
-          "subsystem",
-          "deployment-scanner",
-          "scanner",
-          deploymentScanners.update.name,
-        ],
+        address.concat(deploymentScanners.update.name),
         autoDeployZipped,
         !value
       );
@@ -193,23 +171,14 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
 
   it("Edit deployment-timeout", () => {
     cy.navigateTo(managementEndpoint, "deployment-scanner");
-    cy.get(
-      '#deployment-scanner-table td:contains("' +
-        deploymentScanners.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, deploymentTimeout, "1000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address.concat(deploymentScanners.update.name),
       deploymentTimeout,
       1000
     );
@@ -217,23 +186,14 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
 
   it("Edit path", () => {
     cy.navigateTo(managementEndpoint, "deployment-scanner");
-    cy.get(
-      '#deployment-scanner-table td:contains("' +
-        deploymentScanners.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, path, "another-dir");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address.concat(deploymentScanners.update.name),
       path,
       "another-dir"
     );
@@ -241,22 +201,13 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
 
   it("Edit relative-to", () => {
     cy.navigateTo(managementEndpoint, "deployment-scanner");
-    cy.get(
-      '#deployment-scanner-table td:contains("' +
-        deploymentScanners.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, relativeTo, "another-dir");
     cy.saveForm(configurationFormId);
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address.concat(deploymentScanners.update.name),
       relativeTo,
       "another-dir"
     );
@@ -267,33 +218,22 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.task("execute:cli", {
       managementApi: managementEndpoint + "/management",
       operation: "read-attribute",
-      address: [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address: address.concat(deploymentScanners.update.name),
       name: runtimeFailureCausesRollback,
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.get(
-        '#deployment-scanner-table td:contains("' +
-          deploymentScanners.update.name +
-          '")'
-      ).click();
+      cy.selectInTable(
+        deploymentScannerTableId,
+        deploymentScanners.update.name
+      );
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, runtimeFailureCausesRollback, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
       cy.verifyAttribute(
         managementEndpoint,
-        [
-          "subsystem",
-          "deployment-scanner",
-          "scanner",
-          deploymentScanners.update.name,
-        ],
+        address.concat(deploymentScanners.update.name),
         runtimeFailureCausesRollback,
         !value
       );
@@ -305,33 +245,22 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.task("execute:cli", {
       managementApi: managementEndpoint + "/management",
       operation: "read-attribute",
-      address: [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address: address.concat(deploymentScanners.update.name),
       name: scanEnabled,
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.get(
-        '#deployment-scanner-table td:contains("' +
-          deploymentScanners.update.name +
-          '")'
-      ).click();
+      cy.selectInTable(
+        deploymentScannerTableId,
+        deploymentScanners.update.name
+      );
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, scanEnabled, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
       cy.verifyAttribute(
         managementEndpoint,
-        [
-          "subsystem",
-          "deployment-scanner",
-          "scanner",
-          deploymentScanners.update.name,
-        ],
+        address.concat(deploymentScanners.update.name),
         scanEnabled,
         !value
       );
@@ -340,25 +269,40 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
 
   it("Edit scan-interval", () => {
     cy.navigateTo(managementEndpoint, "deployment-scanner");
-    cy.get(
-      '#deployment-scanner-table td:contains("' +
-        deploymentScanners.update.name +
-        '")'
-    ).click();
+    cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, scanInterval, "1000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "deployment-scanner",
-        "scanner",
-        deploymentScanners.update.name,
-      ],
+      address.concat(deploymentScanners.update.name),
       scanInterval,
       1000
+    );
+  });
+
+  it("Remove", () => {
+    cy.navigateTo(managementEndpoint, "deployment-scanner");
+    cy.removeFromTable(
+      deploymentScannerTableId,
+      deploymentScanners.delete.name
+    );
+    cy.verifySuccess();
+    cy.validateAddress(
+      managementEndpoint,
+      address.concat(deploymentScanners.delete.name),
+      false
+    );
+  });
+
+  it("Reset", () => {
+    cy.navigateTo(managementEndpoint, "deployment-scanner");
+    cy.selectInTable(deploymentScannerTableId, deploymentScanners.reset.name);
+    cy.resetForm(
+      configurationFormId,
+      managementEndpoint,
+      address.concat(deploymentScanners.reset.name)
     );
   });
 });

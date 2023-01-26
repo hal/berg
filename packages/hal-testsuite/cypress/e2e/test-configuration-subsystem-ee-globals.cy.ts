@@ -57,9 +57,7 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
       !globalModuleToAdd.annotations
     );
     cy.flip("ee-global-modules-form", "services", !globalModuleToAdd.services);
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.verifyListAttributeContains(
       managementEndpoint,
@@ -91,14 +89,10 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
     ]);
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-global-modules-item").click();
-    cy.get(
-      "#" + emptyConfigurationForm + ' .btn-primary:contains("Add")'
-    ).click();
+    cy.addSingletonResource(emptyConfigurationForm);
     cy.text("ee-global-directory-add", "name", globalDirectory.name);
     cy.text("ee-global-directory-add", "path", globalDirectory.path);
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
@@ -130,8 +124,6 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
   });
 
   it("Remove Global Directory", () => {
-    const removeButton =
-      "#" + configurationFormId + ' a.clickable[data-operation="remove"';
     cy.addAddressIfDoesntExist(
       managementEndpoint,
       ["subsystem", "ee", "global-directory", globalDirectory.name],
@@ -141,10 +133,7 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
     );
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-global-modules-item").click();
-    cy.get(removeButton).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeSingletonResource(configurationFormId);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

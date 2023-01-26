@@ -12,3 +12,4 @@ packages/hal-testsuite/cypress/fixtures/modules/*.jar
 target
 .idea
 results
+mochawesome*

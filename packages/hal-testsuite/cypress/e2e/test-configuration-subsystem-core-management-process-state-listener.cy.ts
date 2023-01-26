@@ -74,9 +74,7 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
       "module",
       processStateListeners.create.module
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

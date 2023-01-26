@@ -121,9 +121,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
       "cache-container",
       cacheContainers.create.name
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

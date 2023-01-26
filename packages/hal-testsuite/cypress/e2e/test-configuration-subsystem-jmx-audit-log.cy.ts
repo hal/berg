@@ -19,9 +19,7 @@ describe("TESTS: Configuration => Subsystem => JMX => Audit Log", () => {
     cy.removeAddressIfExists(managementEndpoint, address);
     cy.navigateTo(managementEndpoint, "jmx");
     cy.get("#jmx-audit-log-item").click();
-    cy.get(
-      "#" + emptyConfigurationForm + ' .btn-primary:contains("Add")'
-    ).click();
+    cy.addSingletonResource(emptyConfigurationForm);
     cy.verifySuccess();
     cy.validateAddress(managementEndpoint, address, true);
   });
@@ -47,15 +45,10 @@ describe("TESTS: Configuration => Subsystem => JMX => Audit Log", () => {
   });
 
   it("Delete Audit Log", () => {
-    const removeButton =
-      "#" + configurationFormId + ' a.clickable[data-operation="remove"';
     cy.addAddressIfDoesntExist(managementEndpoint, address);
     cy.navigateTo(managementEndpoint, "jmx");
     cy.get("#jmx-audit-log-item").click();
-    cy.get(removeButton).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeSingletonResource(configurationFormId);
     cy.verifySuccess();
     cy.validateAddress(managementEndpoint, address, false);
   });

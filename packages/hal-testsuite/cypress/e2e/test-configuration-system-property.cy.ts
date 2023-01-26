@@ -67,9 +67,7 @@ describe("TESTS: Configuration => System Properties", () => {
     cy.addInTable(systemPropertyTableId);
     cy.text("system-property-add", "name", systemProperties.create.name);
     cy.text("system-property-add", value, systemProperties.create.value);
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

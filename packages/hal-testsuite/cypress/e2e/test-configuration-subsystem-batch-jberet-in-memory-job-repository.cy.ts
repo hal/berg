@@ -31,9 +31,7 @@ describe("TESTS: Configuration => Subsystem => Batch => In Memory", () => {
       "name",
       inMemoryJobRepositories.create.name
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

@@ -102,9 +102,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       "jndi-name",
       scheduledExecutors.create["jndi-name"]
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

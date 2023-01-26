@@ -59,9 +59,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
       "max-threads",
       threadPools.create.maxThreads.toString()
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

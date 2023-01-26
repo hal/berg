@@ -181,9 +181,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
       "remote-cache-container",
       hotRodSessionManagements.create["remote-cache-container"]
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

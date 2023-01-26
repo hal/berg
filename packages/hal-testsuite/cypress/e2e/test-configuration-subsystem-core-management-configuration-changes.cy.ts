@@ -24,13 +24,9 @@ describe("TESTS: Configuration => Subsystem => Core Management => Configuration 
     cy.removeAddressIfExists(managementEndpoint, address);
     cy.navigateTo(managementEndpoint, "core-management");
     cy.get("#core-mgmt-conf-change-item").click();
-    cy.get(
-      "#" + emptyConfigurationForm + ' .btn-primary:contains("Add")'
-    ).click();
+    cy.addSingletonResource(emptyConfigurationForm);
     cy.text("configuration-changes-add", "max-history", "10");
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(managementEndpoint, address, true);
   });
@@ -49,17 +45,12 @@ describe("TESTS: Configuration => Subsystem => Core Management => Configuration 
   });
 
   it("Remove Configuration Changes", () => {
-    const removeButton =
-      "#" + configurationFormId + ' a.clickable[data-operation="remove"';
     cy.addAddressIfDoesntExist(managementEndpoint, address, {
       "max-history": 10,
     });
     cy.navigateTo(managementEndpoint, "core-management");
     cy.get("#core-mgmt-conf-change-item").click();
-    cy.get(removeButton).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeSingletonResource(configurationFormId);
     cy.verifySuccess();
     cy.validateAddress(managementEndpoint, address, false);
   });
