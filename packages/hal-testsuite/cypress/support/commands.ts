@@ -65,7 +65,9 @@ Cypress.Commands.add(
 Cypress.Commands.add("editForm", (configurationFormId) => {
   const editButton =
     "#" + configurationFormId + ' a.clickable[data-operation="edit"';
+  cy.get(`#${configurationFormId}-editing`).should("not.be.visible");
   cy.get(editButton).click();
+  cy.get(`#${configurationFormId}-editing`).should("be.visible");
 });
 
 Cypress.Commands.add("saveForm", (configurationFormId) => {
@@ -96,7 +98,7 @@ Cypress.Commands.add("flip", (configurationFormId, attributeName, value) => {
       configurationFormId +
       "-" +
       attributeName +
-      '-editing"] .bootstrap-switch-label'
+      '-editing"] .bootstrap-switch-label:visible'
   )
     .click()
     .wait(1000);
@@ -115,10 +117,10 @@ Cypress.Commands.add(
     const resetButton =
       "#" + configurationFormId + ' a.clickable[data-operation="reset"';
     cy.get(resetButton).click();
-    cy.get(".modal-footer .btn-primary").click({ force: true });
+    cy.get(".modal-footer .btn-hal.btn-primary").click({ force: true });
     cy.verifySuccess();
     cy.task("execute:cli", {
-      managementApi: managementApi,
+      managementApi: `${managementApi}/management`,
       operation: "read-resource-description",
       address: address,
     }).then((result) => {
@@ -142,7 +144,7 @@ Cypress.Commands.add(
         });
       attributesWithDefaultValues.forEach((attributeWithDefaultValue) => {
         cy.task("execute:cli", {
-          managementApi: managementApi,
+          managementApi: `${managementApi}/management`,
           operation: "read-attribute",
           address: address,
           name: attributeWithDefaultValue.name,
@@ -157,21 +159,44 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add("addInTable", (tableId) => {
+  const tableWrapper = `#${tableId}_wrapper`;
+  cy.get(
+    `${tableWrapper} button.btn.btn-default > span:contains("Add")`
+  ).click();
+});
+
+Cypress.Commands.add("selectInTable", (tableId, resourceName) => {
+  const tableWrapper = `#${tableId}_wrapper`;
+  cy.get(`${tableWrapper} td:contains("${resourceName}")`).click();
+});
+
+Cypress.Commands.add("removeFromTable", (tableId, resourceName) => {
+  const tableWrapper = `#${tableId}_wrapper`;
+  cy.selectInTable(tableId, resourceName);
+  cy.get(
+    `${tableWrapper} button.btn.btn-default > span:contains("Remove")`
+  ).click();
+  cy.get(
+    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
+  ).click();
+});
+
 Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
+  cy.clearAttribute(configurationFormId, attributeName);
   cy.formInput(configurationFormId, attributeName)
     .click({ force: true })
-    .then(($textInput) => {
-      if ($textInput.val()) {
-        cy.formInput(configurationFormId, attributeName).clear();
-      }
-    })
-    .type(value)
-    .should("have.value", value)
-    .trigger("change");
+    .type(value);
+  cy.formInput(configurationFormId, attributeName).should("have.value", value);
+  cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("clearAttribute", (configurationFormId, attributeName) => {
-  cy.formInput(configurationFormId, attributeName).clear().trigger("change");
+  cy.formInput(configurationFormId, attributeName)
+    .click({ force: true })
+    .clear();
+  cy.formInput(configurationFormId, attributeName).should("have.value", "");
+  cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("verifySuccess", () => {
@@ -278,6 +303,61 @@ Cypress.Commands.add(
   }
 );
 
+Cypress.Commands.add(
+  "verifyListAttributeContains",
+  (managementEndpoint, address, attributeName, expectedValue) => {
+    cy.task("execute:cli", {
+      managementApi: managementEndpoint + "/management",
+      operation: "read-attribute",
+      address: address,
+      name: attributeName,
+    }).then((result) => {
+      expect((result as { outcome: string }).outcome).to.equal("success");
+      expect(
+        (result as { result: object[] | string[] }).result
+      ).to.deep.include(expectedValue);
+    });
+  }
+);
+
+Cypress.Commands.add(
+  "verifyListAttributeDoesNotContain",
+  (managementEndpoint, address, attributeName, expectedValue) => {
+    cy.task("execute:cli", {
+      managementApi: managementEndpoint + "/management",
+      operation: "read-attribute",
+      address: address,
+      name: attributeName,
+    }).then((result) => {
+      expect((result as { outcome: string }).outcome).to.equal("success");
+      expect(
+        (result as { result: object[] | string[] }).result
+      ).to.not.deep.include(expectedValue);
+    });
+  }
+);
+
+Cypress.Commands.add("confirmAddResourceWizard", () => {
+  cy.get(
+    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
+  ).click();
+});
+
+Cypress.Commands.add("addSingletonResource", (emptyConfigurationFormId) => {
+  cy.get(
+    "#" + emptyConfigurationFormId + ' .btn-primary:contains("Add")'
+  ).click();
+});
+
+Cypress.Commands.add("removeSingletonResource", (configurationFormId) => {
+  const removeButton =
+    "#" + configurationFormId + ' a.clickable[data-operation="remove"';
+  cy.get(removeButton).click();
+  cy.get(
+    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
+  ).click();
+});
+
 export {};
 /* eslint @typescript-eslint/no-namespace: off */
 declare global {
@@ -341,6 +421,24 @@ declare global {
         attributeName: string,
         expectedVaue: string | number | boolean
       ): void;
+      verifyListAttributeContains(
+        managementEndpoint: string,
+        address: string[],
+        attributeName: string,
+        expectedVaue: object | string
+      ): void;
+      verifyListAttributeDoesNotContain(
+        managementEndpoint: string,
+        address: string[],
+        attributeName: string,
+        expectedVaue: object | string
+      ): void;
+      addInTable(tableId: string): void;
+      addSingletonResource(emptyConfigurationFormId: string): void;
+      removeSingletonResource(configurationFormId: string): void;
+      selectInTable(tableId: string, resourceName: string): void;
+      removeFromTable(tableId: string, resourceName: string): void;
+      confirmAddResourceWizard(): void;
     }
   }
 }

@@ -4,7 +4,7 @@ import {
   AddXADataSourceBuilder,
 } from "@hal/commands";
 
-describe("TESTS: Configuration => Datasource", () => {
+describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
   const sqlserverUser = "sa";
   const sqlserverPassword = "Str[0]ngPassw[0]rd";
   const sqlserverDatabaseName = "tempdb";

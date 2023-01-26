@@ -50,10 +50,6 @@ describe("TESTS: Configuration => Interface", () => {
 
   it("Reset", () => {
     cy.navigateTo(managementEndpoint, "interface;name=" + interfaceToEdit.name);
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint + "/management",
-      address
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address);
   });
 });

@@ -1,4 +1,6 @@
 describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
+  const batchJdbcRepositoryTableId = "batch-jdbc-job-repo-table";
+
   const jdbcJobRepositories = {
     create: {
       name: "jdbc-job-repository-create",
@@ -25,9 +27,7 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
   it("Create JDBC Job Repository", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-jdbc-job-repo-item").click();
-    cy.get(
-      '#batch-jdbc-job-repo-table_wrapper button.btn.btn-default > span:contains("Add")'
-    ).click();
+    cy.addInTable(batchJdbcRepositoryTableId);
     cy.text(
       "batch-jdbc-job-repo-table-add",
       "name",
@@ -38,9 +38,7 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
       "data-source",
       jdbcJobRepositories.create.dataSource
     );
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-    ).click();
+    cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
@@ -67,17 +65,10 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
     );
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-jdbc-job-repo-item").click();
-    cy.get(
-      'table#batch-jdbc-job-repo-table td:contains("' +
-        jdbcJobRepositories.remove.name +
-        '")'
-    ).click();
-    cy.get(
-      '#batch-jdbc-job-repo-table_wrapper button.btn.btn-default > span:contains("Remove")'
-    ).click();
-    cy.get(
-      'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-    ).click();
+    cy.removeFromTable(
+      batchJdbcRepositoryTableId,
+      jdbcJobRepositories.remove.name
+    );
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
