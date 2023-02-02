@@ -23,7 +23,8 @@ export class Manatoko {
     if (!Manatoko._instance) {
       const network = await new Network().start();
       const halContainer = await new GenericContainer(
-        "quay.io/halconsole/hal-development:latest"
+        process.env.HAL_STANDALONE_IMAGE ||
+          "quay.io/halconsole/hal-development:latest"
       )
         .withExposedPorts(9090)
         .withNetworkMode(network.getName())

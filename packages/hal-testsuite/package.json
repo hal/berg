@@ -11,11 +11,15 @@
     "wait-port": "^1.0.4"
   },
   "scripts": {
-    "run-e2e-tests": "node dist/run-e2e-tests.js",
+    "pretest": "npm run --prefix ../.. compile",
+    "test": "node dist/run-e2e-tests.js",
+    "posttest": "npm run --prefix ../.. generate-report",
     "develop": "node dist/open-cypress.js"
   },
   "devDependencies": {
-    "cypress": "^12.1.0",
+    "@types/command-line-args": "^5.2.0",
+    "command-line-args": "^5.2.1",
+    "cypress": "^12.5.0",
     "cypress-multi-reporters": "^1.6.2",
     "mocha-junit-reporter": "^2.2.0",
     "mochawesome": "^7.1.3",

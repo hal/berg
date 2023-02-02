@@ -185,16 +185,15 @@ Cypress.Commands.add("removeFromTable", (tableId, resourceName) => {
 Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
   cy.clearAttribute(configurationFormId, attributeName);
   cy.formInput(configurationFormId, attributeName)
-    .click({ force: true })
+    .click()
+    .wait(200)
     .type(value);
   cy.formInput(configurationFormId, attributeName).should("have.value", value);
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("clearAttribute", (configurationFormId, attributeName) => {
-  cy.formInput(configurationFormId, attributeName)
-    .click({ force: true })
-    .clear();
+  cy.formInput(configurationFormId, attributeName).click().wait(200).clear();
   cy.formInput(configurationFormId, attributeName).should("have.value", "");
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });

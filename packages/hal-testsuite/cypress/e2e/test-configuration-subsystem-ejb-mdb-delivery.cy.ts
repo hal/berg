@@ -7,27 +7,38 @@ describe("TESTS: Configuration => Subsystem => EJB => MDB Delivery", () => {
 
   const mdbDeliveryGroups = {
     create: {
-      name: "mdb-dg-to-create"
+      name: "mdb-dg-to-create",
     },
     update: {
-      name: "mdb-dg-to-update"
+      name: "mdb-dg-to-update",
     },
     reset: {
-      name: "mdb-dg-to-reset"
+      name: "mdb-dg-to-reset",
     },
     remove: {
-      name: "mdb-dg-to-remove"
-    }
-  }
+      name: "mdb-dg-to-remove",
+    },
+  };
 
   before(() => {
-    cy.startWildflyContainer().then((result) => {
-      managementEndpoint = result as string;
-    }).then(() => {
-      cy.addAddress(managementEndpoint, address.concat(mdbDeliveryGroups.update.name));
-      cy.addAddress(managementEndpoint, address.concat(mdbDeliveryGroups.reset.name));
-      cy.addAddress(managementEndpoint, address.concat(mdbDeliveryGroups.remove.name));
-    })
+    cy.startWildflyContainer()
+      .then((result) => {
+        managementEndpoint = result as string;
+      })
+      .then(() => {
+        cy.addAddress(
+          managementEndpoint,
+          address.concat(mdbDeliveryGroups.update.name)
+        );
+        cy.addAddress(
+          managementEndpoint,
+          address.concat(mdbDeliveryGroups.reset.name)
+        );
+        cy.addAddress(
+          managementEndpoint,
+          address.concat(mdbDeliveryGroups.remove.name)
+        );
+      });
   });
 
   after(() => {
@@ -38,10 +49,18 @@ describe("TESTS: Configuration => Subsystem => EJB => MDB Delivery", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-mdb-delivery-group-item").click();
     cy.addInTable(mdbDeliveryGroupTableId);
-    cy.text("ejb3-mdb-delivery-group-table-add", "name", mdbDeliveryGroups.create.name);
+    cy.text(
+      "ejb3-mdb-delivery-group-table-add",
+      "name",
+      mdbDeliveryGroups.create.name
+    );
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(managementEndpoint, address.concat(mdbDeliveryGroups.create.name), true);
+    cy.validateAddress(
+      managementEndpoint,
+      address.concat(mdbDeliveryGroups.create.name),
+      true
+    );
   });
 
   it("Toggle active", () => {
@@ -74,7 +93,11 @@ describe("TESTS: Configuration => Subsystem => EJB => MDB Delivery", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-mdb-delivery-group-item").click();
     cy.selectInTable(mdbDeliveryGroupTableId, mdbDeliveryGroups.reset.name);
-    cy.resetForm(configurationFormId, managementEndpoint, address.concat(mdbDeliveryGroups.reset.name));
+    cy.resetForm(
+      configurationFormId,
+      managementEndpoint,
+      address.concat(mdbDeliveryGroups.reset.name)
+    );
   });
 
   it("Remove", () => {
@@ -82,6 +105,10 @@ describe("TESTS: Configuration => Subsystem => EJB => MDB Delivery", () => {
     cy.get("#ejb3-mdb-delivery-group-item").click();
     cy.removeFromTable(mdbDeliveryGroupTableId, mdbDeliveryGroups.remove.name);
     cy.verifySuccess();
-    cy.validateAddress(managementEndpoint, address.concat(mdbDeliveryGroups.remove.name), false);
+    cy.validateAddress(
+      managementEndpoint,
+      address.concat(mdbDeliveryGroups.remove.name),
+      false
+    );
   });
 });
