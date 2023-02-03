@@ -28,7 +28,7 @@ Following tools are required to run the test suite
   - [nvm](https://github.com/nvm-sh/nvm) is optional tool to install & manage multiple Node environments
 - [npx](https://github.com/npm/npx) CLI tool used to exeute binaries from project's `node_modules` directly (instead of providing absolute/relative path to the commannds). It is used in multiple build steps.
 - [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Node that when using Podman as container runtime, please may need to export following environment variables:
-  - ` TESTCONTAINERS_RYUK_DISABLED=true`
+  - `TESTCONTAINERS_RYUK_DISABLED=true`
   - `DOCKER_HOST` environment variable pointing to `podman.sock`
 - Java. Yes we'll need Java to write deployments/applications that will be deployed onto the running WildFly container.
 - [Maven](https://maven.apache.org). Yes, we'll need Maven to ease up the development of the deployed applications & downloading needed JDBC drivers for datasource & drivers UI tests. Maven is mostly used embedded by [node-maven](https://github.com/headcr4sh/node-maven) JS wrapper to execute Maven & Java related tasks into the build automation.
@@ -50,12 +50,12 @@ in the root directory to download all of the NPM dependencies specified in `pack
 npm run develop
 ```
 
-- If you want to execute whole testsuite, navigate to `packages/hal-testsuite` and from within that directory execute `npm test`
+- If you want to execute whole testsuite, navigate to `packages/testsuite` and from within that directory execute `npm test`
   - It is also possible to run on specific browser by supplying `--browser` argument, e.g
   ```
   npm test -- --browser=chrome
   ```
-  - It is also possible to reduce the amount of specs executed by passing `--specs` flag. This flag must be relative to the `packages/hal-testsuite` directory and supports glob patterns, e.g to execute only `ejb` related tests, run
+  - It is also possible to reduce the amount of specs executed by passing `--specs` flag. This flag must be relative to the `packages/testsuite` directory and supports glob patterns, e.g to execute only `ejb` related tests, run
   ```
   npm test -- --specs="cypress/e2e/*ejb*.cy.ts"
   ```
