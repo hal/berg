@@ -1,21 +1,20 @@
 {
-  "name": "hal-cypress",
+  "name": "berg",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "npx del \"packages/hal-testsuite/cypress/fixtures/**\" \"packages/hal-testsuite/results\" \"mochawesome*\"",
+    "clean": "npx del \"packages/testsuite/cypress/fixtures/**\" \"packages/testsuite/results\" \"mochawesome*\"",
     "preformat": "npm run clean",
     "format": "npx prettier --write .",
-    "prelint": "npm run format",
     "lint": "npx eslint .",
-    "precompile": "npm run lint",
-    "resources": "npm run resources -w @hal/resources",
+    "precompile": "npm run format",
+    "resources": "npm run resources -w @berg/resources",
     "compile": "npx tsc --build --clean && npx tsc --build",
-    "postcompile": "npm run resources",
-    "generate-report": "npx mochawesome-merge packages/hal-testsuite/results/cypress/e2e/*.json > mochawesome.json && npx marge mochawesome.json",
+    "postcompile": "npm run lint && npm run resources",
+    "generate-report": "npx mochawesome-merge packages/testsuite/results/cypress/e2e/*.json > mochawesome.json && npx marge mochawesome.json",
     "predevelop": "npm run compile",
-    "develop": "npm run develop -w @hal/testsuite"
+    "develop": "npm run develop -w @berg/testsuite"
   },
   "workspaces": {
     "packages": [
