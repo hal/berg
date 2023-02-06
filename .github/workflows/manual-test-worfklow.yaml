@@ -1,5 +1,0 @@
-on: workflow_dispatch
-name: 'Manual job execution'
-jobs:
-  call-reusable-workflow:
-    uses: ./.github/workflows/reusable-build-project-workflow.yaml'
