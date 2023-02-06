@@ -1,0 +1,14 @@
+on: 
+  workflow_dispatch:
+    inputs:
+      spec:
+        type: string
+        description: 'Spec to run'
+name: "Manual job execution"
+jobs:
+  call-reusable-workflow:
+    uses: "./.github/workflows/reusable-build-project-workflow.yaml"
+    with:
+      spec: ${{ inputs.spec }}
+  
+  
