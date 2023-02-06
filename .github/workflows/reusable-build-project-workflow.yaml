@@ -1,0 +1,22 @@
+on: 'workflow_call'
+name: 'Reusable Build Project Workflow'
+jobs:
+  build_project_job:
+    name: 'Build Project'
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: 'Checkout project'
+      uses: actions/checkout@v3
+    - name: 'Setup NodeJS'
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+    - name: 'Setup JDK'
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+    - name: 'Run npm build'
+      run: 'npm build'
+    
+
