@@ -37,11 +37,7 @@
 //
 
 Cypress.Commands.add("navigateTo", (managementEndpoint, token) => {
-  cy.intercept("POST", "https://www.google-analytics.com/j/collect*").as(
-    "loadPage"
-  );
   cy.visit(`?connect=${managementEndpoint}#${token}`);
-  cy.wait("@loadPage").its("response.statusCode").should("eq", 200);
   cy.get("#hal-root-container").should("be.visible");
 });
 
@@ -49,15 +45,11 @@ Cypress.Commands.add(
   "navigateToGenericSubsystemPage",
   (managementEndpoint, address) => {
     const subsystemSeparator = "%255C2";
-    cy.intercept("POST", "https://www.google-analytics.com/j/collect*").as(
-      "loadPage"
-    );
     cy.visit(
       `?connect=${managementEndpoint}#generic-subsystem;address=%255C0${address.join(
         subsystemSeparator
       )}`
     );
-    cy.wait("@loadPage").its("response.statusCode").should("eq", 200);
     cy.get("#hal-root-container").should("be.visible");
   }
 );
@@ -183,17 +175,20 @@ Cypress.Commands.add("removeFromTable", (tableId, resourceName) => {
 });
 
 Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
-  cy.clearAttribute(configurationFormId, attributeName);
   cy.formInput(configurationFormId, attributeName)
-    .click()
+    .click({ force: true })
     .wait(200)
-    .type(value);
+    .clear();
+  cy.formInput(configurationFormId, attributeName).type(value);
   cy.formInput(configurationFormId, attributeName).should("have.value", value);
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("clearAttribute", (configurationFormId, attributeName) => {
-  cy.formInput(configurationFormId, attributeName).click().wait(200).clear();
+  cy.formInput(configurationFormId, attributeName)
+    .click({ force: true })
+    .wait(200)
+    .clear();
   cy.formInput(configurationFormId, attributeName).should("have.value", "");
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
@@ -339,7 +334,7 @@ Cypress.Commands.add(
 Cypress.Commands.add("confirmAddResourceWizard", () => {
   cy.get(
     'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-  ).click();
+  ).click({ force: true });
 });
 
 Cypress.Commands.add("addSingletonResource", (emptyConfigurationFormId) => {

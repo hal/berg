@@ -1,4 +1,4 @@
-describe("TESTS: Configuration => Subsystem => EJB => Services => Identity", () => {
+describe("TESTS: Configuration => Subsystem => EJB => Services => IIOP", () => {
   let managementEndpoint: string;
 
   const address = ["subsystem", "ejb3", "service", "iiop"];

@@ -1,7 +1,8 @@
 {
   "reporterEnabled": "mocha-junit-reporter, mochawesome",
   "mochaJunitReporterReporterOptions": {
-    "mochaFile": "results/[suiteFilename].xml"
+    "mochaFile": "results/[suiteFilename].xml",
+    "jenkinsMode": true
   },
   "mochawesomeReporterOptions": {
     "reportDir": "results",

@@ -6,18 +6,19 @@
   "author": "spriadka",
   "license": "MIT",
   "dependencies": {
-    "@berg/commands": "^1.0.0",
     "@berg/berg": "^1.0.0",
+    "@berg/commands": "^1.0.0",
     "wait-port": "^1.0.4"
   },
   "scripts": {
     "pretest": "npm run --prefix ../.. compile",
     "test": "node dist/run-e2e-tests.js",
-    "posttest": "npm run --prefix ../.. generate-report",
     "develop": "node dist/open-cypress.js"
   },
   "devDependencies": {
+    "@cypress/xvfb": "^1.2.4",
     "@types/command-line-args": "^5.2.0",
+    "@types/mochawesome": "^6.2.1",
     "command-line-args": "^5.2.1",
     "cypress": "^12.5.0",
     "cypress-multi-reporters": "^1.6.2",

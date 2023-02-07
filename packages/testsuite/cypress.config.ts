@@ -9,7 +9,7 @@ import {
 import { Environment } from "testcontainers/dist/docker/types";
 
 export default defineConfig({
-  reporter: "../../node_modules/cypress-multi-reporters/index.js",
+  reporter: require.resolve("cypress-multi-reporters/index.js"),
   reporterOptions: {
     configFile: "reporter-config.json",
   },

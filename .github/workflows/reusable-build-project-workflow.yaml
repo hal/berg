@@ -5,7 +5,7 @@ on:
       spec:
         type: string
         required: false
-        description: 'Spec to run'
+        description: "Comma delimited test spec file(s) to run."
 jobs:
   build_project_job:
     name: "Build Project"
@@ -24,10 +24,12 @@ jobs:
           java-version: "17"
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
-      - name: Setup firefox
+        with:
+          chrome-version: stable
+      - name: Install Firefox
         uses: browser-actions/setup-firefox@v1
         with:
-          firefox-version: 'latest-esr'
+          firefox-version: "latest-esr"
       - name: "Run npm install"
         run: "npm install"
       - name: "Run compile"
