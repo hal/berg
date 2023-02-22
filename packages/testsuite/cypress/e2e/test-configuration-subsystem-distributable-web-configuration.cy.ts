@@ -135,7 +135,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
     cy.text(
       configurationFormId,
       "default-single-sign-on-management",
-      hotRodSessionManagements.create.name
+      hotRodSingleSignOnManagements.create.name
     );
     cy.saveForm(configurationFormId);
     cy.verifySuccess();

@@ -1,0 +1,91 @@
+on:
+  schedule:
+    - cron: "0 0 * * *"
+name: "Nightly matrix workflow"
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test_matrix:
+    strategy:
+      matrix:
+        specs:
+          [
+            "*datasource*",
+            "*interface*",
+            "*path*",
+            "*batch-jberet*",
+            "*core-management*",
+            "*deployment-scanner*",
+            "*distributable-web*",
+            "*ee*",
+            "*ejb*",
+            "*elytron*",
+            "*jmx*",
+            "*jpa*",
+            "*jsf*",
+            "*system-property*",
+            "*weld*",
+            "*homepage*",
+            "*smoke*",
+          ]
+    name: "Run tests"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout project"
+        uses: actions/checkout@v3
+      - name: "Setup NodeJS"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: "Setup JDK"
+        uses: actions/setup-java@v3
+        with:
+          distribution: "adopt"
+          java-version: "17"
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+      - name: Install Firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: "latest-esr"
+      - name: "Run npm install"
+        run: "npm install"
+      - name: "Run compile"
+        run: "npm run compile"
+      - name: "Run test(s)"
+        run: "cd packages/testsuite && npm test -- --browser=chrome --specs=cypress/e2e/${{ matrix.specs }}"
+      - name: "Archive test report(s) and video(s)"
+        uses: "actions/upload-artifact@v3"
+        with:
+          name: "${{ github.run_id}}-${{ strategy.job-index }}-artifacts"
+          path: |
+            packages/testsuite/results
+            packages/testsuite/cypress/videos
+  process_report:
+    name: "Collect results & deploy GH pages"
+    needs: test_matrix
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Download artifacts"
+        uses: "actions/download-artifact@v3"
+      - name: "Setup NodeJS"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: "Install necessary tools"
+        run: npm install -g copyfiles gh-pages@3.0.0 mochawesome-merge mochawesome-report-generator
+      - name: "Generate Mochawesome Report"
+        run: mochawesome-merge "./*-artifacts/results/cypress/e2e/*.json" > mochawesome.json
+      - name: "Copy video assets"
+        run: copyfiles -u 3 "./*-artifacts/cypress/videos/*.mp4" mochawesome-report/assets/videos
+      - name: "Create GH Pages content"
+        run: marge mochawesome.json -f index.html
+      - name: "Get time info"
+        uses: josStorer/get-current-time@v2
+        id: current-time
+      - name: "Publish GH Pages"
+        run: |
+          gh-pages -r https://git:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git -d mochawesome-report -f -u "github-actions-bot <support+actions@github.com>" -m "${{ steps.current-time.outputs.readableTime }}"

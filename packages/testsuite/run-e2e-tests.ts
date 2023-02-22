@@ -4,10 +4,9 @@ import commandLineArgs from "command-line-args";
 import { OptionDefinition } from "command-line-args";
 
 const optionDefinitions: OptionDefinition[] = [
-  { name: "browser", alias: "b", type: String, defaultValue: "firefox" },
+  { name: "browser", type: String, defaultValue: "firefox" },
   {
     name: "specs",
-    alias: "s",
     type: String,
     defaultValue: "cypress/e2e/**/*.cy.ts",
   },
@@ -28,7 +27,7 @@ const optionDefinitions: OptionDefinition[] = [
         baseUrl: `http://localhost:${berg
           .getHalContainer()
           .getMappedPort(9090)}`,
-        specPattern: `${options.specs as string}`,
+        specPattern: (options.specs as string).split(","),
       },
     },
   });

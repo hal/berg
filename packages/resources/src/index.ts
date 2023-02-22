@@ -15,6 +15,7 @@ const modulesDirectory = path.resolve(fixturesDirectory, "modules");
 
 const mavenInstance = maven.create({
   cwd: path.resolve(__dirname, ".."),
+  batchMode: true,
 });
 (async () => {
   await mavenInstance.execute(["clean", "install"], {

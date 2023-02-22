@@ -19,11 +19,21 @@ describe("TESTS: Homepage", () => {
   });
 
   it("Should display About info", () => {
-    cy.get("a.tool.clickable > span.pficon").click({ force: true });
-    cy.get("div.product-versions-pf")
-      .contains("Product Version")
-      .siblings("dd")
-      .should("include.text", "26.1.0.Final");
+    let productVersion = "";
+    cy.task("execute:cli", {
+      managementApi: managementEndpoint + "/management",
+      operation: "read-attribute",
+      address: [],
+      name: "product-version",
+    }).then((result) => {
+      productVersion = (result as { result: string }).result;
+      cy.get("span.pficon.pficon-info").parent().click();
+      cy.get("div.product-versions-pf")
+        .should("be.visible")
+        .contains("Product Version")
+        .next()
+        .should("include.text", productVersion);
+    });
   });
 
   it("Should load Deployments page", () => {

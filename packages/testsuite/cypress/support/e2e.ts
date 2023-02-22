@@ -15,6 +15,9 @@
 
 // Import commands.js using ES2015 syntax:
 import "./commands";
+/* eslint @typescript-eslint/no-unsafe-assignment: off */
+/* eslint @typescript-eslint/no-var-requires: off */
+const addContext = require("mochawesome/addContext");
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
@@ -23,4 +26,16 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   console.error(err);
   console.error(runnable);
   return false;
+});
+
+/* eslint @typescript-eslint/no-unsafe-call: off */
+/* eslint @typescript-eslint/no-unused-vars: off */
+Cypress.on("test:after:run", (test, runnable) => {
+  // Temporary workaround till https://github.com/cypress-io/cypress/issues/18415 is resolved
+  if (Cypress.browser.family == "chromium") {
+    const videoUrl = `assets/videos/${Cypress.spec.name}.mp4`;
+    if (runnable.state === "failed") {
+      addContext({ test }, videoUrl);
+    }
+  }
 });
