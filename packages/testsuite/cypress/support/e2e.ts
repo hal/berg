@@ -31,8 +31,11 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 /* eslint @typescript-eslint/no-unsafe-call: off */
 /* eslint @typescript-eslint/no-unused-vars: off */
 Cypress.on("test:after:run", (test, runnable) => {
-  const videoUrl = `assets/videos/${Cypress.spec.name}.mp4`;
-  if (runnable.state === "failed") {
-    addContext({ test }, videoUrl);
+  // Temporary workaround till https://github.com/cypress-io/cypress/issues/18415 is resolved
+  if (Cypress.browser.family == "chromium") {
+    const videoUrl = `assets/videos/${Cypress.spec.name}.mp4`;
+    if (runnable.state === "failed") {
+      addContext({ test }, videoUrl);
+    }
   }
 });
