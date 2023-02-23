@@ -4,7 +4,6 @@
 
 ## Things to know before you start contributing
 
-
 ### Packages overview
 
 ```
@@ -15,13 +14,13 @@
 |   ├── testsuite
 ```
 
-* `berg` is responsible for launching [HAL standalone container](quay.io/halconsole/hal-development).
+- `berg` is responsible for launching [HAL standalone container](https://quay.io/halconsole/hal-development).
 
-* `testsuite` is the main test package. Tests should be placed under `testsuite/cypress/e2e` folder. Test file name should include the tested UI part and test name in the `describe` method should include information on how to navigate to the tested resource.
+- `testsuite` is the main test package. Tests should be placed under `testsuite/cypress/e2e` folder. Test file name should include the tested UI part and test name in the `describe` method should include information on how to navigate to the tested resource.
 
-* `commands` is the package where the WildFly CLI abstractions are being put. This package should also include just the operations, that are present in the `jboss-cli.sh` but are not available via REST API (commands such as `data-source add ...`, `module add ...`)
+- `commands` is the package where the WildFly CLI abstractions are being put. This package should also include just the operations, that are present in the `jboss-cli.sh` but are not available via REST API (commands such as `data-source add ...`, `module add ...`)
 
-* `resources` package serves mostly to build Java deployments/JARs (such as JDBC drivers), basically anything related to the WildFly Java world.
+- `resources` package serves mostly to build Java deployments/JARs (such as JDBC drivers), basically anything related to the WildFly Java world.
 
 ## How to write tests
 
@@ -29,23 +28,28 @@
 
 When developing in Cypress, you need to understand two different JavaScript runtimes
 
-* The one Cypress bundles into the browser under test
-* System wide JavaScript
+- The one Cypress bundles into the browser under test
+- System wide JavaScript
 
-Since using TestContainers to launch containers shouldn't be bundled into browser under test, starting the WildFly container is being done using Cypress arbitrary Node code running handle - [`cy.task`](https://docs.cypress.io/api/commands/task), use 
+Since using TestContainers to launch containers shouldn't be bundled into browser under test, starting the WildFly container is being done using Cypress arbitrary Node code running handle - [`cy.task`](https://docs.cypress.io/api/commands/task), use
+
 ```
 cy.startWildFlyContainer
 ```
+
 method, which is a wrapper for
+
 ```
 cy.task("start:wildfly:container")
 ```
-to start the container. This method/task also automatically sets the deployed HAL container endpoint in the `allowed-origins` attribute. Both of the approaches would return the management endpoint of the deployed WildFly instance.
+
+to start the container. Note that despite starting the web server being marked as an anti-pattern, starting the WildFly server clean has its benefits in terms of a clean environment per test and also it introduces means for test parallelization (we know what we're doing :slightly_smiling_face:). This method/task also automatically sets the deployed HAL container endpoint in the `allowed-origins` attribute. Both of the approaches would return the management endpoint of the deployed WildFly instance.
 
 ### Communicating with WildFly management interface
 
 Communication with the WildFly management interface is also being done using Cypress task, `execute:cli` to be precise. A better example of running `/system-property=to-add:add(value=myVal)` in JBoss CLI in Berg using `cy.task`
-would be 
+would be
+
 ```
 cy.task("execute:cli", {
       managementApi: `${managementEndpoint}/management`,
@@ -54,3 +58,59 @@ cy.task("execute:cli", {
       value: "myVal"
     });
 ```
+
+### Test template
+
+To start developing tests, you can copy paste following example into your `packages/testsuite/cypress/e2e/test-to-be-added.cy.ts`
+
+```typescript
+// describe method is an equivalent of a TestClass
+describe("TESTS: Path => To => Tested => Resource", () => {
+  const configurationFormId = "resource-form";
+
+  // This is and before method are very important
+  let managementEndpoint: string;
+
+  // Here we start our WildFly container prior to test execution
+  before(() => {
+    // Obtains WildFly management endpoint, that will be used
+    // for backend data retrieval and validation
+    // cy.startWildflyContainer also starts the WildFly container under
+    // the name of the spec/test file, e.g in our case: test_to_be_added
+    cy.startWildflyContainer().then((result) => {
+      managementEndpoint = result as string;
+    });
+  });
+
+  // Here we stop & remove started WildFly container(s)
+  after(() => {
+    cy.task("stop:containers");
+  });
+
+  // it methods is an equivalent of a @Test annotated method,
+  // First argument is the name of the test, second is a lambda test function
+  it("Edit default-extended-persistence-inheritance", () => {
+    // Navigates to the UI page
+    // http://localhost:<mapped_hal_port>?connect=http://localhost:<mapped_wildfly_port>#<token>
+    cy.navigateTo(managementEndpoint, "token");
+    // Clicks on the "Edit" button of the form to be edited
+    cy.editForm(configurationFormId);
+    // Fills in "sample" into the #resource-form-module-editing input
+    cy.text(configurationFormId, "module", "sample");
+    // Clicks on the "Save" button of the form
+    cy.saveForm(configurationFormId);
+    // Verifies a succesful notification has been displayed in the UI
+    cy.verifySuccess();
+    // Checks that /path=to/tested=resource:read-attribute(name=module)
+    // returns "sample" and is succesful
+    cy.verifyAttribute(
+      managementEndpoint,
+      ["path", "to", "tested", "resource"],
+      "module",
+      "sample"
+    );
+  });
+});
+```
+
+Above is just a simple blueprint on how to write tests for Berg. See other tests for some "advanced" scenarios and make sure to visit our [custom commands](packages/testsuite/cypress/support/commands.ts) :slightly_smiling_face:
