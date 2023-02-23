@@ -61,14 +61,15 @@ cy.task("execute:cli", {
 
 ### Test template
 
-To start developing tests, you can copy paste following example into your `packages/testsuite/cypress/e2e/test-to-be-added.cy.ts`
+To start developing tests, you can copy paste following example into your `packages/testsuite/cypress/e2e/test-to-be-added.cy.ts`. Added tests should be prefixed with "test-" followed by navigation crumbs of the tested UI area. When developing new tests, prefer to test viable minimum per test, e.g if a page has a vertical navigation list elements, test one of the element per test file.
 
 ```typescript
-// describe method is an equivalent of a TestClass
+// "describe" method is an equivalent of a TestClass
+// Please keep the "TESTS:" in the "test class" name followed by
+// navigation crumbs in the management console
 describe("TESTS: Path => To => Tested => Resource", () => {
   const configurationFormId = "resource-form";
 
-  // This is and before method are very important
   let managementEndpoint: string;
 
   // Here we start our WildFly container prior to test execution
@@ -77,17 +78,19 @@ describe("TESTS: Path => To => Tested => Resource", () => {
     // for backend data retrieval and validation
     // cy.startWildflyContainer also starts the WildFly container under
     // the name of the spec/test file, e.g in our case: test_to_be_added
+    // ()
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
     });
   });
 
-  // Here we stop & remove started WildFly container(s)
+  // Here we stop & remove started WildFly container and other containers
+  // e.g postgres (see packages/testsuite/cypress/e2e/test-configuration-datasource-postgre-finder.cy.ts)
   after(() => {
     cy.task("stop:containers");
   });
 
-  // it methods is an equivalent of a @Test annotated method,
+  // "it" method is an equivalent of a @Test annotated method,
   // First argument is the name of the test, second is a lambda test function
   it("Edit default-extended-persistence-inheritance", () => {
     // Navigates to the UI page
@@ -111,6 +114,30 @@ describe("TESTS: Path => To => Tested => Resource", () => {
     );
   });
 });
+```
+
+If you want to run your developed test, you can either see it live by running Cypress interactively:
+
+```
+npm run develop
+```
+
+from the project root. If you want to execute it non-interactively, run
+
+```
+npm test -- --specs=cypress/e2e/test-to-be-added.cy.ts
+```
+
+from [testsuite root](packages/testsuite). You can also specify the desired browser by supplying `--browser=firefox|chrome` when running
+
+```
+npm test
+```
+
+e.g
+
+```
+npm test -- --browser=chrome --specs=cypress/e2e/test-to-be-added.cy.ts
 ```
 
 Above is just a simple blueprint on how to write tests for Berg. See other tests for some "advanced" scenarios and make sure to visit our [custom commands](packages/testsuite/cypress/support/commands.ts) :slightly_smiling_face:
