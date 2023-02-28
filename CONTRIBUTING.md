@@ -61,10 +61,10 @@ cy.task("execute:cli", {
 
 ### Test template
 
-* To start developing tests, you can copy paste following example into your `packages/testsuite/cypress/e2e/test-to-be-added.cy.ts`. 
-* Added tests should be prefixed with "test-" followed by navigation crumbs of the tested UI area. 
-* When developing new tests, prefer to test viable minimum per test, e.g if a page has a vertical navigation list elements, test one of the element per test file.
-* Currently, our GH actions are running test matrix nightly, where the tests are being grouped by regular expressions (see [`jobs.test_matrix.strategy.matrix.specs`](.github/workflows/scheduled-run-all-tests-workflow.yaml)). If you're developing a new test that would enhance mentioned test groups, make sure to edit GH workflows as well.
+- To start developing tests, you can copy paste following example into your `packages/testsuite/cypress/e2e/test-to-be-added.cy.ts`.
+- Added tests should be prefixed with "test-" followed by navigation crumbs of the tested UI area.
+- When developing new tests, prefer to test viable minimum per test, e.g if a page has a vertical navigation list elements, test one of the element per test file.
+- Currently, our GH actions are running test matrix nightly, where the tests are being grouped by regular expressions (see [`jobs.test_matrix.strategy.matrix.specs`](.github/workflows/scheduled-run-all-tests-workflow.yaml)). If you're developing a new test that would enhance mentioned test groups, make sure to edit GH workflows as well.
 
 ```typescript
 // "describe" method is an equivalent of a TestClass
