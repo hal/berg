@@ -1,6 +1,6 @@
 # Berg
 
-Berg is a test-suite for HAL Management Console (https://github.com/hal/console) based on Cypress (https://www.cypress.io) UI test automation. Berg as a name is heavily inspired by Gutenberg, inventor of printing press :) (printing press -> press -> Cypress).
+Berg is a test-suite for [HAL Management Console](https://github.com/hal/console) based on [Cypress](https://www.cypress.io) UI test automation. Berg as a name is heavily inspired by Gutenberg, inventor of printing press :) (printing press -> press -> Cypress).
 
 # Technological Stack
 
@@ -27,7 +27,7 @@ Following tools are required to run the test suite
 - [NodeJS](https://nodejs.org/en/) as a runtime environment.
   - [nvm](https://github.com/nvm-sh/nvm) is optional tool to install & manage multiple Node environments
 - [npx](https://github.com/npm/npx) CLI tool used to exeute binaries from project's `node_modules` directly (instead of providing absolute/relative path to the commannds). It is used in multiple build steps.
-- [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Node that when using Podman as container runtime, please may need to export following environment variables:
+- [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Note that when using Podman as container runtime you may need to export following environment variables:
   - `TESTCONTAINERS_RYUK_DISABLED=true`
   - `DOCKER_HOST` environment variable pointing to `podman.sock`
 - Java. Yes we'll need Java to write deployments/applications that will be deployed onto the running WildFly container.
@@ -58,4 +58,8 @@ npm run develop
   - It is also possible to reduce the amount of specs executed by passing `--specs` flag. This flag must be relative to the `packages/testsuite` directory and supports glob patterns, e.g to execute only `ejb` related tests, run
   ```
   npm test -- --specs="cypress/e2e/*ejb*.cy.ts"
+  ```
+  - If you wish to run the test suite against custom HAL or WildFly images, you can use `HAL_IMAGE` and `WILDFLY_IMAGE` environment variables to specify custom images, e.g
+  ```
+  HAL_IMAGE=quay.io/myorg/hal WILDFLY_IMAGE=quay.io/myorg/wildfly npm test ...
   ```
