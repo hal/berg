@@ -1,0 +1,52 @@
+name: "Test coverage enhancement"
+description: "File test coverage enhancement"
+title: "[Coverage]: "
+labels: ["coverage"]
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      placeholder: "How this feature enhances berg TS?"
+  - type: dropdown
+    attributes:
+      label: Affects
+      multiple: false
+      options:
+        - "configuration"
+        - "runtime"
+        - "deployment"
+  - type: dropdown
+    attributes:
+      label: Subsystem
+      multiple: false
+      options:
+        - "batch"
+        - "datasource"
+        - "deploymentscanner"
+        - "distributableweb"
+        - "ee"
+        - "ejb"
+        - "elytron"
+        - "iiop"
+        - "infinispan"
+        - "interface"
+        - "io"
+        - "jca"
+        - "jgroups"
+        - "jmx"
+        - "jpa"
+        - "jsf"
+        - "logging"
+        - "mail"
+        - "management"
+        - "messaging"
+        - "microprofile"
+        - "modcluster"
+        - "paths"
+        - "remoting"
+        - "resourcedapter"
+        - "securitymanager"
+        - "socketbinding"
+        - "transaction"
+        - "undertow"
+        - "webservices"
