@@ -43,6 +43,7 @@ body:
         - "logging"
         - "mail"
         - "management"
+        - "metrics"
         - "messaging"
         - "microprofile-config"
         - "microprofile-jwt-smallrye"
