@@ -29,6 +29,7 @@ body:
         - "ejb"
         - "elytron"
         - "elytron-oidc-client"
+        - "health"
         - "iiop"
         - "infinispan"
         - "interface"
