@@ -19,6 +19,7 @@ jobs:
             "*ee*",
             "*ejb*",
             "*elytron*",
+            "*health*",
             "*jmx*",
             "*jpa*",
             "*jsf*",
