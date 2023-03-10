@@ -27,9 +27,11 @@ Following tools are required to run the test suite
 - [NodeJS](https://nodejs.org/en/) as a runtime environment.
   - [nvm](https://github.com/nvm-sh/nvm) is optional tool to install & manage multiple Node environments
 - [npx](https://github.com/npm/npx) CLI tool used to exeute binaries from project's `node_modules` directly (instead of providing absolute/relative path to the commannds). It is used in multiple build steps.
-- [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Note that when using Podman as container runtime you may need to export following environment variables:
+- [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Note that when using Podman as container runtime you may need to export following environment variables and start podman socket:
   - `TESTCONTAINERS_RYUK_DISABLED=true`
-  - `DOCKER_HOST` environment variable pointing to `podman.sock`
+  - `DOCKER_HOST=unix:///run/user/$UID/podman/podman.sock`
+    - the path can be found by command `podman info --debug` and look for `path` in `remoteSocket` section.
+  - `systemctl --user start podman.socket`
 - Java. Yes we'll need Java to write deployments/applications that will be deployed onto the running WildFly container.
 - [Maven](https://maven.apache.org). Yes, we'll need Maven to ease up the development of the deployed applications & downloading needed JDBC drivers for datasource & drivers UI tests. Maven is mostly used embedded by [node-maven](https://github.com/headcr4sh/node-maven) JS wrapper to execute Maven & Java related tasks into the build automation.
 
