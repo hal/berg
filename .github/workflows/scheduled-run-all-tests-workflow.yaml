@@ -21,10 +21,11 @@ jobs:
             "ee",
             "ejb",
             "elytron",
+            "health",
             "jmx",
             "jpa",
             "jsf",
-            "health",
+            "mail",
             "system-property",
             "weld",
             "homepage",
@@ -53,7 +54,7 @@ jobs:
         with:
           firefox-version: "latest-esr"
       - name: "Check docker status"
-        run: systemctl status docker
+        run: "systemctl status docker"
       - name: "Run npm install"
         run: "npm install"
       - name: "Run compile"
