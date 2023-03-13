@@ -9,24 +9,24 @@ jobs:
       matrix:
         specs:
           [
-            "*datasource*",
-            "*interface*",
-            "*path*",
-            "*batch-jberet*",
-            "*core-management*",
-            "*deployment-scanner*",
-            "*distributable-web*",
-            "*ee*",
-            "*ejb*",
-            "*elytron*",
-            "*health*",
-            "*jmx*",
-            "*jpa*",
-            "*jsf*",
-            "*system-property*",
-            "*weld*",
-            "*homepage*",
-            "*smoke*",
+            "datasource",
+            "interface",
+            "path",
+            "batch-jberet",
+            "core-management",
+            "deployment-scanner",
+            "distributable-web",
+            "ee",
+            "ejb",
+            "elytron",
+            "jmx",
+            "jpa",
+            "jsf",
+            "health",
+            "system-property",
+            "weld",
+            "homepage",
+            "smoke",
           ]
     name: "Run tests"
     runs-on: "ubuntu-latest"
@@ -50,6 +50,8 @@ jobs:
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: "latest-esr"
+      - name: "Check docker status"
+        run: systemctl status docker
       - name: "Run npm install"
         run: "npm install"
       - name: "Run compile"
