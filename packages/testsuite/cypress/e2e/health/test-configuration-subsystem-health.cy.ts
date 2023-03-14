@@ -1,4 +1,4 @@
-describe("TESTS: Configuration => Subsystems => Health", () => {
+describe("TESTS: Configuration => Subsystem => Health", () => {
 
   const address = ["subsystem", "health"];
   const configurationFormId = "model-browser-model-browser-root-form";

@@ -59,7 +59,7 @@ npm run develop
   ```
   - It is also possible to reduce the amount of specs executed by passing `--specs` flag. This flag must be relative to the `packages/testsuite` directory and supports glob patterns, e.g to execute only `ejb` related tests, run
   ```
-  npm test -- --specs="cypress/e2e/*ejb*.cy.ts"
+  npm test -- --specs="cypress/e2e/ejb/*.cy.ts"
   ```
   - If you wish to run the test suite against custom HAL or WildFly images, you can use `HAL_IMAGE` and `WILDFLY_IMAGE` environment variables to specify custom images, e.g
   ```
