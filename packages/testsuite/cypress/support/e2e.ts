@@ -14,7 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import "./commands";
+import "./containers-utils";
 import "./resource-utils";
 import "./verification-utils";
 import "./navigation";
