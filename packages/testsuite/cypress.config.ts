@@ -8,6 +8,7 @@ export default defineConfig({
   reporterOptions: {
     configFile: "reporter-config.json",
   },
+  experimentalModifyObstructiveThirdPartyCode: false,
   videoCompression: false,
   e2e: {
     setupNodeEvents(on, config) {
