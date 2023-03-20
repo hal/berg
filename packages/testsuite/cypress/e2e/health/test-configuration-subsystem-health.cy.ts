@@ -1,5 +1,4 @@
 describe("TESTS: Configuration => Subsystem => Health", () => {
-
   const address = ["subsystem", "health"];
   const configurationFormId = "model-browser-model-browser-root-form";
   const securityEnabled = "security-enabled";
