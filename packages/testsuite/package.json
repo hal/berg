@@ -16,15 +16,15 @@
     "develop": "node dist/open-cypress.js"
   },
   "devDependencies": {
-    "@cypress/xvfb": "^1.2.4",
-    "@types/command-line-args": "^5.2.0",
-    "@types/mochawesome": "^6.2.1",
-    "command-line-args": "^5.2.1",
-    "cypress": "^12.5.0",
-    "cypress-multi-reporters": "^1.6.2",
-    "mocha-junit-reporter": "^2.2.0",
-    "mochawesome": "^7.1.3",
-    "mochawesome-merge": "^4.2.2",
-    "mochawesome-report-generator": "^6.2.0"
+    "@cypress/xvfb": "1.2.4",
+    "@types/command-line-args": "5.2.0",
+    "@types/mochawesome": "6.2.1",
+    "command-line-args": "5.2.1",
+    "cypress": "12.8.1",
+    "cypress-multi-reporters": "1.6.3",
+    "mocha-junit-reporter": "2.2.0",
+    "mochawesome": "7.1.3",
+    "mochawesome-merge": "4.3.0",
+    "mochawesome-report-generator": "6.2.0"
   }
 }

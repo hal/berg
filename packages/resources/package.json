@@ -13,6 +13,6 @@
   "author": "spriadka",
   "license": "MIT",
   "dependencies": {
-    "maven": "^5.0.0"
+    "maven": "5.0.0"
   }
 }

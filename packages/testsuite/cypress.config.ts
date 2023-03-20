@@ -6,13 +6,14 @@ import {
   StoppedTestContainer,
   Wait,
 } from "testcontainers";
-import { Environment } from "testcontainers/dist/docker/types";
+import { Environment } from "testcontainers/dist/src/docker/types";
 
 export default defineConfig({
   reporter: require.resolve("cypress-multi-reporters/index.js"),
   reporterOptions: {
     configFile: "reporter-config.json",
   },
+  experimentalModifyObstructiveThirdPartyCode: true,
   videoCompression: false,
   e2e: {
     setupNodeEvents(on, config) {
@@ -21,7 +22,7 @@ export default defineConfig({
         StartedTestContainer
       >();
       on("task", {
-        "start:wildfly:container": ({ name }) => {
+        "start:wildfly:container": ({ name, configuration }) => {
           return new Promise((resolve, reject) => {
             new GenericContainer(
               process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly:latest"
@@ -42,7 +43,7 @@ export default defineConfig({
                 )
               )
               .withStartupTimeout(333000)
-              .withCommand(["-c", "standalone-insecure.xml"])
+              .withCommand(["-c", configuration || "standalone-insecure.xml"])
               .start()
               .then((wildflyContainer) => {
                 startedContainers.set(name as string, wildflyContainer);
