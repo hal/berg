@@ -104,6 +104,22 @@ Cypress.Commands.add("flip", (configurationFormId, attributeName, value) => {
 });
 
 Cypress.Commands.add(
+  "getDefaultBooleanValue",
+  (managementEndpoint, address, name) => {
+    return cy
+      .task("execute:cli", {
+        managementApi: `${managementEndpoint}/management`,
+        operation: "read-attribute",
+        address: address,
+        name: name,
+      })
+      .then((result) => {
+        return (result as { result: boolean }).result;
+      });
+  }
+);
+
+Cypress.Commands.add(
   "resetForm",
   (configurationFormId, managementApi, address) => {
     const resetButton =
@@ -433,6 +449,11 @@ declare global {
       selectInTable(tableId: string, resourceName: string): void;
       removeFromTable(tableId: string, resourceName: string): void;
       confirmAddResourceWizard(): void;
+      getDefaultBooleanValue(
+        managementEndpoint: string,
+        address: string[],
+        name: string
+      ): Chainable<boolean>;
     }
   }
 }
