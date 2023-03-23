@@ -119,6 +119,79 @@ describe("TESTS: Path => To => Tested => Resource", () => {
 });
 ```
 
+### All custom method
+
+#### Before and after the tests
+
+- Before the tests is required to start the docker container with HAL console.
+  - `startWildflyContainer()`
+  - `executeInWildflyContainer(command: string)`
+- After tes tests is ruquired to stop the docker container.
+  - `cy.task("stop:containers")`
+
+#### Form editing
+
+- Enabled form for editing. Save form after editing. Reset form to previous values before saving it.
+  - `editForm(configurationFormId: string)`
+  - `saveForm(configurationFormId: string)`
+  - `resetForm(configurationFormId: string, managementApi: string,address: string[])`
+- Add or remove row from table.
+  - `addInTable(tableId: string)`
+  - `removeFromTable(tableId: string, resourceName: string)`
+- Add or remove new resource via form.
+  - `addSingletonResource(emptyConfigurationFormId: string)`
+  - `removeSingletonResource(configurationFormId: string)`
+- Toggle on/off switch. The value is current value. It will set up the opposite value to the form.
+  - `flip(configurationFormId: string, attributeName: string, value: boolean)`
+- Set the value into the form input.
+  - `text(configurationFormId: string, attributeName: string, value: string)`
+- Clear input in form.
+  - `clearAttribute(configurationFormId: string, attributeName: string)`
+
+#### Get values
+
+- Get HTML input from form.
+  - `formInput(configurationFormId: string, attributeName: string)`
+- Get current boolean value saved in HAL console. Usually used with `flip` method.
+  - `getDefaultBooleanValue(managementEndpoint: string, address: string[], name: string)`
+
+#### Navigation
+
+- Navigate to subsystem or generic subsystem of HAL console.
+  - `navigateTo(managementEndpoint: string, token: string)`
+  - `navigateToGenericSubsystemPage(managementEndpoint: string, address: string[])`
+- Confirm `Add` popup dialog window.
+  - `confirmAddResourceWizard()`
+- Select resource in table.
+  - `selectInTable(tableId: string, resourceName: string)`
+
+#### Verification
+
+- Verify successful popup notification has been occurred.
+  - `verifySuccess()`
+- Verify the value has been saved into HAL console.
+  - `verifyAttribute(managementEndpoint: string, address: string[], attributeName: string, expectedVaue: string | number | boolean)`
+  - If you need verify sub attribute use a `.` to concatenate indexes. For example `credential-reference.clear-text`
+- Verify the list value contain specific value.
+  - `verifyListAttributeContains(managementEndpoint: string,address: string[], attributeName: string, expectedVaue: object | string)`
+- Verify the list value NOT contain specific value.
+  - `verifyListAttributeDoesNotContain(managementEndpoint: string, address: string[], attributeName: string, expectedVaue: object | string)`
+- Verify the URL exist or not.
+  - `validateAddress(managementEndpoint: string, address: string[], expectedValue: boolean)`
+
+#### add or remove custom data via CLI
+
+- create specific resource
+  - `createMailSession(managementEndpoint: string,mailSession:{mailSessionName: string;jndiName: string;})`
+  - `createOutboundSocketBinding(managementEndpoint: string,outBoundSocketBinding: {name: string;host: string;port: string;})`
+- create any resource
+  - `addAddress(managementEndpoint: string, address: string[], parameters?: object)`
+  - `addAddressIfDoesntExist(managementEndpoint: string, address: string[], parameters?: object)`
+- remove any resource
+  - `removeAddressIfExists(managementEndpoint: string, address: string[])`
+
+### starting the tests
+
 If you want to run your developed test, you can either see it live by running Cypress interactively:
 
 ```
