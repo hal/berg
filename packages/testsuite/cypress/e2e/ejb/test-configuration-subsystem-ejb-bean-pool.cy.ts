@@ -26,27 +26,15 @@ describe("TESTS: Configuration => Subsystem => EJB => Bean Pool", () => {
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(beanPools.update.name),
-          {
-            "max-threads": 10,
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(beanPools.remove.name),
-          {
-            "max-threads": 10,
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(beanPools.reset.name),
-          {
-            "max-threads": 10,
-          }
-        );
+        cy.addAddress(managementEndpoint, address.concat(beanPools.update.name), {
+          "max-threads": 10,
+        });
+        cy.addAddress(managementEndpoint, address.concat(beanPools.remove.name), {
+          "max-threads": 10,
+        });
+        cy.addAddress(managementEndpoint, address.concat(beanPools.reset.name), {
+          "max-threads": 10,
+        });
       });
   });
 
@@ -61,11 +49,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Bean Pool", () => {
     cy.text("ejb3-bean-pool-table-add", "name", beanPools.create.name);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(beanPools.create.name),
-      true
-    );
+    cy.validateAddress(managementEndpoint, address.concat(beanPools.create.name), true);
   });
 
   it("Edit derive-size", () => {
@@ -79,18 +63,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Bean Pool", () => {
     cy.formInput(configurationFormId, "derive-size").trigger("change", {
       force: true,
     });
-    cy.formInput(configurationFormId, "derive-size").should(
-      "have.value",
-      "from-cpu-count"
-    );
+    cy.formInput(configurationFormId, "derive-size").should("have.value", "from-cpu-count");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(beanPools.update.name),
-      "derive-size",
-      "from-cpu-count"
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(beanPools.update.name), "derive-size", "from-cpu-count");
   });
 
   it("Edit max-pool-size", () => {
@@ -108,12 +84,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Bean Pool", () => {
     cy.text(configurationFormId, "max-pool-size", "8");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(beanPools.update.name),
-      "max-pool-size",
-      8
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(beanPools.update.name), "max-pool-size", 8);
   });
 
   it("Edit timeout", () => {
@@ -124,12 +95,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Bean Pool", () => {
     cy.text(configurationFormId, "timeout", "8");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(beanPools.update.name),
-      "timeout",
-      8
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(beanPools.update.name), "timeout", 8);
   });
 
   it("Edit timeout-unit", () => {
@@ -142,12 +108,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Bean Pool", () => {
     });
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(beanPools.update.name),
-      "timeout-unit",
-      "SECONDS"
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(beanPools.update.name), "timeout-unit", "SECONDS");
   });
 
   it("Remove", () => {
@@ -155,21 +116,13 @@ describe("TESTS: Configuration => Subsystem => EJB => Bean Pool", () => {
     cy.get("#ejb3-bean-pool-item").click();
     cy.removeFromTable(beanPoolTableId, beanPools.remove.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(beanPools.remove.name),
-      false
-    );
+    cy.validateAddress(managementEndpoint, address.concat(beanPools.remove.name), false);
   });
 
   it("Reset", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-bean-pool-item").click();
     cy.selectInTable(beanPoolTableId, beanPools.reset.name);
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint,
-      address.concat(beanPools.reset.name)
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address.concat(beanPools.reset.name));
   });
 });

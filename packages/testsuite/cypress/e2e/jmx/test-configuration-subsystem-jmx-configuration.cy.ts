@@ -35,12 +35,7 @@ describe("TESTS: Configuration => Subsystem => JMX => Configuration", () => {
       cy.flip(configurationFormId, nonCoreMbeanSensitivity, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        nonCoreMbeanSensitivity,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, nonCoreMbeanSensitivity, !value);
     });
   });
 });

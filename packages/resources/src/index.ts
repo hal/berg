@@ -1,14 +1,7 @@
 import maven from "maven";
 import path from "path";
 
-const fixturesDirectory = path.resolve(
-  __dirname,
-  "..",
-  "..",
-  "testsuite",
-  "cypress",
-  "fixtures"
-);
+const fixturesDirectory = path.resolve(__dirname, "..", "..", "testsuite", "cypress", "fixtures");
 
 const jdbcDriversDirectory = path.resolve(fixturesDirectory, "jdbc-drivers");
 const modulesDirectory = path.resolve(fixturesDirectory, "modules");

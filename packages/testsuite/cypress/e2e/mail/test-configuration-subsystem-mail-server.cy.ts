@@ -1,12 +1,5 @@
 describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
-  const address = [
-    "subsystem",
-    "mail",
-    "mail-session",
-    "my-mail-session",
-    "server",
-    "smtp",
-  ];
+  const address = ["subsystem", "mail", "mail-session", "my-mail-session", "server", "smtp"];
 
   const outBoundSocketBinding = {
     name: "custom-outbound-socket-binding",
@@ -52,15 +45,11 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
 
   const itemSelectors = {
     mailServerItem: "#mail-server-item a",
-    mailServerAdd:
-      "div.pull-right.btn-group.hal-table-buttons > button:contains('Add')",
-    buttonAdd:
-      "div.modal-footer > button.btn.btn-hal.btn-primary:contains('Add')",
-    buttonYes:
-      "div.modal-footer > button.btn.btn-hal.btn-primary:contains('Yes')",
+    mailServerAdd: "div.pull-right.btn-group.hal-table-buttons > button:contains('Add')",
+    buttonAdd: "div.modal-footer > button.btn.btn-hal.btn-primary:contains('Add')",
+    buttonYes: "div.modal-footer > button.btn.btn-hal.btn-primary:contains('Yes')",
     credentialsReferenceTab: "a:contains('Credential Reference')",
-    credentialsReferenceAdd:
-      "div.blank-slate-pf-main-action > button:contains('Add')",
+    credentialsReferenceAdd: "div.blank-slate-pf-main-action > button:contains('Add')",
   };
 
   let managementEndpoint: string;
@@ -87,37 +76,19 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
     cy.get(addServerForm.typeSelector).select(testValues.serverType, {
       force: true,
     });
-    cy.text(
-      addServerForm.id,
-      addServerForm.outboundSocket,
-      outBoundSocketBinding.name
-    );
+    cy.text(addServerForm.id, addServerForm.outboundSocket, outBoundSocketBinding.name);
     cy.get(itemSelectors.buttonAdd).click();
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      serverForm.outboundSocket,
-      outBoundSocketBinding.name
-    );
+    cy.verifyAttribute(managementEndpoint, address, serverForm.outboundSocket, outBoundSocketBinding.name);
   });
 
   it("Edit outbound-socket", () => {
     cy.selectInTable(mailSessionTable.id, mailSessionTable.outboundSocketType);
     cy.editForm(serverForm.id);
-    cy.text(
-      serverForm.id,
-      serverForm.outboundSocket,
-      testValues.outboundSocket
-    );
+    cy.text(serverForm.id, serverForm.outboundSocket, testValues.outboundSocket);
     cy.saveForm(serverForm.id);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      serverForm.outboundSocket,
-      testValues.outboundSocket
-    );
+    cy.verifyAttribute(managementEndpoint, address, serverForm.outboundSocket, testValues.outboundSocket);
   });
 
   it("Edit user-name", () => {
@@ -126,12 +97,7 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
     cy.text(serverForm.id, serverForm.userName, testValues.userName);
     cy.saveForm(serverForm.id);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      serverForm.userName,
-      testValues.userName
-    );
+    cy.verifyAttribute(managementEndpoint, address, serverForm.userName, testValues.userName);
   });
 
   it("Edit password", () => {
@@ -140,48 +106,29 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
     cy.text(serverForm.id, serverForm.password, testValues.password);
     cy.saveForm(serverForm.id);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      serverForm.password,
-      testValues.password
-    );
+    cy.verifyAttribute(managementEndpoint, address, serverForm.password, testValues.password);
   });
 
   it("Toggle ssl", () => {
     cy.selectInTable(mailSessionTable.id, mailSessionTable.outboundSocketType);
-    cy.getDefaultBooleanValue(managementEndpoint, address, serverForm.ssl).then(
-      (defaultValue: boolean) => {
-        cy.editForm(serverForm.id);
-        cy.flip(serverForm.id, serverForm.ssl, defaultValue);
-        cy.saveForm(serverForm.id);
-        cy.verifySuccess();
-        cy.verifyAttribute(
-          managementEndpoint,
-          address,
-          serverForm.ssl,
-          !defaultValue
-        );
-      }
-    );
+    cy.getDefaultBooleanValue(managementEndpoint, address, serverForm.ssl).then((defaultValue: boolean) => {
+      cy.editForm(serverForm.id);
+      cy.flip(serverForm.id, serverForm.ssl, defaultValue);
+      cy.saveForm(serverForm.id);
+      cy.verifySuccess();
+      cy.verifyAttribute(managementEndpoint, address, serverForm.ssl, !defaultValue);
+    });
   });
 
   it("Toggle tls", () => {
     cy.selectInTable(mailSessionTable.id, mailSessionTable.outboundSocketType);
-    cy.getDefaultBooleanValue(managementEndpoint, address, serverForm.tls).then(
-      (defaultValue: boolean) => {
-        cy.editForm(serverForm.id);
-        cy.flip(serverForm.id, serverForm.tls, defaultValue);
-        cy.saveForm(serverForm.id);
-        cy.verifySuccess();
-        cy.verifyAttribute(
-          managementEndpoint,
-          address,
-          serverForm.tls,
-          !defaultValue
-        );
-      }
-    );
+    cy.getDefaultBooleanValue(managementEndpoint, address, serverForm.tls).then((defaultValue: boolean) => {
+      cy.editForm(serverForm.id);
+      cy.flip(serverForm.id, serverForm.tls, defaultValue);
+      cy.saveForm(serverForm.id);
+      cy.verifySuccess();
+      cy.verifyAttribute(managementEndpoint, address, serverForm.tls, !defaultValue);
+    });
   });
 
   it("Create credential-reference", () => {
@@ -189,18 +136,9 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
     cy.get(itemSelectors.credentialsReferenceTab).click();
     cy.get(itemSelectors.credentialsReferenceAdd).click();
     cy.get(itemSelectors.buttonYes).click();
-    cy.text(
-      credentialsReferenceForm.id,
-      credentialsReferenceForm.clearText,
-      testValues.clearText
-    );
+    cy.text(credentialsReferenceForm.id, credentialsReferenceForm.clearText, testValues.clearText);
     cy.get(itemSelectors.buttonAdd).click();
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      credentialsReferenceForm.clearTextCliName,
-      testValues.clearText
-    );
+    cy.verifyAttribute(managementEndpoint, address, credentialsReferenceForm.clearTextCliName, testValues.clearText);
   });
 });

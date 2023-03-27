@@ -13,26 +13,13 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Remote", () =>
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(managementEndpoint, [
-          "socket-binding-group",
-          "standard-sockets",
-          "socket-binding",
-          "custom",
-        ]);
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "remoting", "connector", connectorToUpdate],
-          {
-            "socket-binding": "custom",
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ejb3", "thread-pool", threadPoolToUpdate],
-          {
-            "max-threads": 10,
-          }
-        );
+        cy.addAddress(managementEndpoint, ["socket-binding-group", "standard-sockets", "socket-binding", "custom"]);
+        cy.addAddress(managementEndpoint, ["subsystem", "remoting", "connector", connectorToUpdate], {
+          "socket-binding": "custom",
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ejb3", "thread-pool", threadPoolToUpdate], {
+          "max-threads": 10,
+        });
       });
   });
 
@@ -45,18 +32,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Remote", () =>
     cy.get("#ejb3-service-item").click();
     cy.get("#ejb3-service-remote-item").click();
     cy.editForm(configurationFormId);
-    cy.formInput(configurationFormId, "connectors")
-      .clear()
-      .type(`${connectorToUpdate}{enter}`)
-      .trigger("change");
+    cy.formInput(configurationFormId, "connectors").clear().type(`${connectorToUpdate}{enter}`).trigger("change");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "connectors",
-      connectorToUpdate
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "connectors", connectorToUpdate);
   });
 
   it("Edit thread-pool-name", () => {
@@ -67,12 +46,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Remote", () =>
     cy.text(configurationFormId, "thread-pool-name", threadPoolToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "thread-pool-name",
-      threadPoolToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "thread-pool-name", threadPoolToUpdate);
   });
 
   it("Toggle execute-in-worker", () => {
@@ -92,12 +66,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Remote", () =>
       cy.flip(configurationFormId, "execute-in-worker", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "execute-in-worker",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "execute-in-worker", !value);
     });
   });
 

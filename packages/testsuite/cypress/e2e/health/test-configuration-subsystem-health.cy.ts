@@ -25,9 +25,7 @@ describe("TESTS: Configuration => Subsystem => Health", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-      cy.get(
-        '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-      ).click();
+      cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, securityEnabled, value);
       cy.saveForm(configurationFormId);

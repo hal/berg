@@ -36,49 +36,18 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ee", "context-service", contextServices.update.name],
-          {
-            "jndi-name": contextServices.update["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "ee",
-            "managed-thread-factory",
-            threadFactories.update.name,
-          ],
-          {
-            "jndi-name": threadFactories.update["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "ee",
-            "managed-thread-factory",
-            threadFactories.reset.name,
-          ],
-          {
-            "jndi-name": threadFactories.reset["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "ee",
-            "managed-thread-factory",
-            threadFactories.remove.name,
-          ],
-          {
-            "jndi-name": threadFactories.remove["jndi-name"],
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "context-service", contextServices.update.name], {
+          "jndi-name": contextServices.update["jndi-name"],
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "managed-thread-factory", threadFactories.update.name], {
+          "jndi-name": threadFactories.update["jndi-name"],
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "managed-thread-factory", threadFactories.reset.name], {
+          "jndi-name": threadFactories.reset["jndi-name"],
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "managed-thread-factory", threadFactories.remove.name], {
+          "jndi-name": threadFactories.remove["jndi-name"],
+        });
       });
   });
 
@@ -91,26 +60,13 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-thread-factories").click();
     cy.addInTable(managedThreadFactoriesTableId);
-    cy.text(
-      "ee-service-thread-factories-add",
-      "name",
-      threadFactories.create.name
-    );
-    cy.text(
-      "ee-service-thread-factories-add",
-      "jndi-name",
-      threadFactories.create["jndi-name"]
-    );
+    cy.text("ee-service-thread-factories-add", "name", threadFactories.create.name);
+    cy.text("ee-service-thread-factories-add", "jndi-name", threadFactories.create["jndi-name"]);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-thread-factory",
-        threadFactories.create.name,
-      ],
+      ["subsystem", "ee", "managed-thread-factory", threadFactories.create.name],
       true
     );
   });
@@ -132,19 +88,11 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-thread-factories").click();
-    cy.removeFromTable(
-      managedThreadFactoriesTableId,
-      threadFactories.remove.name
-    );
+    cy.removeFromTable(managedThreadFactoriesTableId, threadFactories.remove.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-thread-factory",
-        threadFactories.remove.name,
-      ],
+      ["subsystem", "ee", "managed-thread-factory", threadFactories.remove.name],
       false
     );
   });
@@ -153,26 +101,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-thread-factories").click();
-    cy.selectInTable(
-      managedThreadFactoriesTableId,
-      threadFactories.update.name
-    );
+    cy.selectInTable(managedThreadFactoriesTableId, threadFactories.update.name);
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "context-service",
-      contextServices.update.name
-    );
+    cy.text(configurationFormId, "context-service", contextServices.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-thread-factory",
-        threadFactories.update.name,
-      ],
+      ["subsystem", "ee", "managed-thread-factory", threadFactories.update.name],
       "context-service",
       contextServices.update.name
     );
@@ -182,22 +118,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-thread-factories").click();
-    cy.selectInTable(
-      managedThreadFactoriesTableId,
-      threadFactories.update.name
-    );
+    cy.selectInTable(managedThreadFactoriesTableId, threadFactories.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "jndi-name", "java:jboss/updatedJndiName");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-thread-factory",
-        threadFactories.update.name,
-      ],
+      ["subsystem", "ee", "managed-thread-factory", threadFactories.update.name],
       "jndi-name",
       "java:jboss/updatedJndiName"
     );
@@ -207,22 +135,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-thread-factories").click();
-    cy.selectInTable(
-      managedThreadFactoriesTableId,
-      threadFactories.update.name
-    );
+    cy.selectInTable(managedThreadFactoriesTableId, threadFactories.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "priority", "3");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-thread-factory",
-        threadFactories.update.name,
-      ],
+      ["subsystem", "ee", "managed-thread-factory", threadFactories.update.name],
       "priority",
       3
     );

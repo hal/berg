@@ -56,14 +56,8 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
           steps: [
             {
               operation: "add",
-              address: [
-                "subsystem",
-                "infinispan",
-                "remote-cache-container",
-                remoteCacheContainers.create.name,
-              ],
-              "default-remote-cluster":
-                remoteCacheContainers.create["default-remote-cluster"],
+              address: ["subsystem", "infinispan", "remote-cache-container", remoteCacheContainers.create.name],
+              "default-remote-cluster": remoteCacheContainers.create["default-remote-cluster"],
             },
             {
               operation: "add",
@@ -81,16 +75,10 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
         });
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "distributable-web",
-            "hotrod-session-management",
-            hotRodSessionManagements.create.name,
-          ],
+          ["subsystem", "distributable-web", "hotrod-session-management", hotRodSessionManagements.create.name],
           {
             granularity: hotRodSessionManagements.create.granularity,
-            "remote-cache-container":
-              hotRodSessionManagements.create["remote-cache-container"],
+            "remote-cache-container": hotRodSessionManagements.create["remote-cache-container"],
           }
         );
         cy.addAddress(
@@ -102,8 +90,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
             hotRodSingleSignOnManagements.create.name,
           ],
           {
-            "remote-cache-container":
-              hotRodSingleSignOnManagements.create["remote-cache-container"],
+            "remote-cache-container": hotRodSingleSignOnManagements.create["remote-cache-container"],
           }
         );
       });
@@ -113,11 +100,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-session-management",
-      hotRodSessionManagements.create.name
-    );
+    cy.text(configurationFormId, "default-session-management", hotRodSessionManagements.create.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
@@ -132,11 +115,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-single-sign-on-management",
-      hotRodSingleSignOnManagements.create.name
-    );
+    cy.text(configurationFormId, "default-single-sign-on-management", hotRodSingleSignOnManagements.create.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
@@ -150,10 +129,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
   it("Reset", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-configuration-item").click();
-    cy.resetForm(configurationFormId, managementEndpoint, [
-      "subsystem",
-      "distributable-web",
-    ]);
+    cy.resetForm(configurationFormId, managementEndpoint, ["subsystem", "distributable-web"]);
   });
 
   after(() => {

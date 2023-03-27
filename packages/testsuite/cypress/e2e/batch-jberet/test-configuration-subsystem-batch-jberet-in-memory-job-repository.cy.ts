@@ -26,21 +26,12 @@ describe("TESTS: Configuration => Subsystem => Batch => In Memory", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-in-memory-job-repo-item").click();
     cy.addInTable(batchInMemoryTableId);
-    cy.text(
-      "batch-in-memory-job-repo-table-add",
-      "name",
-      inMemoryJobRepositories.create.name
-    );
+    cy.text("batch-in-memory-job-repo-table-add", "name", inMemoryJobRepositories.create.name);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "batch-jberet",
-        "in-memory-job-repository",
-        inMemoryJobRepositories.create.name,
-      ],
+      ["subsystem", "batch-jberet", "in-memory-job-repository", inMemoryJobRepositories.create.name],
       true
     );
   });
@@ -54,19 +45,11 @@ describe("TESTS: Configuration => Subsystem => Batch => In Memory", () => {
     ]);
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-in-memory-job-repo-item").click();
-    cy.removeFromTable(
-      batchInMemoryTableId,
-      inMemoryJobRepositories.remove.name
-    );
+    cy.removeFromTable(batchInMemoryTableId, inMemoryJobRepositories.remove.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "batch-jberet",
-        "in-memory-job-repository",
-        inMemoryJobRepositories.remove.name,
-      ],
+      ["subsystem", "batch-jberet", "in-memory-job-repository", inMemoryJobRepositories.remove.name],
       false
     );
   });

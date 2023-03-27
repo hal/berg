@@ -5,10 +5,8 @@ describe("TESTS: Configuration => Subsystem => EE => Configuration", () => {
   const configurationFormId = "ee-attributes-form";
   const annotationPropertyReplacement = "annotation-property-replacement";
   const earSubdeploymentsIsolated = "ear-subdeployments-isolated";
-  const jbossDescriptorPropertyReplacement =
-    "jboss-descriptor-property-replacement";
-  const specDescriptorPropertyReplacement =
-    "spec-descriptor-property-replacement";
+  const jbossDescriptorPropertyReplacement = "jboss-descriptor-property-replacement";
+  const specDescriptorPropertyReplacement = "spec-descriptor-property-replacement";
 
   before(() => {
     cy.startWildflyContainer().then((result) => {
@@ -35,12 +33,7 @@ describe("TESTS: Configuration => Subsystem => EE => Configuration", () => {
       cy.flip(configurationFormId, annotationPropertyReplacement, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        annotationPropertyReplacement,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, annotationPropertyReplacement, !value);
     });
   });
 
@@ -59,12 +52,7 @@ describe("TESTS: Configuration => Subsystem => EE => Configuration", () => {
       cy.flip(configurationFormId, earSubdeploymentsIsolated, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        earSubdeploymentsIsolated,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, earSubdeploymentsIsolated, !value);
     });
   });
 
@@ -83,12 +71,7 @@ describe("TESTS: Configuration => Subsystem => EE => Configuration", () => {
       cy.flip(configurationFormId, jbossDescriptorPropertyReplacement, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        jbossDescriptorPropertyReplacement,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, jbossDescriptorPropertyReplacement, !value);
     });
   });
 
@@ -107,12 +90,7 @@ describe("TESTS: Configuration => Subsystem => EE => Configuration", () => {
       cy.flip(configurationFormId, specDescriptorPropertyReplacement, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        specDescriptorPropertyReplacement,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, specDescriptorPropertyReplacement, !value);
     });
   });
 

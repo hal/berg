@@ -1,8 +1,7 @@
 describe("TESTS: Configuration => Subsystems => Mail => Attributes", () => {
   const address = ["subsystem", "mail", "mail-session", "my-mail-session"];
 
-  const mailConfigurationPath =
-    "configuration;path=configuration~subsystems!css~mail";
+  const mailConfigurationPath = "configuration;path=configuration~subsystems!css~mail";
 
   const attributesForm = {
     id: "mail-session-form",
@@ -23,8 +22,7 @@ describe("TESTS: Configuration => Subsystems => Mail => Attributes", () => {
   const itemSelectors = {
     mailAttributesItem: "#mail-session-item a",
     mailSessionAdd: "#mail-session-add",
-    buttonAdd:
-      "div.modal-footer > button.btn.btn-hal.btn-primary:contains('Add')",
+    buttonAdd: "div.modal-footer > button.btn.btn-hal.btn-primary:contains('Add')",
   };
 
   let managementEndpoint: string;
@@ -52,36 +50,17 @@ describe("TESTS: Configuration => Subsystems => Mail => Attributes", () => {
     cy.text(attributesForm.id, attributesForm.jndi, testValues.jndiDefault);
     cy.get(itemSelectors.buttonAdd).click();
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      attributesForm.from,
-      testValues.fromDefault
-    );
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      attributesForm.jndi,
-      testValues.jndiDefault
-    );
+    cy.verifyAttribute(managementEndpoint, address, attributesForm.from, testValues.fromDefault);
+    cy.verifyAttribute(managementEndpoint, address, attributesForm.jndi, testValues.jndiDefault);
   });
 
   it("Toggle debug", () => {
-    cy.getDefaultBooleanValue(
-      managementEndpoint,
-      address,
-      attributesForm.debug
-    ).then((defaultValue: boolean) => {
+    cy.getDefaultBooleanValue(managementEndpoint, address, attributesForm.debug).then((defaultValue: boolean) => {
       cy.editForm(attributesForm.id);
       cy.flip(attributesForm.id, attributesForm.debug, defaultValue);
       cy.saveForm(attributesForm.id);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        attributesForm.debug,
-        !defaultValue
-      );
+      cy.verifyAttribute(managementEndpoint, address, attributesForm.debug, !defaultValue);
     });
   });
 
@@ -90,12 +69,7 @@ describe("TESTS: Configuration => Subsystems => Mail => Attributes", () => {
     cy.text(attributesForm.id, attributesForm.from, testValues.fromNew);
     cy.saveForm(attributesForm.id);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      attributesForm.from,
-      testValues.fromNew
-    );
+    cy.verifyAttribute(managementEndpoint, address, attributesForm.from, testValues.fromNew);
   });
 
   it("Edit jndi-name", () => {
@@ -103,11 +77,6 @@ describe("TESTS: Configuration => Subsystems => Mail => Attributes", () => {
     cy.text(attributesForm.id, attributesForm.jndi, testValues.jndiNew);
     cy.saveForm(attributesForm.id);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      attributesForm.jndi,
-      testValues.jndiNew
-    );
+    cy.verifyAttribute(managementEndpoint, address, attributesForm.jndi, testValues.jndiNew);
   });
 });

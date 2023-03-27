@@ -46,18 +46,9 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.create.name,
-          ],
-          {
-            module: "org.wildfly.clustering.ejb.infinispan",
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "infinispan", "cache-container", cacheContainers.create.name], {
+          module: "org.wildfly.clustering.ejb.infinispan",
+        });
         cy.addAddress(managementEndpoint, [
           "subsystem",
           "infinispan",
@@ -77,27 +68,13 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.create.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.create.name],
           name: "default-cache",
           value: cacheContainers.create["default-cache"].name,
         });
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.update.name,
-          ],
-          {
-            module: "org.wildfly.clustering.ejb.infinispan",
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "infinispan", "cache-container", cacheContainers.update.name], {
+          module: "org.wildfly.clustering.ejb.infinispan",
+        });
         cy.addAddress(managementEndpoint, [
           "subsystem",
           "infinispan",
@@ -117,12 +94,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.update.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.update.name],
           name: "default-cache",
           value: cacheContainers.update["default-cache"].name,
         });
@@ -135,8 +107,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
             infinispanSingleSignOnManagements.update.name,
           ],
           {
-            "cache-container":
-              infinispanSingleSignOnManagements.update["cache-container"],
+            "cache-container": infinispanSingleSignOnManagements.update["cache-container"],
           }
         );
         cy.addAddress(
@@ -148,8 +119,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
             infinispanSingleSignOnManagements.delete.name,
           ],
           {
-            "cache-container":
-              infinispanSingleSignOnManagements.delete["cache-container"],
+            "cache-container": infinispanSingleSignOnManagements.delete["cache-container"],
           }
         );
         cy.addAddress(
@@ -161,8 +131,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
             infinispanSingleSignOnManagements.reset.name,
           ],
           {
-            "cache-container":
-              infinispanSingleSignOnManagements.reset["cache-container"],
+            "cache-container": infinispanSingleSignOnManagements.reset["cache-container"],
           }
         );
       });
@@ -176,11 +145,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
     cy.addInTable(infinispanSsoManagementTableId);
-    cy.text(
-      "dw-infinispan-sso-management-table-add",
-      "name",
-      infinispanSingleSignOnManagements.create.name
-    );
+    cy.text("dw-infinispan-sso-management-table-add", "name", infinispanSingleSignOnManagements.create.name);
     cy.text(
       "dw-infinispan-sso-management-table-add",
       "cache-container",
@@ -203,10 +168,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit cache", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.selectInTable(
-      infinispanSsoManagementTableId,
-      infinispanSingleSignOnManagements.update.name
-    );
+    cy.selectInTable(infinispanSsoManagementTableId, infinispanSingleSignOnManagements.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "cache", cacheToUpdate);
     cy.saveForm(configurationFormId);
@@ -227,16 +189,9 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit cache-container", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.selectInTable(
-      infinispanSsoManagementTableId,
-      infinispanSingleSignOnManagements.update.name
-    );
+    cy.selectInTable(infinispanSsoManagementTableId, infinispanSingleSignOnManagements.update.name);
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "cache-container",
-      cacheContainers.update.name
-    );
+    cy.text(configurationFormId, "cache-container", cacheContainers.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
@@ -255,10 +210,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Reset Infinispan SSO Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.selectInTable(
-      infinispanSsoManagementTableId,
-      infinispanSingleSignOnManagements.reset.name
-    );
+    cy.selectInTable(infinispanSsoManagementTableId, infinispanSingleSignOnManagements.reset.name);
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",
@@ -280,10 +232,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
-    cy.removeFromTable(
-      infinispanSsoManagementTableId,
-      infinispanSingleSignOnManagements.delete.name
-    );
+    cy.removeFromTable(infinispanSsoManagementTableId, infinispanSingleSignOnManagements.delete.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,

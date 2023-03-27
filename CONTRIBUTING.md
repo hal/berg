@@ -109,12 +109,7 @@ describe("TESTS: Path => To => Tested => Resource", () => {
     cy.verifySuccess();
     // Checks that /path=to/tested=resource:read-attribute(name=module)
     // returns "sample" and is succesful
-    cy.verifyAttribute(
-      managementEndpoint,
-      ["path", "to", "tested", "resource"],
-      "module",
-      "sample"
-    );
+    cy.verifyAttribute(managementEndpoint, ["path", "to", "tested", "resource"], "module", "sample");
   });
 });
 ```

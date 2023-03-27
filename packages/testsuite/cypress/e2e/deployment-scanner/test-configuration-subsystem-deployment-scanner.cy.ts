@@ -38,27 +38,15 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
   before(() => {
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
-      cy.addAddress(
-        managementEndpoint,
-        address.concat(deploymentScanners.delete.name),
-        {
-          path: deploymentScanners.delete.path,
-        }
-      );
-      cy.addAddress(
-        managementEndpoint,
-        address.concat(deploymentScanners.update.name),
-        {
-          path: deploymentScanners.update.path,
-        }
-      );
-      cy.addAddress(
-        managementEndpoint,
-        address.concat(deploymentScanners.reset.name),
-        {
-          path: deploymentScanners.reset.path,
-        }
-      );
+      cy.addAddress(managementEndpoint, address.concat(deploymentScanners.delete.name), {
+        path: deploymentScanners.delete.path,
+      });
+      cy.addAddress(managementEndpoint, address.concat(deploymentScanners.update.name), {
+        path: deploymentScanners.update.path,
+      });
+      cy.addAddress(managementEndpoint, address.concat(deploymentScanners.reset.name), {
+        path: deploymentScanners.reset.path,
+      });
     });
   });
 
@@ -69,23 +57,11 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
   it("Create Deployment Scanner", () => {
     cy.navigateTo(managementEndpoint, "deployment-scanner");
     cy.addInTable(deploymentScannerTableId);
-    cy.text(
-      "deployment-scanner-table-add",
-      "name",
-      deploymentScanners.create.name
-    );
-    cy.text(
-      "deployment-scanner-table-add",
-      "path",
-      deploymentScanners.create.path
-    );
+    cy.text("deployment-scanner-table-add", "name", deploymentScanners.create.name);
+    cy.text("deployment-scanner-table-add", "path", deploymentScanners.create.path);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(deploymentScanners.create.name),
-      true
-    );
+    cy.validateAddress(managementEndpoint, address.concat(deploymentScanners.create.name), true);
   });
 
   it("Toggle auto-deploy-exploded", () => {
@@ -98,10 +74,7 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.selectInTable(
-        deploymentScannerTableId,
-        deploymentScanners.update.name
-      );
+      cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, autoDeployExploded, value);
       cy.saveForm(configurationFormId);
@@ -125,20 +98,12 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.selectInTable(
-        deploymentScannerTableId,
-        deploymentScanners.update.name
-      );
+      cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, autoDeployXml, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address.concat(deploymentScanners.update.name),
-        autoDeployXml,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address.concat(deploymentScanners.update.name), autoDeployXml, !value);
     });
   });
 
@@ -152,20 +117,12 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.selectInTable(
-        deploymentScannerTableId,
-        deploymentScanners.update.name
-      );
+      cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, autoDeployZipped, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address.concat(deploymentScanners.update.name),
-        autoDeployZipped,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address.concat(deploymentScanners.update.name), autoDeployZipped, !value);
     });
   });
 
@@ -176,12 +133,7 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.text(configurationFormId, deploymentTimeout, "1000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(deploymentScanners.update.name),
-      deploymentTimeout,
-      1000
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(deploymentScanners.update.name), deploymentTimeout, 1000);
   });
 
   it("Edit path", () => {
@@ -191,12 +143,7 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.text(configurationFormId, path, "another-dir");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(deploymentScanners.update.name),
-      path,
-      "another-dir"
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(deploymentScanners.update.name), path, "another-dir");
   });
 
   it("Edit relative-to", () => {
@@ -205,12 +152,7 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, relativeTo, "another-dir");
     cy.saveForm(configurationFormId);
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(deploymentScanners.update.name),
-      relativeTo,
-      "another-dir"
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(deploymentScanners.update.name), relativeTo, "another-dir");
   });
 
   it("Toggle runtime-failure-causes-rollback", () => {
@@ -223,10 +165,7 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.selectInTable(
-        deploymentScannerTableId,
-        deploymentScanners.update.name
-      );
+      cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, runtimeFailureCausesRollback, value);
       cy.saveForm(configurationFormId);
@@ -250,20 +189,12 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "deployment-scanner");
-      cy.selectInTable(
-        deploymentScannerTableId,
-        deploymentScanners.update.name
-      );
+      cy.selectInTable(deploymentScannerTableId, deploymentScanners.update.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, scanEnabled, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address.concat(deploymentScanners.update.name),
-        scanEnabled,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address.concat(deploymentScanners.update.name), scanEnabled, !value);
     });
   });
 
@@ -274,35 +205,19 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.text(configurationFormId, scanInterval, "1000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(deploymentScanners.update.name),
-      scanInterval,
-      1000
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(deploymentScanners.update.name), scanInterval, 1000);
   });
 
   it("Remove", () => {
     cy.navigateTo(managementEndpoint, "deployment-scanner");
-    cy.removeFromTable(
-      deploymentScannerTableId,
-      deploymentScanners.delete.name
-    );
+    cy.removeFromTable(deploymentScannerTableId, deploymentScanners.delete.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(deploymentScanners.delete.name),
-      false
-    );
+    cy.validateAddress(managementEndpoint, address.concat(deploymentScanners.delete.name), false);
   });
 
   it("Reset", () => {
     cy.navigateTo(managementEndpoint, "deployment-scanner");
     cy.selectInTable(deploymentScannerTableId, deploymentScanners.reset.name);
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint,
-      address.concat(deploymentScanners.reset.name)
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address.concat(deploymentScanners.reset.name));
   });
 });

@@ -30,27 +30,15 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ee", "context-service", contextServices.update.name],
-          {
-            "jndi-name": contextServices.update["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ee", "context-service", contextServices.remove.name],
-          {
-            "jndi-name": contextServices.remove["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ee", "context-service", contextServices.reset.name],
-          {
-            "jndi-name": contextServices.reset["jndi-name"],
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "context-service", contextServices.update.name], {
+          "jndi-name": contextServices.update["jndi-name"],
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "context-service", contextServices.remove.name], {
+          "jndi-name": contextServices.remove["jndi-name"],
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "context-service", contextServices.reset.name], {
+          "jndi-name": contextServices.reset["jndi-name"],
+        });
       });
   });
 
@@ -63,23 +51,11 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-context-service").click();
     cy.addInTable(contextServicesTable);
-    cy.text(
-      "ee-service-context-service-add",
-      "name",
-      contextServices.create.name
-    );
-    cy.text(
-      "ee-service-context-service-add",
-      "jndi-name",
-      contextServices.create["jndi-name"]
-    );
+    cy.text("ee-service-context-service-add", "name", contextServices.create.name);
+    cy.text("ee-service-context-service-add", "jndi-name", contextServices.create["jndi-name"]);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["subsystem", "ee", "context-service", contextServices.create.name],
-      true
-    );
+    cy.validateAddress(managementEndpoint, ["subsystem", "ee", "context-service", contextServices.create.name], true);
   });
 
   it("Edit jndi-name", () => {
@@ -104,12 +80,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
     cy.task("execute:cli", {
       managementApi: managementEndpoint + "/management",
       operation: "read-attribute",
-      address: [
-        "subsystem",
-        "ee",
-        "context-service",
-        contextServices.update.name,
-      ],
+      address: ["subsystem", "ee", "context-service", contextServices.update.name],
       name: useTransactionSetupProvider,
     }).then((result) => {
       value = (result as { result: boolean }).result;
@@ -149,10 +120,6 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
     cy.get("#ee-service-context-service").click();
     cy.removeFromTable(contextServicesTable, contextServices.remove.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["subsystem", "ee", "context-service", contextServices.remove.name],
-      false
-    );
+    cy.validateAddress(managementEndpoint, ["subsystem", "ee", "context-service", contextServices.remove.name], false);
   });
 });

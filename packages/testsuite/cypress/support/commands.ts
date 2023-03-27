@@ -41,32 +41,21 @@ Cypress.Commands.add("navigateTo", (managementEndpoint, token) => {
   cy.get("#hal-root-container").should("be.visible");
 });
 
-Cypress.Commands.add(
-  "navigateToGenericSubsystemPage",
-  (managementEndpoint, address) => {
-    const subsystemSeparator = "%255C2";
-    cy.visit(
-      `?connect=${managementEndpoint}#generic-subsystem;address=%255C0${address.join(
-        subsystemSeparator
-      )}`
-    );
-    cy.get("#hal-root-container").should("be.visible");
-  }
-);
+Cypress.Commands.add("navigateToGenericSubsystemPage", (managementEndpoint, address) => {
+  const subsystemSeparator = "%255C2";
+  cy.visit(`?connect=${managementEndpoint}#generic-subsystem;address=%255C0${address.join(subsystemSeparator)}`);
+  cy.get("#hal-root-container").should("be.visible");
+});
 
 Cypress.Commands.add("editForm", (configurationFormId) => {
-  const editButton =
-    "#" + configurationFormId + ' a.clickable[data-operation="edit"';
+  const editButton = "#" + configurationFormId + ' a.clickable[data-operation="edit"';
   cy.get(`#${configurationFormId}-editing`).should("not.be.visible");
   cy.get(editButton).click();
   cy.get(`#${configurationFormId}-editing`).should("be.visible");
 });
 
 Cypress.Commands.add("saveForm", (configurationFormId) => {
-  const saveButton =
-    "#" +
-    configurationFormId +
-    '-editing button.btn.btn-hal.btn-primary:contains("Save")';
+  const saveButton = "#" + configurationFormId + '-editing button.btn.btn-hal.btn-primary:contains("Save")';
   cy.get(saveButton).scrollIntoView().click();
 });
 
@@ -103,75 +92,64 @@ Cypress.Commands.add("flip", (configurationFormId, attributeName, value) => {
   });
 });
 
-Cypress.Commands.add(
-  "getDefaultBooleanValue",
-  (managementEndpoint, address, name) => {
-    return cy
-      .task("execute:cli", {
-        managementApi: `${managementEndpoint}/management`,
+Cypress.Commands.add("getDefaultBooleanValue", (managementEndpoint, address, name) => {
+  return cy
+    .task("execute:cli", {
+      managementApi: `${managementEndpoint}/management`,
+      operation: "read-attribute",
+      address: address,
+      name: name,
+    })
+    .then((result) => {
+      return (result as { result: boolean }).result;
+    });
+});
+
+Cypress.Commands.add("resetForm", (configurationFormId, managementApi, address) => {
+  const resetButton = "#" + configurationFormId + ' a.clickable[data-operation="reset"';
+  cy.get(resetButton).click();
+  cy.get(".modal-footer .btn-hal.btn-primary").click({ force: true });
+  cy.verifySuccess();
+  cy.task("execute:cli", {
+    managementApi: `${managementApi}/management`,
+    operation: "read-resource-description",
+    address: address,
+  }).then((result) => {
+    expect((result as { outcome: string }).outcome).to.equal("success");
+    const attributes = (
+      result as {
+        result: { attributes: { [key: string]: { default?: string } } };
+      }
+    ).result.attributes;
+    const attributesWithDefaultValues = Object.keys(attributes)
+      .filter((key: string) => Object.prototype.hasOwnProperty.call(attributes[key], "default"))
+      .map((key) => {
+        const obj: {
+          [index: string]: undefined | string | number | boolean;
+        } = {};
+        obj["name"] = key;
+        obj["defaultValue"] = attributes[key].default;
+        return obj;
+      });
+    attributesWithDefaultValues.forEach((attributeWithDefaultValue) => {
+      cy.task("execute:cli", {
+        managementApi: `${managementApi}/management`,
         operation: "read-attribute",
         address: address,
-        name: name,
-      })
-      .then((result) => {
-        return (result as { result: boolean }).result;
-      });
-  }
-);
-
-Cypress.Commands.add(
-  "resetForm",
-  (configurationFormId, managementApi, address) => {
-    const resetButton =
-      "#" + configurationFormId + ' a.clickable[data-operation="reset"';
-    cy.get(resetButton).click();
-    cy.get(".modal-footer .btn-hal.btn-primary").click({ force: true });
-    cy.verifySuccess();
-    cy.task("execute:cli", {
-      managementApi: `${managementApi}/management`,
-      operation: "read-resource-description",
-      address: address,
-    }).then((result) => {
-      expect((result as { outcome: string }).outcome).to.equal("success");
-      const attributes = (
-        result as {
-          result: { attributes: { [key: string]: { default?: string } } };
-        }
-      ).result.attributes;
-      const attributesWithDefaultValues = Object.keys(attributes)
-        .filter((key: string) =>
-          Object.prototype.hasOwnProperty.call(attributes[key], "default")
-        )
-        .map((key) => {
-          const obj: {
-            [index: string]: undefined | string | number | boolean;
-          } = {};
-          obj["name"] = key;
-          obj["defaultValue"] = attributes[key].default;
-          return obj;
-        });
-      attributesWithDefaultValues.forEach((attributeWithDefaultValue) => {
-        cy.task("execute:cli", {
-          managementApi: `${managementApi}/management`,
-          operation: "read-attribute",
-          address: address,
-          name: attributeWithDefaultValue.name,
-        }).then((result) => {
-          expect((result as { outcome: string }).outcome).to.equal("success");
-          expect(
-            (result as { result: string | number | boolean }).result
-          ).to.equal(attributeWithDefaultValue.defaultValue);
-        });
+        name: attributeWithDefaultValue.name,
+      }).then((result) => {
+        expect((result as { outcome: string }).outcome).to.equal("success");
+        expect((result as { result: string | number | boolean }).result).to.equal(
+          attributeWithDefaultValue.defaultValue
+        );
       });
     });
-  }
-);
+  });
+});
 
 Cypress.Commands.add("addInTable", (tableId) => {
   const tableWrapper = `#${tableId}_wrapper`;
-  cy.get(
-    `${tableWrapper} button.btn.btn-default > span:contains("Add")`
-  ).click();
+  cy.get(`${tableWrapper} button.btn.btn-default > span:contains("Add")`).click();
 });
 
 Cypress.Commands.add("selectInTable", (tableId, resourceName) => {
@@ -182,29 +160,19 @@ Cypress.Commands.add("selectInTable", (tableId, resourceName) => {
 Cypress.Commands.add("removeFromTable", (tableId, resourceName) => {
   const tableWrapper = `#${tableId}_wrapper`;
   cy.selectInTable(tableId, resourceName);
-  cy.get(
-    `${tableWrapper} button.btn.btn-default > span:contains("Remove")`
-  ).click();
-  cy.get(
-    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-  ).click();
+  cy.get(`${tableWrapper} button.btn.btn-default > span:contains("Remove")`).click();
+  cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")').click();
 });
 
 Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
-  cy.formInput(configurationFormId, attributeName)
-    .click({ force: true })
-    .wait(200)
-    .clear();
-  cy.formInput(configurationFormId, attributeName).type(value as string);
+  cy.formInput(configurationFormId, attributeName).click({ force: true }).wait(200).clear();
+  cy.formInput(configurationFormId, attributeName).type(value);
   cy.formInput(configurationFormId, attributeName).should("have.value", value);
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
 
 Cypress.Commands.add("clearAttribute", (configurationFormId, attributeName) => {
-  cy.formInput(configurationFormId, attributeName)
-    .click({ force: true })
-    .wait(200)
-    .clear();
+  cy.formInput(configurationFormId, attributeName).click({ force: true }).wait(200).clear();
   cy.formInput(configurationFormId, attributeName).should("have.value", "");
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
@@ -221,47 +189,39 @@ Cypress.Commands.add("startWildflyContainer", () => {
 
 Cypress.Commands.add("executeInWildflyContainer", (command) => {
   return cy.task("execute:in:container", {
-    containerName: Cypress.spec.name
-      .replace(/\.cy\.ts/g, "")
-      .replace(/-/g, "_"),
+    containerName: Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_"),
     command: command,
   });
 });
 
-Cypress.Commands.add(
-  "addAddress",
-  (managementEndpoint, address, parameters) => {
-    return cy.task("execute:cli", {
-      managementApi: `${managementEndpoint}/management`,
-      operation: "add",
-      address: address,
-      ...parameters,
-    });
-  }
-);
+Cypress.Commands.add("addAddress", (managementEndpoint, address, parameters) => {
+  return cy.task("execute:cli", {
+    managementApi: `${managementEndpoint}/management`,
+    operation: "add",
+    address: address,
+    ...parameters,
+  });
+});
 
-Cypress.Commands.add(
-  "addAddressIfDoesntExist",
-  (managementEndpoint, address, parameters) => {
-    return cy
-      .task("execute:cli", {
-        managementApi: managementEndpoint + "/management",
-        operation: "validate-address",
-        value: address,
-      })
-      .then((result) => {
-        expect((result as { outcome: string }).outcome).to.equal("success");
-        if (!(result as { result: { valid: boolean } }).result.valid) {
-          cy.task("execute:cli", {
-            managementApi: managementEndpoint + "/management",
-            operation: "add",
-            address: address,
-            ...parameters,
-          });
-        }
-      });
-  }
-);
+Cypress.Commands.add("addAddressIfDoesntExist", (managementEndpoint, address, parameters) => {
+  return cy
+    .task("execute:cli", {
+      managementApi: managementEndpoint + "/management",
+      operation: "validate-address",
+      value: address,
+    })
+    .then((result) => {
+      expect((result as { outcome: string }).outcome).to.equal("success");
+      if (!(result as { result: { valid: boolean } }).result.valid) {
+        cy.task("execute:cli", {
+          managementApi: managementEndpoint + "/management",
+          operation: "add",
+          address: address,
+          ...parameters,
+        });
+      }
+    });
+});
 
 Cypress.Commands.add("removeAddressIfExists", (managementEndpoint, address) => {
   cy.task("execute:cli", {
@@ -280,55 +240,40 @@ Cypress.Commands.add("removeAddressIfExists", (managementEndpoint, address) => {
   });
 });
 
-Cypress.Commands.add(
-  "validateAddress",
-  (managementEndpoint, address, expectedValue) => {
-    cy.task("execute:cli", {
-      managementApi: managementEndpoint + "/management",
-      operation: "validate-address",
-      value: address,
-    }).then((result) => {
-      expect((result as { outcome: string }).outcome).to.equal("success");
-      expect((result as { result: { valid: boolean } }).result.valid).to.equal(
-        expectedValue
-      );
-    });
-  }
-);
+Cypress.Commands.add("validateAddress", (managementEndpoint, address, expectedValue) => {
+  cy.task("execute:cli", {
+    managementApi: managementEndpoint + "/management",
+    operation: "validate-address",
+    value: address,
+  }).then((result) => {
+    expect((result as { outcome: string }).outcome).to.equal("success");
+    expect((result as { result: { valid: boolean } }).result.valid).to.equal(expectedValue);
+  });
+});
 
-Cypress.Commands.add(
-  "verifyAttribute",
-  (managementEndpoint, address, attributeName, expectedValue) => {
-    cy.task("execute:cli", {
-      managementApi: managementEndpoint + "/management",
-      operation: "read-attribute",
-      address: address,
-      name: attributeName,
-    }).then((result) => {
-      expect((result as { outcome: string }).outcome).to.equal("success");
-      expect((result as { result: string | number | boolean }).result).to.equal(
-        expectedValue
-      );
-    });
-  }
-);
+Cypress.Commands.add("verifyAttribute", (managementEndpoint, address, attributeName, expectedValue) => {
+  cy.task("execute:cli", {
+    managementApi: managementEndpoint + "/management",
+    operation: "read-attribute",
+    address: address,
+    name: attributeName,
+  }).then((result) => {
+    expect((result as { outcome: string }).outcome).to.equal("success");
+    expect((result as { result: string | number | boolean }).result).to.equal(expectedValue);
+  });
+});
 
-Cypress.Commands.add(
-  "verifyListAttributeContains",
-  (managementEndpoint, address, attributeName, expectedValue) => {
-    cy.task("execute:cli", {
-      managementApi: managementEndpoint + "/management",
-      operation: "read-attribute",
-      address: address,
-      name: attributeName,
-    }).then((result) => {
-      expect((result as { outcome: string }).outcome).to.equal("success");
-      expect(
-        (result as { result: object[] | string[] }).result
-      ).to.deep.include(expectedValue);
-    });
-  }
-);
+Cypress.Commands.add("verifyListAttributeContains", (managementEndpoint, address, attributeName, expectedValue) => {
+  cy.task("execute:cli", {
+    managementApi: managementEndpoint + "/management",
+    operation: "read-attribute",
+    address: address,
+    name: attributeName,
+  }).then((result) => {
+    expect((result as { outcome: string }).outcome).to.equal("success");
+    expect((result as { result: object[] | string[] }).result).to.deep.include(expectedValue);
+  });
+});
 
 Cypress.Commands.add(
   "verifyListAttributeDoesNotContain",
@@ -340,32 +285,23 @@ Cypress.Commands.add(
       name: attributeName,
     }).then((result) => {
       expect((result as { outcome: string }).outcome).to.equal("success");
-      expect(
-        (result as { result: object[] | string[] }).result
-      ).to.not.deep.include(expectedValue);
+      expect((result as { result: object[] | string[] }).result).to.not.deep.include(expectedValue);
     });
   }
 );
 
 Cypress.Commands.add("confirmAddResourceWizard", () => {
-  cy.get(
-    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")'
-  ).click({ force: true });
+  cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")').click({ force: true });
 });
 
 Cypress.Commands.add("addSingletonResource", (emptyConfigurationFormId) => {
-  cy.get(
-    "#" + emptyConfigurationFormId + ' .btn-primary:contains("Add")'
-  ).click();
+  cy.get("#" + emptyConfigurationFormId + ' .btn-primary:contains("Add")').click();
 });
 
 Cypress.Commands.add("removeSingletonResource", (configurationFormId) => {
-  const removeButton =
-    "#" + configurationFormId + ' a.clickable[data-operation="remove"';
+  const removeButton = "#" + configurationFormId + ' a.clickable[data-operation="remove"';
   cy.get(removeButton).click();
-  cy.get(
-    'div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")'
-  ).click();
+  cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")').click();
 });
 
 Cypress.Commands.add("verifyRemovedFromTable", (tableId, resourceName) => {
@@ -378,58 +314,22 @@ export {};
 declare global {
   namespace Cypress {
     interface Chainable {
-      flip(
-        configurationFormId: string,
-        attributeName: string,
-        value: boolean
-      ): Chainable<void>;
-      text(
-        configurationFormId: string,
-        attributeName: string,
-        value: string | number
-      ): Chainable<void>;
-      clearAttribute(
-        configurationFormId: string,
-        attributeName: string
-      ): Chainable<void>;
+      flip(configurationFormId: string, attributeName: string, value: boolean): Chainable<void>;
+      text(configurationFormId: string, attributeName: string, value: string | number): Chainable<void>;
+      clearAttribute(configurationFormId: string, attributeName: string): Chainable<void>;
       editForm(configurationFormId: string): Chainable<void>;
-      formInput(
-        configurationFormId: string,
-        attributeName: string
-      ): Chainable<JQuery<HTMLElement>>;
+      formInput(configurationFormId: string, attributeName: string): Chainable<JQuery<HTMLElement>>;
       saveForm(configurationFormId: string): Chainable<void>;
-      resetForm(
-        configurationFormId: string,
-        managementApi: string,
-        address: string[]
-      ): Chainable<void>;
+      resetForm(configurationFormId: string, managementApi: string, address: string[]): Chainable<void>;
       navigateTo(managementEndpoint: string, token: string): Chainable<void>;
-      navigateToGenericSubsystemPage(
-        managementEndpoint: string,
-        address: string[]
-      ): Chainable<void>;
+      navigateToGenericSubsystemPage(managementEndpoint: string, address: string[]): Chainable<void>;
       verifySuccess(): Chainable<void>;
       startWildflyContainer(): Chainable<unknown>;
       executeInWildflyContainer(command: string): Chainable<unknown>;
-      addAddress(
-        managementEndpoint: string,
-        address: string[],
-        parameters?: object
-      ): Chainable<unknown>;
-      addAddressIfDoesntExist(
-        managementEndpoint: string,
-        address: string[],
-        parameters?: object
-      ): Chainable<unknown>;
-      removeAddressIfExists(
-        managementEndpoint: string,
-        address: string[]
-      ): void;
-      validateAddress(
-        managementEndpoint: string,
-        address: string[],
-        expectedValue: boolean
-      ): void;
+      addAddress(managementEndpoint: string, address: string[], parameters?: object): Chainable<unknown>;
+      addAddressIfDoesntExist(managementEndpoint: string, address: string[], parameters?: object): Chainable<unknown>;
+      removeAddressIfExists(managementEndpoint: string, address: string[]): void;
+      validateAddress(managementEndpoint: string, address: string[], expectedValue: boolean): void;
       verifyAttribute(
         managementEndpoint: string,
         address: string[],
@@ -454,11 +354,7 @@ declare global {
       selectInTable(tableId: string, resourceName: string): void;
       removeFromTable(tableId: string, resourceName: string): void;
       confirmAddResourceWizard(): void;
-      getDefaultBooleanValue(
-        managementEndpoint: string,
-        address: string[],
-        name: string
-      ): Chainable<boolean>;
+      getDefaultBooleanValue(managementEndpoint: string, address: string[], name: string): Chainable<boolean>;
       verifyRemovedFromTable(tableId: string, resourceName: string): void;
     }
   }

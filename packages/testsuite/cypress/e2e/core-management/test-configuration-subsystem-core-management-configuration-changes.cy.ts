@@ -2,12 +2,7 @@ describe("TESTS: Configuration => Subsystem => Core Management => Configuration 
   let managementEndpoint: string;
   const configurationFormId = "core-mgmt-conf-change-form";
   const emptyConfigurationForm = "core-mgmt-conf-change-form-empty";
-  const address = [
-    "subsystem",
-    "core-management",
-    "service",
-    "configuration-changes",
-  ];
+  const address = ["subsystem", "core-management", "service", "configuration-changes"];
   const maxHistory = "max-history";
 
   before(() => {

@@ -1,28 +1,16 @@
 Cypress.Commands.add("createMailSession", (managementEndpoint, mailSession) => {
-  cy.addAddress(
-    managementEndpoint,
-    ["subsystem", "mail", "mail-session", mailSession.mailSessionName],
-    {
-      "jndi-name": mailSession.jndiName,
-    }
-  );
+  cy.addAddress(managementEndpoint, ["subsystem", "mail", "mail-session", mailSession.mailSessionName], {
+    "jndi-name": mailSession.jndiName,
+  });
 });
 
-Cypress.Commands.add(
-  "createOutboundSocketBinding",
-  (managementEndpoint, socketBinding) => {
-    cy.addAddress(
-      managementEndpoint,
-      [
-        "socket-binding-group",
-        "standard-sockets",
-        "remote-destination-outbound-socket-binding",
-        socketBinding.name,
-      ],
-      socketBinding
-    );
-  }
-);
+Cypress.Commands.add("createOutboundSocketBinding", (managementEndpoint, socketBinding) => {
+  cy.addAddress(
+    managementEndpoint,
+    ["socket-binding-group", "standard-sockets", "remote-destination-outbound-socket-binding", socketBinding.name],
+    socketBinding
+  );
+});
 
 export {};
 

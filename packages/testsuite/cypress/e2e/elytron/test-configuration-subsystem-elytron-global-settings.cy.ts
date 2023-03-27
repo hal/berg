@@ -22,25 +22,10 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(
-            "authentication-context",
-            authenticationContextToUpdate
-          )
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat("client-ssl-context", sslContextToUpdate)
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat("provider-loader", providerLoaders.initial.name)
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat("provider-loader", providerLoaders.final.name)
-        );
+        cy.addAddress(managementEndpoint, address.concat("authentication-context", authenticationContextToUpdate));
+        cy.addAddress(managementEndpoint, address.concat("client-ssl-context", sslContextToUpdate));
+        cy.addAddress(managementEndpoint, address.concat("provider-loader", providerLoaders.initial.name));
+        cy.addAddress(managementEndpoint, address.concat("provider-loader", providerLoaders.final.name));
       });
   });
 
@@ -51,19 +36,10 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
   it("Edit default-authentication-context", () => {
     cy.navigateTo(managementEndpoint, "elytron");
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-authentication-context",
-      authenticationContextToUpdate
-    );
+    cy.text(configurationFormId, "default-authentication-context", authenticationContextToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-authentication-context",
-      authenticationContextToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-authentication-context", authenticationContextToUpdate);
   });
 
   it("Edit default-ssl-context", () => {
@@ -72,29 +48,17 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
     cy.text(configurationFormId, "default-ssl-context", sslContextToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-ssl-context",
-      sslContextToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-ssl-context", sslContextToUpdate);
   });
 
   it("Edit disallowed-providers", () => {
     cy.navigateTo(managementEndpoint, "elytron");
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "disallowed-providers", "DisallowedProvider");
-    cy.formInput(configurationFormId, "disallowed-providers")
-      .type("{enter}")
-      .trigger("change");
+    cy.formInput(configurationFormId, "disallowed-providers").type("{enter}").trigger("change");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "disallowed-providers",
-      "DisallowedProvider"
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "disallowed-providers", "DisallowedProvider");
   });
 
   it("Edit final-providers", () => {
@@ -103,30 +67,16 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
     cy.text(configurationFormId, "final-providers", providerLoaders.final.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "final-providers",
-      providerLoaders.final.name
-    );
+    cy.verifyAttribute(managementEndpoint, address, "final-providers", providerLoaders.final.name);
   });
 
   it("Edit initial-providers", () => {
     cy.navigateTo(managementEndpoint, "elytron");
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "initial-providers",
-      providerLoaders.initial.name
-    );
+    cy.text(configurationFormId, "initial-providers", providerLoaders.initial.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "initial-providers",
-      providerLoaders.initial.name
-    );
+    cy.verifyAttribute(managementEndpoint, address, "initial-providers", providerLoaders.initial.name);
   });
 
   it("Toggle register-jaspi-factory", () => {
@@ -143,12 +93,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
       cy.flip(configurationFormId, "register-jaspi-factory", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "register-jaspi-factory",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "register-jaspi-factory", !value);
     });
   });
 
@@ -156,18 +101,11 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
     cy.navigateTo(managementEndpoint, "elytron");
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "security-properties", "prop=val");
-    cy.formInput(configurationFormId, "security-properties")
-      .type("{enter}")
-      .trigger("change");
+    cy.formInput(configurationFormId, "security-properties").type("{enter}").trigger("change");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "security-properties",
-      {
-        prop: "val",
-      }
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "security-properties", {
+      prop: "val",
+    });
   });
 });

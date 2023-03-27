@@ -25,18 +25,9 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.create.name,
-          ],
-          {
-            module: "org.wildfly.clustering.ejb.infinispan",
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "infinispan", "cache-container", cacheContainers.create.name], {
+          module: "org.wildfly.clustering.ejb.infinispan",
+        });
         cy.addAddress(managementEndpoint, [
           "subsystem",
           "infinispan",
@@ -56,27 +47,13 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.create.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.create.name],
           name: "default-cache",
           value: cacheContainers.create["default-cache"].name,
         });
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.update.name,
-          ],
-          {
-            module: "org.wildfly.clustering.ejb.infinispan",
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "infinispan", "cache-container", cacheContainers.update.name], {
+          module: "org.wildfly.clustering.ejb.infinispan",
+        });
         cy.addAddress(managementEndpoint, [
           "subsystem",
           "infinispan",
@@ -96,12 +73,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.update.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.update.name],
           name: "default-cache",
           value: cacheContainers.update["default-cache"].name,
         });
@@ -116,28 +88,16 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-routing-item").click();
     cy.get("#dw-routing-select").select("Infinispan", { force: true });
-    cy.text(
-      "dw-routing-infinispan-add",
-      "cache-container",
-      cacheContainers.create.name
-    );
+    cy.text("dw-routing-infinispan-add", "cache-container", cacheContainers.create.name);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["subsystem", "distributable-web", "routing", "infinispan"],
-      true
-    );
+    cy.validateAddress(managementEndpoint, ["subsystem", "distributable-web", "routing", "infinispan"], true);
   });
 
   it("Edit cache", () => {
-    cy.addAddress(
-      managementEndpoint,
-      ["subsystem", "distributable-web", "routing", "infinispan"],
-      {
-        "cache-container": cacheContainers.create.name,
-      }
-    );
+    cy.addAddress(managementEndpoint, ["subsystem", "distributable-web", "routing", "infinispan"], {
+      "cache-container": cacheContainers.create.name,
+    });
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-routing-item").click();
     cy.editForm(configurationFormId);
@@ -153,21 +113,13 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
   });
 
   it("Edit cache-container", () => {
-    cy.addAddress(
-      managementEndpoint,
-      ["subsystem", "distributable-web", "routing", "infinispan"],
-      {
-        "cache-container": cacheContainers.create.name,
-      }
-    );
+    cy.addAddress(managementEndpoint, ["subsystem", "distributable-web", "routing", "infinispan"], {
+      "cache-container": cacheContainers.create.name,
+    });
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-routing-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "cache-container",
-      cacheContainers.update.name
-    );
+    cy.text(configurationFormId, "cache-container", cacheContainers.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
@@ -179,39 +131,22 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
   });
 
   it("Reset", () => {
-    cy.addAddress(
-      managementEndpoint,
-      ["subsystem", "distributable-web", "routing", "infinispan"],
-      {
-        "cache-container": cacheContainers.create.name,
-      }
-    );
+    cy.addAddress(managementEndpoint, ["subsystem", "distributable-web", "routing", "infinispan"], {
+      "cache-container": cacheContainers.create.name,
+    });
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-routing-item").click();
-    cy.resetForm(configurationFormId, managementEndpoint, [
-      "subsystem",
-      "distributable-web",
-      "routing",
-      "infinispan",
-    ]);
+    cy.resetForm(configurationFormId, managementEndpoint, ["subsystem", "distributable-web", "routing", "infinispan"]);
   });
 
   it("Switch routing to local", () => {
-    cy.addAddress(
-      managementEndpoint,
-      ["subsystem", "distributable-web", "routing", "infinispan"],
-      {
-        "cache-container": cacheContainers.create.name,
-      }
-    );
+    cy.addAddress(managementEndpoint, ["subsystem", "distributable-web", "routing", "infinispan"], {
+      "cache-container": cacheContainers.create.name,
+    });
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-routing-item").click();
     cy.get("#dw-routing-select").select("local", { force: true });
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["subsystem", "distributable-web", "routing", "local"],
-      true
-    );
+    cy.validateAddress(managementEndpoint, ["subsystem", "distributable-web", "routing", "local"], true);
   });
 });

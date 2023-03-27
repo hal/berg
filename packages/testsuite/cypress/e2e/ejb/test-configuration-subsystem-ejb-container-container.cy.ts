@@ -16,28 +16,13 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       .then(() => {
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "ejb3",
-            "application-security-domain",
-            securityDomainToUpdate,
-          ],
+          ["subsystem", "ejb3", "application-security-domain", securityDomainToUpdate],
           {
             "security-domain": "ApplicationDomain",
           }
         );
-        cy.addAddress(managementEndpoint, [
-          "subsystem",
-          "ejb3",
-          "cache",
-          cacheToUpdate,
-        ]);
-        cy.addAddress(managementEndpoint, [
-          "subsystem",
-          "ejb3",
-          "strict-max-bean-instance-pool",
-          slsbToUpdate,
-        ]);
+        cy.addAddress(managementEndpoint, ["subsystem", "ejb3", "cache", cacheToUpdate]);
+        cy.addAddress(managementEndpoint, ["subsystem", "ejb3", "strict-max-bean-instance-pool", slsbToUpdate]);
       });
   });
 
@@ -61,12 +46,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       cy.flip(configurationFormId, "allow-ejb-name-regex", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "allow-ejb-name-regex",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "allow-ejb-name-regex", !value);
     });
   });
 
@@ -81,15 +61,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       .trigger("change");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "client-interceptors",
-      {
-        class: "someClass",
-        module: "someModule",
-      }
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "client-interceptors", {
+      class: "someClass",
+      module: "someModule",
+    });
   });
 
   it("Edit client-interceptors via wizard", () => {
@@ -107,15 +82,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.confirmAddResourceWizard();
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "client-interceptors",
-      {
-        class: "anotherClass",
-        module: "anotherModule",
-      }
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "client-interceptors", {
+      class: "anotherClass",
+      module: "anotherModule",
+    });
   });
 
   it("Edit default-distinct-name", () => {
@@ -123,19 +93,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-distinct-name",
-      "distinct-name-updated"
-    );
+    cy.text(configurationFormId, "default-distinct-name", "distinct-name-updated");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-distinct-name",
-      "distinct-name-updated"
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-distinct-name", "distinct-name-updated");
   });
 
   it("Edit default-entity-bean-instance-pool", () => {
@@ -143,11 +104,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-entity-bean-instance-pool",
-      "default-entity-bean-instance-pool-updated"
-    );
+    cy.text(configurationFormId, "default-entity-bean-instance-pool", "default-entity-bean-instance-pool-updated");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
@@ -171,19 +128,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       cy.get("#ejb3-container-item").click();
       cy.get("#ejb3-configuration-item").click();
       cy.editForm(configurationFormId);
-      cy.flip(
-        configurationFormId,
-        "default-entity-bean-optimistic-locking",
-        value
-      );
+      cy.flip(configurationFormId, "default-entity-bean-optimistic-locking", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "default-entity-bean-optimistic-locking",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "default-entity-bean-optimistic-locking", !value);
     });
   });
 
@@ -192,19 +140,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-mdb-instance-pool",
-      "default-mdb-instance-pool-updated"
-    );
+    cy.text(configurationFormId, "default-mdb-instance-pool", "default-mdb-instance-pool-updated");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-mdb-instance-pool",
-      "default-mdb-instance-pool-updated"
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-mdb-instance-pool", "default-mdb-instance-pool-updated");
   });
 
   it("Toggle default-missing-method-permissions-deny-access", () => {
@@ -220,19 +159,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       cy.get("#ejb3-container-item").click();
       cy.get("#ejb3-configuration-item").click();
       cy.editForm(configurationFormId);
-      cy.flip(
-        configurationFormId,
-        "default-missing-method-permissions-deny-access",
-        value
-      );
+      cy.flip(configurationFormId, "default-missing-method-permissions-deny-access", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "default-missing-method-permissions-deny-access",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "default-missing-method-permissions-deny-access", !value);
     });
   });
 
@@ -244,12 +174,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.text(configurationFormId, "default-resource-adapter-name", "ra-updated");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-resource-adapter-name",
-      "ra-updated"
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-resource-adapter-name", "ra-updated");
   });
 
   it("Edit default-security-domain", () => {
@@ -257,19 +182,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-security-domain",
-      securityDomainToUpdate
-    );
+    cy.text(configurationFormId, "default-security-domain", securityDomainToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-security-domain",
-      securityDomainToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-security-domain", securityDomainToUpdate);
   });
 
   it("Edit default-sfsb-cache", () => {
@@ -280,12 +196,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.text(configurationFormId, "default-sfsb-cache", cacheToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-sfsb-cache",
-      cacheToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-sfsb-cache", cacheToUpdate);
   });
 
   it("Edit default-sfsb-passivation-disabled-cache", () => {
@@ -293,19 +204,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-sfsb-passivation-disabled-cache",
-      cacheToUpdate
-    );
+    cy.text(configurationFormId, "default-sfsb-passivation-disabled-cache", cacheToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-sfsb-passivation-disabled-cache",
-      cacheToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-sfsb-passivation-disabled-cache", cacheToUpdate);
   });
 
   it("Edit default-singleton-bean-access-timeout", () => {
@@ -313,19 +215,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-singleton-bean-access-timeout",
-      "3000"
-    );
+    cy.text(configurationFormId, "default-singleton-bean-access-timeout", "3000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-singleton-bean-access-timeout",
-      3000
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-singleton-bean-access-timeout", 3000);
   });
 
   it("Edit default-slsb-instance-pool", () => {
@@ -336,12 +229,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.text(configurationFormId, "default-slsb-instance-pool", slsbToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-slsb-instance-pool",
-      slsbToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-slsb-instance-pool", slsbToUpdate);
   });
 
   it("Edit default-stateful-bean-access-timeout", () => {
@@ -349,19 +237,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-stateful-bean-access-timeout",
-      "3000"
-    );
+    cy.text(configurationFormId, "default-stateful-bean-access-timeout", "3000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-stateful-bean-access-timeout",
-      3000
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-stateful-bean-access-timeout", 3000);
   });
 
   it("Edit default-stateful-bean-session-timeout", () => {
@@ -369,19 +248,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-configuration-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-stateful-bean-session-timeout",
-      "3000"
-    );
+    cy.text(configurationFormId, "default-stateful-bean-session-timeout", "3000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-stateful-bean-session-timeout",
-      3000
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-stateful-bean-session-timeout", 3000);
   });
 
   it("Toggle enable-graceful-txn-shutdown", () => {
@@ -400,12 +270,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       cy.flip(configurationFormId, "enable-graceful-txn-shutdown", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "enable-graceful-txn-shutdown",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "enable-graceful-txn-shutdown", !value);
     });
   });
 
@@ -422,19 +287,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       cy.get("#ejb3-container-item").click();
       cy.get("#ejb3-configuration-item").click();
       cy.editForm(configurationFormId);
-      cy.flip(
-        configurationFormId,
-        "in-vm-remote-interface-invocation-pass-by-value",
-        value
-      );
+      cy.flip(configurationFormId, "in-vm-remote-interface-invocation-pass-by-value", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "in-vm-remote-interface-invocation-pass-by-value",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "in-vm-remote-interface-invocation-pass-by-value", !value);
     });
   });
 
@@ -454,12 +310,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       cy.flip(configurationFormId, "log-system-exceptions", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "log-system-exceptions",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "log-system-exceptions", !value);
     });
   });
 
@@ -474,15 +325,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
       .trigger("change");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "server-interceptors",
-      {
-        class: "someClass",
-        module: "someModule",
-      }
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "server-interceptors", {
+      class: "someClass",
+      module: "someModule",
+    });
   });
 
   it("Edit server-interceptors via wizard", () => {
@@ -500,15 +346,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.confirmAddResourceWizard();
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "server-interceptors",
-      {
-        class: "anotherClass",
-        module: "anotherModule",
-      }
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "server-interceptors", {
+      class: "anotherClass",
+      module: "anotherModule",
+    });
   });
 
   it("Reset", () => {

@@ -45,12 +45,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
       .then(() => {
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.default.name,
-          ],
+          ["subsystem", "infinispan", "cache-container", cacheContainers.default.name],
           {
             module: "org.wildfly.clustering.ejb.infinispan",
           }
@@ -74,27 +69,13 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.default.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.default.name],
           name: "default-cache",
           value: cacheContainers.default["default-cache"].name,
         });
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.update.name,
-          ],
-          {
-            module: "org.wildfly.clustering.ejb.infinispan",
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "infinispan", "cache-container", cacheContainers.update.name], {
+          module: "org.wildfly.clustering.ejb.infinispan",
+        });
         cy.addAddress(managementEndpoint, [
           "subsystem",
           "infinispan",
@@ -114,42 +95,25 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.update.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.update.name],
           name: "default-cache",
           value: cacheContainers.update["default-cache"].name,
         });
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(passivations.update.name),
-          {
-            "bean-cache": cacheContainers.default["default-cache"].name,
-            "cache-container": cacheContainers.default.name,
-            "max-size": 1000,
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(passivations.remove.name),
-          {
-            "bean-cache": cacheContainers.default["default-cache"].name,
-            "cache-container": cacheContainers.default.name,
-            "max-size": 1000,
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(passivations.reset.name),
-          {
-            "bean-cache": cacheContainers.default["default-cache"].name,
-            "cache-container": cacheContainers.default.name,
-            "max-size": 1000,
-          }
-        );
+        cy.addAddress(managementEndpoint, address.concat(passivations.update.name), {
+          "bean-cache": cacheContainers.default["default-cache"].name,
+          "cache-container": cacheContainers.default.name,
+          "max-size": 1000,
+        });
+        cy.addAddress(managementEndpoint, address.concat(passivations.remove.name), {
+          "bean-cache": cacheContainers.default["default-cache"].name,
+          "cache-container": cacheContainers.default.name,
+          "max-size": 1000,
+        });
+        cy.addAddress(managementEndpoint, address.concat(passivations.reset.name), {
+          "bean-cache": cacheContainers.default["default-cache"].name,
+          "cache-container": cacheContainers.default.name,
+          "max-size": 1000,
+        });
       });
   });
 
@@ -163,24 +127,12 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
     cy.get("#ejb3-passivation-item").click();
     cy.addInTable(passivationTableId);
     cy.text("ejb3-passivation-table-add", "name", passivations.create.name);
-    cy.text(
-      "ejb3-passivation-table-add",
-      "bean-cache",
-      cacheContainers.default["default-cache"].name
-    );
-    cy.text(
-      "ejb3-passivation-table-add",
-      "bean-cache",
-      cacheContainers.default.name
-    );
+    cy.text("ejb3-passivation-table-add", "bean-cache", cacheContainers.default["default-cache"].name);
+    cy.text("ejb3-passivation-table-add", "bean-cache", cacheContainers.default.name);
     cy.text("ejb3-passivation-table-add", "max-size", "1000");
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(passivations.create.name),
-      true
-    );
+    cy.validateAddress(managementEndpoint, address.concat(passivations.create.name), true);
   });
 
   it("Edit bean-cache", () => {
@@ -192,12 +144,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
     cy.text(configurationFormId, "bean-cache", cacheToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(passivations.update.name),
-      "bean-cache",
-      cacheToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(passivations.update.name), "bean-cache", cacheToUpdate);
   });
 
   it("Edit cache-container", () => {
@@ -206,11 +153,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
     cy.get("#ejb3-passivation-item").click();
     cy.selectInTable(passivationTableId, passivations.update.name);
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "cache-container",
-      cacheContainers.update.name
-    );
+    cy.text(configurationFormId, "cache-container", cacheContainers.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
@@ -230,12 +173,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
     cy.text(configurationFormId, "max-size", "1234");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(passivations.update.name),
-      "max-size",
-      1234
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(passivations.update.name), "max-size", 1234);
   });
 
   it("Remove", () => {
@@ -244,11 +182,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
     cy.get("#ejb3-passivation-item").click();
     cy.removeFromTable(passivationTableId, passivations.remove.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(passivations.remove.name),
-      false
-    );
+    cy.validateAddress(managementEndpoint, address.concat(passivations.remove.name), false);
   });
 
   it("Reset", () => {
@@ -256,10 +190,6 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
     cy.get("#ejb3-state-item").click();
     cy.get("#ejb3-passivation-item").click();
     cy.selectInTable(passivationTableId, passivations.reset.name);
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint,
-      address.concat(passivations.reset.name)
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address.concat(passivations.reset.name));
   });
 });

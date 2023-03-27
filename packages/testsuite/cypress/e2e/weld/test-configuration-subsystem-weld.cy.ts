@@ -28,9 +28,7 @@ describe("TESTS: Configuration => Subsystems => Weld", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-      cy.get(
-        '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-      ).click();
+      cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, developmentMode, value);
       cy.saveForm(configurationFormId);
@@ -49,9 +47,7 @@ describe("TESTS: Configuration => Subsystems => Weld", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-      cy.get(
-        '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-      ).click();
+      cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, nonPortableMode, value);
       cy.saveForm(configurationFormId);
@@ -70,27 +66,18 @@ describe("TESTS: Configuration => Subsystems => Weld", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-      cy.get(
-        '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-      ).click();
+      cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, requireBeanDescriptor, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        requireBeanDescriptor,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, requireBeanDescriptor, !value);
     });
   });
 
   it("Edit thread-pool-size", () => {
     cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-    cy.get(
-      '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-    ).click();
+    cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, threadPoolSize, "2");
     cy.saveForm(configurationFormId);
@@ -100,9 +87,7 @@ describe("TESTS: Configuration => Subsystems => Weld", () => {
 
   it("Reset", () => {
     cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-    cy.get(
-      '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-    ).click();
+    cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
     cy.resetForm(configurationFormId, managementEndpoint, address);
   });
 });

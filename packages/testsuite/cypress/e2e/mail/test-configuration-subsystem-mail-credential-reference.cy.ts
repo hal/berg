@@ -1,12 +1,5 @@
 describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
-  const address = [
-    "subsystem",
-    "mail",
-    "mail-session",
-    "my-mail-session",
-    "server",
-    "smtp",
-  ];
+  const address = ["subsystem", "mail", "mail-session", "my-mail-session", "server", "smtp"];
 
   const outBoundSocketBinding = {
     name: "custom-outbound-socket-binding",
@@ -40,13 +33,10 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
 
   const itemSelectors = {
     mailServerItem: "#mail-server-item a",
-    mailServerAdd:
-      "div.pull-right.btn-group.hal-table-buttons > button:contains('Add')",
-    buttonAdd:
-      "div.modal-footer > button.btn.btn-hal.btn-primary:contains('Add')",
+    mailServerAdd: "div.pull-right.btn-group.hal-table-buttons > button:contains('Add')",
+    buttonAdd: "div.modal-footer > button.btn.btn-hal.btn-primary:contains('Add')",
     credentialsReferenceTab: "a:contains('Credential Reference')",
-    credentialsReferenceAdd:
-      "div.blank-slate-pf-main-action > button:contains('Add')",
+    credentialsReferenceAdd: "div.blank-slate-pf-main-action > button:contains('Add')",
   };
 
   let managementEndpoint: string;
@@ -73,37 +63,19 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
     cy.get(addServerForm.typeSelector).select(testValues.serverType, {
       force: true,
     });
-    cy.text(
-      addServerForm.id,
-      addServerForm.outboundSocket,
-      outBoundSocketBinding.name
-    );
+    cy.text(addServerForm.id, addServerForm.outboundSocket, outBoundSocketBinding.name);
     cy.get(itemSelectors.buttonAdd).click();
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      addServerForm.outboundSocket,
-      outBoundSocketBinding.name
-    );
+    cy.verifyAttribute(managementEndpoint, address, addServerForm.outboundSocket, outBoundSocketBinding.name);
   });
 
   it("Create credential-reference", () => {
     cy.selectInTable(mailSessionTable.id, mailSessionTable.outboundSocketType);
     cy.get(itemSelectors.credentialsReferenceTab).click();
     cy.get(itemSelectors.credentialsReferenceAdd).click();
-    cy.text(
-      credentialsReferenceForm.id,
-      credentialsReferenceForm.clearText,
-      testValues.clearText
-    );
+    cy.text(credentialsReferenceForm.id, credentialsReferenceForm.clearText, testValues.clearText);
     cy.get(itemSelectors.buttonAdd).click();
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      credentialsReferenceForm.clearTextCliName,
-      testValues.clearText
-    );
+    cy.verifyAttribute(managementEndpoint, address, credentialsReferenceForm.clearTextCliName, testValues.clearText);
   });
 });

@@ -17,19 +17,12 @@ describe("TESTS: Configuration => Subsystems => JSF", () => {
 
   it("Edit default-jsf-impl-slot", () => {
     cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-    cy.get(
-      '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-    ).click();
+    cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "default-jsf-impl-slot", "newValue");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-jsf-impl-slot",
-      "newValue"
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-jsf-impl-slot", "newValue");
   });
 
   it("Toggle disallow-doctype-decl", () => {
@@ -42,27 +35,18 @@ describe("TESTS: Configuration => Subsystems => JSF", () => {
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-      cy.get(
-        '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-      ).click();
+      cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, disallowDoctypeDecl, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        disallowDoctypeDecl,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, disallowDoctypeDecl, !value);
     });
   });
 
   it("Reset", () => {
     cy.navigateToGenericSubsystemPage(managementEndpoint, address);
-    cy.get(
-      '#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]'
-    ).click();
+    cy.get('#model-browser-resource-tab-container a[href="#model-browser-resource-data-tab"]').click();
     cy.resetForm(configurationFormId, managementEndpoint, address);
   });
 });

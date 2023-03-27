@@ -2,8 +2,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
   let managementEndpoint: string;
 
   const configurationFormId = "ee-service-scheduled-executor-form";
-  const managedScheduledExecutorServiceTableId =
-    "ee-service-scheduled-executor-table";
+  const managedScheduledExecutorServiceTableId = "ee-service-scheduled-executor-table";
 
   const contextServices = {
     update: {
@@ -37,45 +36,26 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
         managementEndpoint = result as string;
       })
       .then(() => {
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "context-service", contextServices.update.name], {
+          "jndi-name": contextServices.update["jndi-name"],
+        });
         cy.addAddress(
           managementEndpoint,
-          ["subsystem", "ee", "context-service", contextServices.update.name],
-          {
-            "jndi-name": contextServices.update["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "ee",
-            "managed-scheduled-executor-service",
-            scheduledExecutors.update.name,
-          ],
+          ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
           {
             "jndi-name": scheduledExecutors.update["jndi-name"],
           }
         );
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "ee",
-            "managed-scheduled-executor-service",
-            scheduledExecutors.reset.name,
-          ],
+          ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.reset.name],
           {
             "jndi-name": scheduledExecutors.reset["jndi-name"],
           }
         );
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "ee",
-            "managed-scheduled-executor-service",
-            scheduledExecutors.remove.name,
-          ],
+          ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.remove.name],
           {
             "jndi-name": scheduledExecutors.remove["jndi-name"],
           }
@@ -92,26 +72,13 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
     cy.addInTable(managedScheduledExecutorServiceTableId);
-    cy.text(
-      "ee-service-scheduled-executor-add",
-      "name",
-      scheduledExecutors.create.name
-    );
-    cy.text(
-      "ee-service-scheduled-executor-add",
-      "jndi-name",
-      scheduledExecutors.create["jndi-name"]
-    );
+    cy.text("ee-service-scheduled-executor-add", "name", scheduledExecutors.create.name);
+    cy.text("ee-service-scheduled-executor-add", "jndi-name", scheduledExecutors.create["jndi-name"]);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.create.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.create.name],
       true
     );
   });
@@ -120,10 +87,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.reset.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.reset.name);
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "ee",
@@ -136,19 +100,11 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.removeFromTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.remove.name
-    );
+    cy.removeFromTable(managedScheduledExecutorServiceTableId, scheduledExecutors.remove.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.remove.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.remove.name],
       false
     );
   });
@@ -157,26 +113,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.update.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "context-service",
-      contextServices.update.name
-    );
+    cy.text(configurationFormId, "context-service", contextServices.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "context-service",
       contextServices.update.name
     );
@@ -186,22 +130,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.update.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "core-threads", "3");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "core-threads",
       3
     );
@@ -211,22 +147,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.update.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "hung-task-termination-period", "3000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "hung-task-termination-period",
       3000
     );
@@ -236,22 +164,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.update.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "hung-task-threshold", "3000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "hung-task-threshold",
       3000
     );
@@ -261,22 +181,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.update.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "jndi-name", "java:jboss/updatedJndiName");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "jndi-name",
       "java:jboss/updatedJndiName"
     );
@@ -286,22 +198,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.update.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "keepalive-time", "3000");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "keepalive-time",
       3000
     );
@@ -312,34 +216,21 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.task("execute:cli", {
       managementApi: managementEndpoint + "/management",
       operation: "read-attribute",
-      address: [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      address: ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       name: "long-running-tasks",
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "ee");
       cy.get("#ee-services-item").click();
       cy.get("#ee-service-scheduled-executor").click();
-      cy.selectInTable(
-        managedScheduledExecutorServiceTableId,
-        scheduledExecutors.update.name
-      );
+      cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, "long-running-tasks", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
       cy.verifyAttribute(
         managementEndpoint,
-        [
-          "subsystem",
-          "ee",
-          "managed-scheduled-executor-service",
-          scheduledExecutors.update.name,
-        ],
+        ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
         "long-running-tasks",
         !value
       );
@@ -350,10 +241,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.update.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
     cy.editForm(configurationFormId);
     cy.formInput(configurationFormId, "reject-policy").select("RETRY_ABORT", {
       force: true,
@@ -361,20 +249,12 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.formInput(configurationFormId, "reject-policy").trigger("change", {
       force: true,
     });
-    cy.formInput(configurationFormId, "reject-policy").should(
-      "have.value",
-      "RETRY_ABORT"
-    );
+    cy.formInput(configurationFormId, "reject-policy").should("have.value", "RETRY_ABORT");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "reject-policy",
       "RETRY_ABORT"
     );
@@ -384,22 +264,14 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
     cy.get("#ee-service-scheduled-executor").click();
-    cy.selectInTable(
-      managedScheduledExecutorServiceTableId,
-      scheduledExecutors.update.name
-    );
+    cy.selectInTable(managedScheduledExecutorServiceTableId, scheduledExecutors.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "thread-priority", "3");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "ee",
-        "managed-scheduled-executor-service",
-        scheduledExecutors.update.name,
-      ],
+      ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "thread-priority",
       3
     );

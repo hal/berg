@@ -1,7 +1,5 @@
 describe("TESTS: Homepage", () => {
-  const specName = Cypress.spec.name
-    .replace(/\.cy\.ts/g, "")
-    .replace(/-/g, "_");
+  const specName = Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_");
   let managementEndpoint: string;
 
   before(() => {

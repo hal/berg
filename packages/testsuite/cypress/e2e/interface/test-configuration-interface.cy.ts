@@ -35,10 +35,7 @@ describe("TESTS: Configuration => Interface", () => {
       name: anyAddress,
     }).then((result) => {
       value = (result as { result: boolean }).result;
-      cy.navigateTo(
-        managementEndpoint,
-        "interface;name=" + interfaceToEdit.name
-      );
+      cy.navigateTo(managementEndpoint, "interface;name=" + interfaceToEdit.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, anyAddress, value);
       cy.clearAttribute(configurationFormId, inetAddress);
