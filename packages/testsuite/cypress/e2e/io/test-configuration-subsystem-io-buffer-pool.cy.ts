@@ -50,115 +50,50 @@ describe("TESTS: Configuration => Subsystems => IO => Buffer Pool", () => {
     cy.navigateTo(managementEndpoint, "io");
     cy.addInTable(itemSelectors.ioBufferPoolTableId);
     cy.text(bufferPoolForm.idNew, bufferPoolForm.name, testDefaultValues.name);
-    cy.text(
-      bufferPoolForm.idNew,
-      bufferPoolForm.bufferSize,
-      testDefaultValues.bufferSize
-    );
-    cy.text(
-      bufferPoolForm.idNew,
-      bufferPoolForm.buffersPerSlice,
-      testDefaultValues.buffersPerSlice
-    );
-    cy.flip(
-      bufferPoolForm.idNew,
-      bufferPoolForm.directBuffers,
-      testDefaultValues.directBuffers
-    );
+    cy.text(bufferPoolForm.idNew, bufferPoolForm.bufferSize, testDefaultValues.bufferSize);
+    cy.text(bufferPoolForm.idNew, bufferPoolForm.buffersPerSlice, testDefaultValues.buffersPerSlice);
+    cy.flip(bufferPoolForm.idNew, bufferPoolForm.directBuffers, testDefaultValues.directBuffers);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      bufferPoolForm.bufferSize,
-      testDefaultValues.bufferSize
-    );
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      bufferPoolForm.buffersPerSlice,
-      testDefaultValues.buffersPerSlice
-    );
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      bufferPoolForm.directBuffers,
-      !testDefaultValues.directBuffers
-    );
+    cy.verifyAttribute(managementEndpoint, address, bufferPoolForm.bufferSize, testDefaultValues.bufferSize);
+    cy.verifyAttribute(managementEndpoint, address, bufferPoolForm.buffersPerSlice, testDefaultValues.buffersPerSlice);
+    cy.verifyAttribute(managementEndpoint, address, bufferPoolForm.directBuffers, !testDefaultValues.directBuffers);
   });
 
   it("Edit buffer-size", () => {
     cy.selectInTable(itemSelectors.ioBufferPoolTableId, testDefaultValues.name);
     cy.editForm(bufferPoolForm.idUpdate);
-    cy.text(
-      bufferPoolForm.idUpdate,
-      bufferPoolForm.bufferSize,
-      testNewValues.bufferSize
-    );
+    cy.text(bufferPoolForm.idUpdate, bufferPoolForm.bufferSize, testNewValues.bufferSize);
     cy.saveForm(bufferPoolForm.idUpdate);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      bufferPoolForm.bufferSize,
-      testNewValues.bufferSize
-    );
+    cy.verifyAttribute(managementEndpoint, address, bufferPoolForm.bufferSize, testNewValues.bufferSize);
   });
 
   it("Edit buffers-per-slice", () => {
     cy.selectInTable(itemSelectors.ioBufferPoolTableId, testDefaultValues.name);
     cy.editForm(bufferPoolForm.idUpdate);
-    cy.text(
-      bufferPoolForm.idUpdate,
-      bufferPoolForm.buffersPerSlice,
-      testNewValues.buffersPerSlice
-    );
+    cy.text(bufferPoolForm.idUpdate, bufferPoolForm.buffersPerSlice, testNewValues.buffersPerSlice);
     cy.saveForm(bufferPoolForm.idUpdate);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      bufferPoolForm.buffersPerSlice,
-      testNewValues.buffersPerSlice
-    );
+    cy.verifyAttribute(managementEndpoint, address, bufferPoolForm.buffersPerSlice, testNewValues.buffersPerSlice);
   });
 
   it("Toggle direct-buffers", () => {
-    cy.getDefaultBooleanValue(
-      managementEndpoint,
-      address,
-      bufferPoolForm.directBuffers
-    ).then((defaultValue: boolean) => {
-      cy.selectInTable(
-        itemSelectors.ioBufferPoolTableId,
-        testDefaultValues.name
-      );
-      cy.editForm(bufferPoolForm.idUpdate);
-      cy.flip(
-        bufferPoolForm.idUpdate,
-        bufferPoolForm.directBuffers,
-        defaultValue
-      );
-      cy.saveForm(bufferPoolForm.idUpdate);
-      cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        bufferPoolForm.directBuffers,
-        !defaultValue
-      );
-    });
+    cy.getDefaultBooleanValue(managementEndpoint, address, bufferPoolForm.directBuffers).then(
+      (defaultValue: boolean) => {
+        cy.selectInTable(itemSelectors.ioBufferPoolTableId, testDefaultValues.name);
+        cy.editForm(bufferPoolForm.idUpdate);
+        cy.flip(bufferPoolForm.idUpdate, bufferPoolForm.directBuffers, defaultValue);
+        cy.saveForm(bufferPoolForm.idUpdate);
+        cy.verifySuccess();
+        cy.verifyAttribute(managementEndpoint, address, bufferPoolForm.directBuffers, !defaultValue);
+      }
+    );
   });
 
   it("Remove buffer-pool", () => {
-    cy.removeFromTable(
-      itemSelectors.ioBufferPoolTableId,
-      testDefaultValues.name
-    );
+    cy.removeFromTable(itemSelectors.ioBufferPoolTableId, testDefaultValues.name);
     cy.verifySuccess();
-    cy.verifyRemovedFromTable(
-      itemSelectors.ioBufferPoolTableId,
-      testDefaultValues.name
-    );
+    cy.verifyRemovedFromTable(itemSelectors.ioBufferPoolTableId, testDefaultValues.name);
   });
 });

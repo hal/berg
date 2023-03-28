@@ -37,6 +37,7 @@
     "mochawesome-report-generator": "6.2.0",
     "prettier": "2.8.5",
     "testcontainers": "9.2.1",
+    "typedoc": "^0.23.28",
     "typescript": "5.0.2"
   }
 }

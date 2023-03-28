@@ -1,0 +1,7 @@
+{
+  "entryPoints": ["./packages/testsuite/cypress/support/"],
+  "exclude": "**/*+(e2e|commands).ts",
+  "out": "docs",
+  "entryPointStrategy": "Expand",
+  "name": "Berg"
+}

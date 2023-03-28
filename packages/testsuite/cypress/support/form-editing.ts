@@ -1,95 +1,17 @@
-/// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-//
-
-Cypress.Commands.add("navigateTo", (managementEndpoint, token) => {
-  cy.visit(`?connect=${managementEndpoint}#${token}`);
-  cy.get("#hal-root-container").should("be.visible");
-});
-
-Cypress.Commands.add("navigateToGenericSubsystemPage", (managementEndpoint, address) => {
-  const subsystemSeparator = "%255C2";
-  cy.visit(`?connect=${managementEndpoint}#generic-subsystem;address=%255C0${address.join(subsystemSeparator)}`);
-  cy.get("#hal-root-container").should("be.visible");
-});
-
-Cypress.Commands.add("editForm", (configurationFormId) => {
-  const editButton = "#" + configurationFormId + ' a.clickable[data-operation="edit"';
-  cy.get(`#${configurationFormId}-editing`).should("not.be.visible");
+Cypress.Commands.add("editForm", (formId) => {
+  const editButton = "#" + formId + ' a.clickable[data-operation="edit"';
+  cy.get(`#${formId}-editing`).should("not.be.visible");
   cy.get(editButton).click();
-  cy.get(`#${configurationFormId}-editing`).should("be.visible");
+  cy.get(`#${formId}-editing`).should("be.visible");
 });
 
-Cypress.Commands.add("saveForm", (configurationFormId) => {
-  const saveButton = "#" + configurationFormId + '-editing button.btn.btn-hal.btn-primary:contains("Save")';
+Cypress.Commands.add("saveForm", (formId) => {
+  const saveButton = "#" + formId + '-editing button.btn.btn-hal.btn-primary:contains("Save")';
   cy.get(saveButton).scrollIntoView().click();
 });
 
-/* eslint @typescript-eslint/unbound-method: off */
-Cypress.Commands.add("flip", (configurationFormId, attributeName, value) => {
-  cy.formInput(configurationFormId, attributeName)
-    .wait(1000)
-    .should(($input) => {
-      if (value) {
-        expect($input).to.be.checked;
-      } else {
-        expect($input).to.not.be.checked;
-      }
-    });
-  cy.get(
-    'div[data-form-item-group="' +
-      configurationFormId +
-      "-" +
-      attributeName +
-      '-editing"] .bootstrap-switch-label:visible'
-  )
-    .click()
-    .wait(1000);
-  cy.formInput(configurationFormId, attributeName).should(($input) => {
-    if (value) {
-      expect($input).to.not.be.checked;
-    } else {
-      expect($input).to.be.checked;
-    }
-  });
-});
-
-Cypress.Commands.add("resetForm", (configurationFormId, managementApi, address) => {
-  const resetButton = "#" + configurationFormId + ' a.clickable[data-operation="reset"';
+Cypress.Commands.add("resetForm", (formId, managementApi, address) => {
+  const resetButton = "#" + formId + ' a.clickable[data-operation="reset"';
   cy.get(resetButton).click();
   cy.get(".modal-footer .btn-hal.btn-primary").click({ force: true });
   cy.verifySuccess();
@@ -135,11 +57,6 @@ Cypress.Commands.add("addInTable", (tableId) => {
   cy.get(`${tableWrapper} button.btn.btn-default > span:contains("Add")`).click();
 });
 
-Cypress.Commands.add("selectInTable", (tableId, resourceName) => {
-  const tableWrapper = `#${tableId}_wrapper`;
-  cy.get(`${tableWrapper} td:contains("${resourceName}")`).click();
-});
-
 Cypress.Commands.add("removeFromTable", (tableId, resourceName) => {
   const tableWrapper = `#${tableId}_wrapper`;
   cy.selectInTable(tableId, resourceName);
@@ -147,31 +64,50 @@ Cypress.Commands.add("removeFromTable", (tableId, resourceName) => {
   cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")').click();
 });
 
-Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
-  cy.formInput(configurationFormId, attributeName).click({ force: true }).wait(200).clear();
-  cy.formInput(configurationFormId, attributeName).type(value);
-  cy.formInput(configurationFormId, attributeName).should("have.value", value);
-  cy.formInput(configurationFormId, attributeName).trigger("change");
+Cypress.Commands.add("addSingletonResource", (addSingletonResourceId) => {
+  cy.get("#" + addSingletonResourceId + ' .btn-primary:contains("Add")').click();
 });
 
-Cypress.Commands.add("clearAttribute", (configurationFormId, attributeName) => {
-  cy.formInput(configurationFormId, attributeName).click({ force: true }).wait(200).clear();
-  cy.formInput(configurationFormId, attributeName).should("have.value", "");
-  cy.formInput(configurationFormId, attributeName).trigger("change");
-});
-
-Cypress.Commands.add("confirmAddResourceWizard", () => {
-  cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")').click({ force: true });
-});
-
-Cypress.Commands.add("addSingletonResource", (emptyConfigurationFormId) => {
-  cy.get("#" + emptyConfigurationFormId + ' .btn-primary:contains("Add")').click();
-});
-
-Cypress.Commands.add("removeSingletonResource", (configurationFormId) => {
-  const removeButton = "#" + configurationFormId + ' a.clickable[data-operation="remove"';
+Cypress.Commands.add("removeSingletonResource", (formId) => {
+  const removeButton = "#" + formId + ' a.clickable[data-operation="remove"';
   cy.get(removeButton).click();
   cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")').click();
+});
+
+/* eslint @typescript-eslint/unbound-method: off */
+Cypress.Commands.add("flip", (formId, attributeName, value) => {
+  cy.formInput(formId, attributeName)
+    .wait(1000)
+    .should(($input) => {
+      if (value) {
+        expect($input).to.be.checked;
+      } else {
+        expect($input).to.not.be.checked;
+      }
+    });
+  cy.get('div[data-form-item-group="' + formId + "-" + attributeName + '-editing"] .bootstrap-switch-label:visible')
+    .click()
+    .wait(1000);
+  cy.formInput(formId, attributeName).should(($input) => {
+    if (value) {
+      expect($input).to.not.be.checked;
+    } else {
+      expect($input).to.be.checked;
+    }
+  });
+});
+
+Cypress.Commands.add("text", (formId, attributeName, value) => {
+  cy.formInput(formId, attributeName).click({ force: true }).wait(200).clear();
+  cy.formInput(formId, attributeName).type(value as string);
+  cy.formInput(formId, attributeName).should("have.value", value);
+  cy.formInput(formId, attributeName).trigger("change");
+});
+
+Cypress.Commands.add("clearAttribute", (formId, attributeName) => {
+  cy.formInput(formId, attributeName).click({ force: true }).wait(200).clear();
+  cy.formInput(formId, attributeName).should("have.value", "");
+  cy.formInput(formId, attributeName).trigger("change");
 });
 
 export {};
@@ -179,19 +115,84 @@ export {};
 declare global {
   namespace Cypress {
     interface Chainable {
-      editForm(configurationFormId: string): Chainable<void>;
-      saveForm(configurationFormId: string): Chainable<void>;
-      resetForm(configurationFormId: string, managementApi: string, address: string[]): Chainable<void>;
-
+      /**
+       * Click on "Edit" and enable form for editing.
+       * @category Form Editing
+       *
+       * @param formId - The ID of section which need to be edit.
+       */
+      editForm(formId: string): Chainable<void>;
+      /**
+       * Click on "Save" button to save current data in form.
+       * @category Form Editing
+       *
+       * @param formId - The ID of section which need to be save.
+       */
+      saveForm(formId: string): Chainable<void>;
+      /**
+       * Click on "Reset" button to reset saved values to default. And verify saved values.
+       * @category Form Editing
+       *
+       * @param formId - The ID of section which need to be reset.
+       * @param managementApi - Host name of currently used container.
+       * @param address - Indexes contains values between "/" from request address.
+       */
+      resetForm(formId: string, managementApi: string, address: string[]): Chainable<void>;
+      /**
+       * Click on "add" to create a new resource in a table.
+       * @category Resource management
+       *
+       * @param tableId - The ID of table where need to be added a new resource.
+       */
       addInTable(tableId: string): void;
+      /**
+       * Select resource from table and click on "Remove" to delete the resource.
+       * @category Resource management
+       *
+       * @param tableId - The ID of table where need to be added a new resource.
+       * @param resourceName - The name of a resource from table.
+       */
       removeFromTable(tableId: string, resourceName: string): void;
-
-      addSingletonResource(emptyConfigurationFormId: string): void;
-      removeSingletonResource(configurationFormId: string): void;
-
-      flip(configurationFormId: string, attributeName: string, value: boolean): Chainable<void>;
-      text(configurationFormId: string, attributeName: string, value: string): Chainable<void>;
-      clearAttribute(configurationFormId: string, attributeName: string): Chainable<void>;
+      /**
+       * Click on "add" to create a new singleton resource.
+       * @category Resource management
+       *
+       * @param addSingletonResourceId - The ID of div with \<h1> "No resource found" and another div with button "Add".
+       */
+      addSingletonResource(addSingletonResourceId: string): void;
+      /**
+       * Click on "remove" to delete a singleton resource.
+       * @category Resource management
+       *
+       * @param formId - The ID of section which contain "Remove" for delete a singleton resource.
+       */
+      removeSingletonResource(formId: string): void;
+      /**
+       * Toggle on/off switch.
+       * @category Data inserting
+       *
+       * @param formId - The ID of section which contain form inputs.
+       * @param attributeName - specific ID part of form input with on/off switch.
+       * @param value - current value of on/off switch. Will be set the opposite value.
+       */
+      flip(formId: string, attributeName: string, value: boolean): Chainable<void>;
+      /**
+       * Set text value to form input.
+       * @category Data inserting
+       *
+       * @param formId - The ID of section which contain form inputs.
+       * @param attributeName - specific ID part of form input with text form input.
+       * @param value - the value which needs to be write to form input.
+       */
+      text(formId: string, attributeName: string, value: string | number): Chainable<void>;
+      /**
+       * Remove text value from form input.
+       * @category Data inserting
+       *
+       * @param formId - The ID of section which contain form inputs.
+       * @param attributeName - specific ID part of form input with text form input.
+       */
+      clearAttribute(formId: string, attributeName: string): Chainable<void>;
     }
   }
 }

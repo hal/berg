@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-Cypress.Commands.add("navigateTo", (managementEndpoint, token) => {
-  cy.visit(`?connect=${managementEndpoint}#${token}`);
+Cypress.Commands.add("navigateTo", (managementEndpoint, subsystem) => {
+  cy.visit(`?connect=${managementEndpoint}#${subsystem}`);
   cy.get("#hal-root-container").should("be.visible");
 });
 
@@ -25,9 +25,34 @@ export {};
 declare global {
   namespace Cypress {
     interface Chainable {
-      navigateTo(managementEndpoint: string, token: string): Chainable<void>;
+      /**
+       * Load a subsystem page
+       * @category Navigation
+       *
+       * @param managementEndpoint - Host name of currently used container.
+       * @param subsystem - The name after the # in URL address.
+       */
+      navigateTo(managementEndpoint: string, subsystem: string): Chainable<void>;
+      /**
+       * Load a subsystem page
+       * @category Navigation
+       *
+       * @param managementEndpoint - Host name of currently used container.
+       * @param address - key words from URL parameter "address". e.g. "subsystem" and "health"
+       */
       navigateToGenericSubsystemPage(managementEndpoint: string, address: string[]): Chainable<void>;
+      /**
+       * Select resource in table.
+       * @category Navigation
+       *
+       * @param tableId - The ID of table where need to be added a new resource.
+       * @param resourceName - The name of a resource from table.
+       */
       selectInTable(tableId: string, resourceName: string): void;
+      /**
+       * Confirm the add resource dialog
+       * @category Navigation
+       */
       confirmAddResourceWizard(): void;
     }
   }
