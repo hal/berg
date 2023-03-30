@@ -27,6 +27,7 @@ jobs:
             "jpa",
             "jsf",
             "mail",
+            "runtime",
             "system-property",
             "weld",
             "homepage",
