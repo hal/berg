@@ -195,7 +195,7 @@ Cypress.Commands.add("text", (configurationFormId, attributeName, value) => {
     .click({ force: true })
     .wait(200)
     .clear();
-  cy.formInput(configurationFormId, attributeName).type(value);
+  cy.formInput(configurationFormId, attributeName).type(value as string);
   cy.formInput(configurationFormId, attributeName).should("have.value", value);
   cy.formInput(configurationFormId, attributeName).trigger("change");
 });
@@ -368,6 +368,11 @@ Cypress.Commands.add("removeSingletonResource", (configurationFormId) => {
   ).click();
 });
 
+Cypress.Commands.add("verifyRemovedFromTable", (tableId, resourceName) => {
+  const tableWrapper = `#${tableId}_wrapper`;
+  cy.get(`${tableWrapper} td:contains("${resourceName}")`).should("not.exist");
+});
+
 export {};
 /* eslint @typescript-eslint/no-namespace: off */
 declare global {
@@ -381,7 +386,7 @@ declare global {
       text(
         configurationFormId: string,
         attributeName: string,
-        value: string
+        value: string | number
       ): Chainable<void>;
       clearAttribute(
         configurationFormId: string,
@@ -429,7 +434,7 @@ declare global {
         managementEndpoint: string,
         address: string[],
         attributeName: string,
-        expectedVaue: string | number | boolean
+        expectedValue: string | number | boolean
       ): void;
       verifyListAttributeContains(
         managementEndpoint: string,
@@ -454,6 +459,7 @@ declare global {
         address: string[],
         name: string
       ): Chainable<boolean>;
+      verifyRemovedFromTable(tableId: string, resourceName: string): void;
     }
   }
 }
