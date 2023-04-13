@@ -1,4 +1,4 @@
-class AddModuleCommand {
+export class AddModuleCommand {
   private _name: string;
   private _resources: string[];
   private _dependencies: string[];
