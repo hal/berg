@@ -4,5 +4,5 @@
   "out": "docs",
   "entryPointStrategy": "Expand",
   "name": "Berg",
-  "media": ["./media"]
+  "sidebarLinks": {"Contributing guide":  "https://github.com/hal/berg/blob/main/CONTRIBUTING.md"}
 }

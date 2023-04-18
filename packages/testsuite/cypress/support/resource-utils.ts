@@ -77,7 +77,6 @@ Cypress.Commands.add("formInput", (configurationFormId, attributeName) => {
   return cy.get("#" + configurationFormId + "-" + attributeName + "-editing");
 });
 
-
 export {};
 
 declare global {
