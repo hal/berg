@@ -16,6 +16,7 @@
     "generate-report": "npx mochawesome-merge packages/testsuite/results/cypress/e2e/*.json > mochawesome.json && npx marge mochawesome.json -f index.html",
     "predevelop": "npm run compile",
     "develop": "npm run develop -w @berg/testsuite",
+    "predocs": "npm run compile",
     "docs": "npx typedoc"
   },
   "workspaces": {
