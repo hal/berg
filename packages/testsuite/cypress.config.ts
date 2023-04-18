@@ -1,11 +1,6 @@
 import axios from "axios";
 import { defineConfig } from "cypress";
-import {
-  GenericContainer,
-  StartedTestContainer,
-  StoppedTestContainer,
-  Wait,
-} from "testcontainers";
+import { GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
 import { Environment } from "testcontainers/dist/src/docker/types";
 
 export default defineConfig({
@@ -16,16 +11,11 @@ export default defineConfig({
   videoCompression: false,
   e2e: {
     setupNodeEvents(on, config) {
-      const startedContainers: Map<string, StartedTestContainer> = new Map<
-        string,
-        StartedTestContainer
-      >();
+      const startedContainers: Map<string, StartedTestContainer> = new Map<string, StartedTestContainer>();
       on("task", {
         "start:wildfly:container": ({ name, configuration }) => {
           return new Promise((resolve, reject) => {
-            new GenericContainer(
-              process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly:latest"
-            )
+            new GenericContainer(process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly:latest")
               .withName(name as string)
               .withNetworkMode(config.env.NETWORK_NAME as string)
               .withNetworkAliases("wildfly")
@@ -36,32 +26,19 @@ export default defineConfig({
                   target: "/home/fixtures",
                 },
               ])
-              .withWaitStrategy(
-                Wait.forLogMessage(
-                  new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")
-                )
-              )
+              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")))
               .withStartupTimeout(333000)
               .withCommand(["-c", configuration || "standalone-insecure.xml"])
               .start()
               .then((wildflyContainer) => {
                 startedContainers.set(name as string, wildflyContainer);
-                const managementApi = `http://localhost:${wildflyContainer.getMappedPort(
-                  9990
-                )}/management`;
+                const managementApi = `http://localhost:${wildflyContainer.getMappedPort(9990)}/management`;
                 return axios
                   .post(managementApi, {
                     operation: "list-add",
-                    address: [
-                      "core-service",
-                      "management",
-                      "management-interface",
-                      "http-interface",
-                    ],
+                    address: ["core-service", "management", "management-interface", "http-interface"],
                     name: "allowed-origins",
-                    value: `http://localhost:${
-                      config.env.HAL_CONTAINER_PORT as string
-                    }`,
+                    value: `http://localhost:${config.env.HAL_CONTAINER_PORT as string}`,
                   })
                   .then(() => {
                     return axios.post(managementApi, {
@@ -81,16 +58,9 @@ export default defineConfig({
                           name: "server-state",
                         })
                         .then((response) => {
-                          if (
-                            (response as { data: { result: string } }).data
-                              .result == "running"
-                          ) {
+                          if ((response as { data: { result: string } }).data.result == "running") {
                             clearInterval(interval);
-                            resolve(
-                              `http://localhost:${wildflyContainer.getMappedPort(
-                                9990
-                              )}`
-                            );
+                            resolve(`http://localhost:${wildflyContainer.getMappedPort(9990)}`);
                           }
                         })
                         /* eslint @typescript-eslint/no-empty-function: off */
@@ -107,11 +77,7 @@ export default defineConfig({
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
             .withWaitStrategy(
-              Wait.forLogMessage(
-                new RegExp(
-                  ".*PostgreSQL init process complete; ready for start up.*"
-                )
-              )
+              Wait.forLogMessage(new RegExp(".*PostgreSQL init process complete; ready for start up.*"))
             )
             .withExposedPorts(5432)
             .withEnvironment(environmentProperties as Environment);
@@ -136,11 +102,7 @@ export default defineConfig({
             .withExposedPorts(3306)
             .withEnvironment(environmentProperties as Environment)
             .withNetworkMode(config.env.NETWORK_NAME as string)
-            .withWaitStrategy(
-              Wait.forLogMessage(
-                new RegExp(".*MySQL init process done. Ready for start up.*")
-              )
-            );
+            .withWaitStrategy(Wait.forLogMessage(new RegExp(".*MySQL init process done. Ready for start up.*")));
           console.log(mysqlContainerBuilder);
           return new Promise((resolve, reject) => {
             mysqlContainerBuilder
@@ -163,11 +125,7 @@ export default defineConfig({
             .withExposedPorts(3306)
             .withNetworkMode(config.env.NETWORK_NAME as string)
             .withEnvironment(environmentProperties as Environment)
-            .withWaitStrategy(
-              Wait.forLogMessage(
-                new RegExp(".*MariaDB init process done. Ready for start up.*")
-              )
-            );
+            .withWaitStrategy(Wait.forLogMessage(new RegExp(".*MariaDB init process done. Ready for start up.*")));
           return new Promise((resolve, reject) => {
             mariadbContainerBuilder
               .start()
@@ -183,19 +141,13 @@ export default defineConfig({
           });
         },
         "start:sqlserver:container": ({ name, environmentProperties }) => {
-          const sqlserverContainerBuilder = new GenericContainer(
-            "mcr.microsoft.com/mssql/server:2022-latest"
-          )
+          const sqlserverContainerBuilder = new GenericContainer("mcr.microsoft.com/mssql/server:2022-latest")
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
             .withExposedPorts(1433)
             .withEnvironment(environmentProperties as Environment)
-            .withWaitStrategy(
-              Wait.forLogMessage(
-                new RegExp(".*SQL Server is now ready for client connections.*")
-              )
-            );
+            .withWaitStrategy(Wait.forLogMessage(new RegExp(".*SQL Server is now ready for client connections.*")));
           return new Promise((resolve, reject) => {
             sqlserverContainerBuilder
               .start()
@@ -211,17 +163,9 @@ export default defineConfig({
         },
         "execute:in:container": ({ containerName, command }) => {
           return new Promise((resolve, reject) => {
-            const containerToExec = startedContainers.get(
-              containerName as string
-            );
+            const containerToExec = startedContainers.get(containerName as string);
             containerToExec
-              ?.exec([
-                "/bin/bash",
-                "-c",
-                `$JBOSS_HOME/bin/jboss-cli.sh -c --command=${
-                  command as string
-                }`,
-              ])
+              ?.exec(["/bin/bash", "-c", `$JBOSS_HOME/bin/jboss-cli.sh -c --command=${command as string}`])
               .then((value) => {
                 console.log(value.output);
                 resolve(value.output);

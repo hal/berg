@@ -28,26 +28,13 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-jdbc-job-repo-item").click();
     cy.addInTable(batchJdbcRepositoryTableId);
-    cy.text(
-      "batch-jdbc-job-repo-table-add",
-      "name",
-      jdbcJobRepositories.create.name
-    );
-    cy.text(
-      "batch-jdbc-job-repo-table-add",
-      "data-source",
-      jdbcJobRepositories.create.dataSource
-    );
+    cy.text("batch-jdbc-job-repo-table-add", "name", jdbcJobRepositories.create.name);
+    cy.text("batch-jdbc-job-repo-table-add", "data-source", jdbcJobRepositories.create.dataSource);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "batch-jberet",
-        "jdbc-job-repository",
-        jdbcJobRepositories.create.name,
-      ],
+      ["subsystem", "batch-jberet", "jdbc-job-repository", jdbcJobRepositories.create.name],
       true
     );
   });
@@ -55,29 +42,16 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
   it("Remove JDBC Job Repository", () => {
     cy.addAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "batch-jberet",
-        "jdbc-job-repository",
-        jdbcJobRepositories.remove.name,
-      ],
+      ["subsystem", "batch-jberet", "jdbc-job-repository", jdbcJobRepositories.remove.name],
       { "data-source": jdbcJobRepositories.remove.dataSource }
     );
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-jdbc-job-repo-item").click();
-    cy.removeFromTable(
-      batchJdbcRepositoryTableId,
-      jdbcJobRepositories.remove.name
-    );
+    cy.removeFromTable(batchJdbcRepositoryTableId, jdbcJobRepositories.remove.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "batch-jberet",
-        "jdbc-job-repository",
-        jdbcJobRepositories.remove.name,
-      ],
+      ["subsystem", "batch-jberet", "jdbc-job-repository", jdbcJobRepositories.remove.name],
       false
     );
   });

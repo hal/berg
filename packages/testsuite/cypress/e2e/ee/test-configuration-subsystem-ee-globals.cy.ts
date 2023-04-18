@@ -51,20 +51,11 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
     cy.get("#ee-global-modules-item").click();
     cy.addInTable(globalModulesTableId);
     cy.text("ee-global-modules-form", "name", globalModuleToAdd.name);
-    cy.flip(
-      "ee-global-modules-form",
-      "annotations",
-      !globalModuleToAdd.annotations
-    );
+    cy.flip("ee-global-modules-form", "annotations", !globalModuleToAdd.annotations);
     cy.flip("ee-global-modules-form", "services", !globalModuleToAdd.services);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "global-modules",
-      globalModuleToAdd
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "global-modules", globalModuleToAdd);
   });
 
   it("Remove Global Module", () => {
@@ -72,21 +63,11 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
     cy.get("#ee-global-modules-item").click();
     cy.removeFromTable(globalModulesTableId, globalModuleToRemove.name);
     cy.verifySuccess();
-    cy.verifyListAttributeDoesNotContain(
-      managementEndpoint,
-      address,
-      "global-modules",
-      globalModuleToRemove
-    );
+    cy.verifyListAttributeDoesNotContain(managementEndpoint, address, "global-modules", globalModuleToRemove);
   });
 
   it("Create Global Directory", () => {
-    cy.removeAddressIfExists(managementEndpoint, [
-      "subsystem",
-      "ee",
-      "global-directory",
-      globalDirectory.name,
-    ]);
+    cy.removeAddressIfExists(managementEndpoint, ["subsystem", "ee", "global-directory", globalDirectory.name]);
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-global-modules-item").click();
     cy.addSingletonResource(emptyConfigurationForm);
@@ -94,21 +75,13 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
     cy.text("ee-global-directory-add", "path", globalDirectory.path);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["subsystem", "ee", "global-directory", globalDirectory.name],
-      true
-    );
+    cy.validateAddress(managementEndpoint, ["subsystem", "ee", "global-directory", globalDirectory.name], true);
   });
 
   it("Edit path", () => {
-    cy.addAddressIfDoesntExist(
-      managementEndpoint,
-      ["subsystem", "ee", "global-directory", globalDirectory.name],
-      {
-        path: globalDirectory.path,
-      }
-    );
+    cy.addAddressIfDoesntExist(managementEndpoint, ["subsystem", "ee", "global-directory", globalDirectory.name], {
+      path: globalDirectory.path,
+    });
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-global-modules-item").click();
     cy.editForm(configurationFormId);
@@ -124,32 +97,20 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
   });
 
   it("Remove Global Directory", () => {
-    cy.addAddressIfDoesntExist(
-      managementEndpoint,
-      ["subsystem", "ee", "global-directory", globalDirectory.name],
-      {
-        path: globalDirectory.path,
-      }
-    );
+    cy.addAddressIfDoesntExist(managementEndpoint, ["subsystem", "ee", "global-directory", globalDirectory.name], {
+      path: globalDirectory.path,
+    });
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-global-modules-item").click();
     cy.removeSingletonResource(configurationFormId);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["subsystem", "ee", "global-directory", globalDirectory.name],
-      false
-    );
+    cy.validateAddress(managementEndpoint, ["subsystem", "ee", "global-directory", globalDirectory.name], false);
   });
 
   it("Reset Global Directory", () => {
-    cy.addAddressIfDoesntExist(
-      managementEndpoint,
-      ["subsystem", "ee", "global-directory", globalDirectory.name],
-      {
-        path: globalDirectory.path,
-      }
-    );
+    cy.addAddressIfDoesntExist(managementEndpoint, ["subsystem", "ee", "global-directory", globalDirectory.name], {
+      path: globalDirectory.path,
+    });
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-global-modules-item").click();
     cy.resetForm(configurationFormId, managementEndpoint, [

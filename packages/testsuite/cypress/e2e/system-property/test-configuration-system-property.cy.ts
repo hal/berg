@@ -32,26 +32,18 @@ describe("TESTS: Configuration => System Properties", () => {
   before(() => {
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
-      cy.addAddress(
-        managementEndpoint,
-        ["system-property", systemProperties.update.name],
-        { value: systemProperties.update.value }
-      );
-      cy.addAddress(
-        managementEndpoint,
-        ["system-property", systemProperties.delete.name],
-        { value: systemProperties.delete.value }
-      );
-      cy.addAddress(
-        managementEndpoint,
-        ["system-property", systemProperties.read.name],
-        { value: systemProperties.read.value }
-      );
-      cy.addAddress(
-        managementEndpoint,
-        ["system-property", systemProperties.reset.name],
-        { value: systemProperties.reset.value }
-      );
+      cy.addAddress(managementEndpoint, ["system-property", systemProperties.update.name], {
+        value: systemProperties.update.value,
+      });
+      cy.addAddress(managementEndpoint, ["system-property", systemProperties.delete.name], {
+        value: systemProperties.delete.value,
+      });
+      cy.addAddress(managementEndpoint, ["system-property", systemProperties.read.name], {
+        value: systemProperties.read.value,
+      });
+      cy.addAddress(managementEndpoint, ["system-property", systemProperties.reset.name], {
+        value: systemProperties.reset.value,
+      });
     });
   });
 
@@ -69,26 +61,14 @@ describe("TESTS: Configuration => System Properties", () => {
     cy.text("system-property-add", value, systemProperties.create.value);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["system-property", systemProperties.create.name],
-      true
-    );
+    cy.validateAddress(managementEndpoint, ["system-property", systemProperties.create.name], true);
   });
 
   it("Delete System Property", () => {
-    cy.validateAddress(
-      managementEndpoint,
-      ["system-property", systemProperties.delete.name],
-      true
-    );
+    cy.validateAddress(managementEndpoint, ["system-property", systemProperties.delete.name], true);
     cy.removeFromTable(systemPropertyTableId, systemProperties.delete.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["system-property", systemProperties.delete.name],
-      false
-    );
+    cy.validateAddress(managementEndpoint, ["system-property", systemProperties.delete.name], false);
   });
 
   it("Read System Property", () => {
@@ -104,19 +84,11 @@ describe("TESTS: Configuration => System Properties", () => {
     cy.text(configurationFormId, value, "newValue");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      ["system-property", systemProperties.update.name],
-      value,
-      "newValue"
-    );
+    cy.verifyAttribute(managementEndpoint, ["system-property", systemProperties.update.name], value, "newValue");
   });
 
   it("Reset System Property", () => {
     cy.selectInTable(systemPropertyTableId, systemProperties.reset.name);
-    cy.resetForm(configurationFormId, managementEndpoint, [
-      "system-property",
-      systemProperties.reset.name,
-    ]);
+    cy.resetForm(configurationFormId, managementEndpoint, ["system-property", systemProperties.reset.name]);
   });
 });

@@ -57,52 +57,16 @@ describe("TESTS: Configuration => Subsystems => IO => Worker", () => {
     cy.navigateTo(managementEndpoint, "io");
     cy.addInTable(itemSelectors.ioWorkersTableId);
     cy.text(workerForm.idNew, workerForm.name, testDefaultValues.name);
-    cy.text(
-      workerForm.idNew,
-      workerForm.ioThreads,
-      testDefaultValues.ioThreads
-    );
-    cy.text(
-      workerForm.idNew,
-      workerForm.stackSize,
-      testDefaultValues.stackSize
-    );
-    cy.text(
-      workerForm.idNew,
-      workerForm.taskKeepalive,
-      testDefaultValues.taskKeepalive
-    );
-    cy.text(
-      workerForm.idNew,
-      workerForm.taskMaxThreads,
-      testDefaultValues.taskMaxThreads
-    );
+    cy.text(workerForm.idNew, workerForm.ioThreads, testDefaultValues.ioThreads);
+    cy.text(workerForm.idNew, workerForm.stackSize, testDefaultValues.stackSize);
+    cy.text(workerForm.idNew, workerForm.taskKeepalive, testDefaultValues.taskKeepalive);
+    cy.text(workerForm.idNew, workerForm.taskMaxThreads, testDefaultValues.taskMaxThreads);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      workerForm.ioThreads,
-      testDefaultValues.ioThreads
-    );
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      workerForm.stackSize,
-      testDefaultValues.stackSize
-    );
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      workerForm.taskKeepalive,
-      testDefaultValues.taskKeepalive
-    );
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      workerForm.taskMaxThreads,
-      testDefaultValues.taskMaxThreads
-    );
+    cy.verifyAttribute(managementEndpoint, address, workerForm.ioThreads, testDefaultValues.ioThreads);
+    cy.verifyAttribute(managementEndpoint, address, workerForm.stackSize, testDefaultValues.stackSize);
+    cy.verifyAttribute(managementEndpoint, address, workerForm.taskKeepalive, testDefaultValues.taskKeepalive);
+    cy.verifyAttribute(managementEndpoint, address, workerForm.taskMaxThreads, testDefaultValues.taskMaxThreads);
   });
 
   it("Edit io-threads", () => {
@@ -111,12 +75,7 @@ describe("TESTS: Configuration => Subsystems => IO => Worker", () => {
     cy.text(workerForm.idUpdate, workerForm.ioThreads, testNewValues.ioThreads);
     cy.saveForm(workerForm.idUpdate);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      workerForm.ioThreads,
-      testNewValues.ioThreads
-    );
+    cy.verifyAttribute(managementEndpoint, address, workerForm.ioThreads, testNewValues.ioThreads);
   });
 
   it("Edit stack-size", () => {
@@ -125,56 +84,30 @@ describe("TESTS: Configuration => Subsystems => IO => Worker", () => {
     cy.text(workerForm.idUpdate, workerForm.stackSize, testNewValues.stackSize);
     cy.saveForm(workerForm.idUpdate);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      workerForm.stackSize,
-      testNewValues.stackSize
-    );
+    cy.verifyAttribute(managementEndpoint, address, workerForm.stackSize, testNewValues.stackSize);
   });
 
   it("Edit keep-alive", () => {
     cy.selectInTable(itemSelectors.ioWorkersTableId, testDefaultValues.name);
     cy.editForm(workerForm.idUpdate);
-    cy.text(
-      workerForm.idUpdate,
-      workerForm.taskKeepalive,
-      testNewValues.taskKeepalive
-    );
+    cy.text(workerForm.idUpdate, workerForm.taskKeepalive, testNewValues.taskKeepalive);
     cy.saveForm(workerForm.idUpdate);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      workerForm.taskKeepalive,
-      testNewValues.taskKeepalive
-    );
+    cy.verifyAttribute(managementEndpoint, address, workerForm.taskKeepalive, testNewValues.taskKeepalive);
   });
 
   it("Edit max-threads", () => {
     cy.selectInTable(itemSelectors.ioWorkersTableId, testDefaultValues.name);
     cy.editForm(workerForm.idUpdate);
-    cy.text(
-      workerForm.idUpdate,
-      workerForm.taskMaxThreads,
-      testNewValues.taskMaxThreads
-    );
+    cy.text(workerForm.idUpdate, workerForm.taskMaxThreads, testNewValues.taskMaxThreads);
     cy.saveForm(workerForm.idUpdate);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      workerForm.taskMaxThreads,
-      testNewValues.taskMaxThreads
-    );
+    cy.verifyAttribute(managementEndpoint, address, workerForm.taskMaxThreads, testNewValues.taskMaxThreads);
   });
 
   it("Remove custom io-worker", () => {
     cy.removeFromTable(itemSelectors.ioWorkersTableId, testDefaultValues.name);
     cy.verifySuccess();
-    cy.verifyRemovedFromTable(
-      itemSelectors.ioWorkersTableId,
-      testDefaultValues.name
-    );
+    cy.verifyRemovedFromTable(itemSelectors.ioWorkersTableId, testDefaultValues.name);
   });
 });

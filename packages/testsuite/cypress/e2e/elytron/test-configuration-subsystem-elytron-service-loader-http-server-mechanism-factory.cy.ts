@@ -1,17 +1,11 @@
 describe("TESTS: Configuration => Subsystem => Security => Settings => Factories/Transformers => HTTP Factories => Service Loader HTTP Server Mechanism Factory", () => {
   let managementEndpoint: string;
 
-  const address = [
-    "subsystem",
-    "elytron",
-    "service-loader-http-server-mechanism-factory",
-  ];
+  const address = ["subsystem", "elytron", "service-loader-http-server-mechanism-factory"];
 
-  const configurationFormId =
-    "elytron-service-loader-http-server-mechanism-factory-form";
+  const configurationFormId = "elytron-service-loader-http-server-mechanism-factory-form";
 
-  const serviceLoaderHttpServerMechanismFactoryTableId =
-    "elytron-service-loader-http-server-mechanism-factory-table";
+  const serviceLoaderHttpServerMechanismFactoryTableId = "elytron-service-loader-http-server-mechanism-factory-table";
   const serviceLoaderHttpServiceMechanismFactories = {
     create: {
       name: "sl-http-smf-create",
@@ -33,18 +27,9 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(serviceLoaderHttpServiceMechanismFactories.remove.name)
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(serviceLoaderHttpServiceMechanismFactories.reset.name)
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(serviceLoaderHttpServiceMechanismFactories.update.name)
-        );
+        cy.addAddress(managementEndpoint, address.concat(serviceLoaderHttpServiceMechanismFactories.remove.name));
+        cy.addAddress(managementEndpoint, address.concat(serviceLoaderHttpServiceMechanismFactories.reset.name));
+        cy.addAddress(managementEndpoint, address.concat(serviceLoaderHttpServiceMechanismFactories.update.name));
       });
   });
 
@@ -55,9 +40,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
   it("Create", () => {
     cy.navigateTo(managementEndpoint, "elytron-factories-transformers");
     cy.get("#http-factories-item").click();
-    cy.get(
-      "#elytron-service-loader-http-server-mechanism-factory-item"
-    ).click();
+    cy.get("#elytron-service-loader-http-server-mechanism-factory-item").click();
     cy.addInTable(serviceLoaderHttpServerMechanismFactoryTableId);
     cy.text(
       "elytron-service-loader-http-server-mechanism-factory-add",
@@ -76,9 +59,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
   it("Remove", () => {
     cy.navigateTo(managementEndpoint, "elytron-factories-transformers");
     cy.get("#http-factories-item").click();
-    cy.get(
-      "#elytron-service-loader-http-server-mechanism-factory-item"
-    ).click();
+    cy.get("#elytron-service-loader-http-server-mechanism-factory-item").click();
     cy.removeFromTable(
       serviceLoaderHttpServerMechanismFactoryTableId,
       serviceLoaderHttpServiceMechanismFactories.remove.name
@@ -94,9 +75,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
   it("Reset", () => {
     cy.navigateTo(managementEndpoint, "elytron-factories-transformers");
     cy.get("#http-factories-item").click();
-    cy.get(
-      "#elytron-service-loader-http-server-mechanism-factory-item"
-    ).click();
+    cy.get("#elytron-service-loader-http-server-mechanism-factory-item").click();
     cy.selectInTable(
       serviceLoaderHttpServerMechanismFactoryTableId,
       serviceLoaderHttpServiceMechanismFactories.reset.name
@@ -111,9 +90,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
   it("Edit module", () => {
     cy.navigateTo(managementEndpoint, "elytron-factories-transformers");
     cy.get("#http-factories-item").click();
-    cy.get(
-      "#elytron-service-loader-http-server-mechanism-factory-item"
-    ).click();
+    cy.get("#elytron-service-loader-http-server-mechanism-factory-item").click();
     cy.selectInTable(
       serviceLoaderHttpServerMechanismFactoryTableId,
       serviceLoaderHttpServiceMechanismFactories.update.name

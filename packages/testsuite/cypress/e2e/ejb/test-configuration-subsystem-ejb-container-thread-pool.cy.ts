@@ -27,33 +27,16 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Thread Pool",
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(threadPools.update.name),
-          {
-            "max-threads": 10,
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(threadPools.remove.name),
-          {
-            "max-threads": 10,
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(threadPools.reset.name),
-          {
-            "max-threads": 10,
-          }
-        );
-        cy.addAddress(managementEndpoint, [
-          "subsystem",
-          "batch-jberet",
-          "thread-factory",
-          threadFactory,
-        ]);
+        cy.addAddress(managementEndpoint, address.concat(threadPools.update.name), {
+          "max-threads": 10,
+        });
+        cy.addAddress(managementEndpoint, address.concat(threadPools.remove.name), {
+          "max-threads": 10,
+        });
+        cy.addAddress(managementEndpoint, address.concat(threadPools.reset.name), {
+          "max-threads": 10,
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "batch-jberet", "thread-factory", threadFactory]);
       });
   });
 
@@ -70,11 +53,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Thread Pool",
     cy.text("ejb3-thread-pool-table-add", "max-threads", "10");
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(threadPools.create.name),
-      true
-    );
+    cy.validateAddress(managementEndpoint, address.concat(threadPools.create.name), true);
   });
 
   it("Edit core-threads", () => {
@@ -86,12 +65,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Thread Pool",
     cy.text(configurationFormId, "core-threads", "5");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(threadPools.update.name),
-      "core-threads",
-      5
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(threadPools.update.name), "core-threads", 5);
   });
 
   it("Edit max-threads", () => {
@@ -103,12 +77,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Thread Pool",
     cy.text(configurationFormId, "max-threads", "8");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(threadPools.update.name),
-      "max-threads",
-      8
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(threadPools.update.name), "max-threads", 8);
   });
 
   it("Edit thread-factory", () => {
@@ -120,12 +89,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Thread Pool",
     cy.text(configurationFormId, "thread-factory", threadFactory);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(threadPools.update.name),
-      "thread-factory",
-      threadFactory
-    );
+    cy.verifyAttribute(managementEndpoint, address.concat(threadPools.update.name), "thread-factory", threadFactory);
   });
 
   it("Remove", () => {
@@ -134,11 +98,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Thread Pool",
     cy.get("#ejb3-thread-pool-item").click();
     cy.removeFromTable(threadPoolTableId, threadPools.remove.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(threadPools.remove.name),
-      false
-    );
+    cy.validateAddress(managementEndpoint, address.concat(threadPools.remove.name), false);
   });
 
   it("Reset", () => {
@@ -146,10 +106,6 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Thread Pool",
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-thread-pool-item").click();
     cy.selectInTable(threadPoolTableId, threadPools.reset.name);
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint,
-      address.concat(threadPools.reset.name)
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address.concat(threadPools.reset.name));
   });
 });

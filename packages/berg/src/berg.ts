@@ -1,9 +1,4 @@
-import {
-  GenericContainer,
-  Network,
-  StartedNetwork,
-  StartedTestContainer,
-} from "testcontainers";
+import { GenericContainer, Network, StartedNetwork, StartedTestContainer } from "testcontainers";
 
 export class Berg {
   private static _instance: Berg;
@@ -11,10 +6,7 @@ export class Berg {
   private _network: StartedNetwork;
   private _halContainer: StartedTestContainer;
 
-  private constructor(
-    network: StartedNetwork,
-    halContainer: StartedTestContainer
-  ) {
+  private constructor(network: StartedNetwork, halContainer: StartedTestContainer) {
     this._network = network;
     this._halContainer = halContainer;
   }

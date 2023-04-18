@@ -11,9 +11,7 @@ import { Berg } from "@berg/berg";
     },
     config: {
       e2e: {
-        baseUrl: `http://localhost:${berg
-          .getHalContainer()
-          .getMappedPort(9090)}`,
+        baseUrl: `http://localhost:${berg.getHalContainer().getMappedPort(9090)}`,
       },
     },
   });

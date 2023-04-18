@@ -26,18 +26,9 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(remotingProfiles.update.name)
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(remotingProfiles.remove.name)
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(remotingProfiles.reset.name)
-        );
+        cy.addAddress(managementEndpoint, address.concat(remotingProfiles.update.name));
+        cy.addAddress(managementEndpoint, address.concat(remotingProfiles.remove.name));
+        cy.addAddress(managementEndpoint, address.concat(remotingProfiles.reset.name));
       });
   });
 
@@ -50,18 +41,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-remoting-profile-item").click();
     cy.addInTable(remotingProfilesTableId);
-    cy.text(
-      "ejb3-remoting-profile-table-add",
-      "name",
-      remotingProfiles.create.name
-    );
+    cy.text("ejb3-remoting-profile-table-add", "name", remotingProfiles.create.name);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(remotingProfiles.create.name),
-      true
-    );
+    cy.validateAddress(managementEndpoint, address.concat(remotingProfiles.create.name), true);
   });
 
   it("Toggle exclude-local-receiver", () => {
@@ -178,11 +161,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
     cy.get("#ejb3-remoting-profile-item").click();
     cy.removeFromTable(remotingProfilesTableId, remotingProfiles.remove.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(remotingProfiles.remove.name),
-      false
-    );
+    cy.validateAddress(managementEndpoint, address.concat(remotingProfiles.remove.name), false);
   });
 
   it("Reset", () => {
@@ -190,10 +169,6 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
     cy.get("#ejb3-container-item").click();
     cy.get("#ejb3-remoting-profile-item").click();
     cy.selectInTable(remotingProfilesTableId, remotingProfiles.reset.name);
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint,
-      address.concat(remotingProfiles.reset.name)
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address.concat(remotingProfiles.reset.name));
   });
 });

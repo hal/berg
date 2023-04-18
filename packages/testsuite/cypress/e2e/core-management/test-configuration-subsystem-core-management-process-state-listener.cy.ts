@@ -3,8 +3,7 @@ import { AddModuleCommandBuilder } from "@berg/commands";
 describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => Process State Listener", () => {
   const processStateListenerTableId = "core-mgmt-prc-state-table";
   const processStateListenerModuleName = "org.jboss.hal.cypress.resources";
-  const processStateListenerClass =
-    "org.jboss.hal.cypress.resources.SimpleProcessStateListener";
+  const processStateListenerClass = "org.jboss.hal.cypress.resources.SimpleProcessStateListener";
 
   let managementEndpoint: string;
 
@@ -27,21 +26,14 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
       cy.executeInWildflyContainer(
         new AddModuleCommandBuilder()
           .withName(processStateListenerModuleName)
-          .withResource(
-            "/home/fixtures/modules/process-state-listener-1.0-SNAPSHOT.jar"
-          )
+          .withResource("/home/fixtures/modules/process-state-listener-1.0-SNAPSHOT.jar")
           .withDependencies(["org.wildfly.extension.core-management-client"])
           .build()
           .toCLICommand()
       ).then(() => {
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "core-management",
-            "process-state-listener",
-            processStateListeners.delete.name,
-          ],
+          ["subsystem", "core-management", "process-state-listener", processStateListeners.delete.name],
           {
             class: processStateListeners.delete.class,
             module: processStateListeners.delete.module,
@@ -59,31 +51,14 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
     cy.navigateTo(managementEndpoint, "core-management");
     cy.get("#core-mgmt-prc-state-item").click();
     cy.addInTable(processStateListenerTableId);
-    cy.text(
-      "core-mgmt-prc-state-table-add",
-      "name",
-      processStateListeners.create.name
-    );
-    cy.text(
-      "core-mgmt-prc-state-table-add",
-      "class",
-      processStateListeners.create.class
-    );
-    cy.text(
-      "core-mgmt-prc-state-table-add",
-      "module",
-      processStateListeners.create.module
-    );
+    cy.text("core-mgmt-prc-state-table-add", "name", processStateListeners.create.name);
+    cy.text("core-mgmt-prc-state-table-add", "class", processStateListeners.create.class);
+    cy.text("core-mgmt-prc-state-table-add", "module", processStateListeners.create.module);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "core-management",
-        "process-state-listener",
-        processStateListeners.create.name,
-      ],
+      ["subsystem", "core-management", "process-state-listener", processStateListeners.create.name],
       true
     );
   });
@@ -91,29 +66,16 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
   it("Delete Process State Listener", () => {
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "core-management",
-        "process-state-listener",
-        processStateListeners.delete.name,
-      ],
+      ["subsystem", "core-management", "process-state-listener", processStateListeners.delete.name],
       true
     );
     cy.navigateTo(managementEndpoint, "core-management");
     cy.get("#core-mgmt-prc-state-item").click();
-    cy.removeFromTable(
-      processStateListenerTableId,
-      processStateListeners.delete.name
-    );
+    cy.removeFromTable(processStateListenerTableId, processStateListeners.delete.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "core-management",
-        "process-state-listener",
-        processStateListeners.delete.name,
-      ],
+      ["subsystem", "core-management", "process-state-listener", processStateListeners.delete.name],
       false
     );
   });

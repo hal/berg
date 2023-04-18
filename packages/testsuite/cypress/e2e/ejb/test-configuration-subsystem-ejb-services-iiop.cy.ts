@@ -46,12 +46,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => IIOP", () => {
       cy.flip(configurationFormId, "enable-by-default", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "enable-by-default",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "enable-by-default", !value);
     });
   });
 
@@ -72,12 +67,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => IIOP", () => {
       cy.flip(configurationFormId, "use-qualified-name", value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        "use-qualified-name",
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, "use-qualified-name", !value);
     });
   });
 

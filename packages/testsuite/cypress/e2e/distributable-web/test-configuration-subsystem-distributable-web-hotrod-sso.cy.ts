@@ -65,14 +65,8 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
           steps: [
             {
               operation: "add",
-              address: [
-                "subsystem",
-                "infinispan",
-                "remote-cache-container",
-                remoteCacheContainers.create.name,
-              ],
-              "default-remote-cluster":
-                remoteCacheContainers.create["default-remote-cluster"],
+              address: ["subsystem", "infinispan", "remote-cache-container", remoteCacheContainers.create.name],
+              "default-remote-cluster": remoteCacheContainers.create["default-remote-cluster"],
             },
             {
               operation: "add",
@@ -94,14 +88,8 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
           steps: [
             {
               operation: "add",
-              address: [
-                "subsystem",
-                "infinispan",
-                "remote-cache-container",
-                remoteCacheContainers.update.name,
-              ],
-              "default-remote-cluster":
-                remoteCacheContainers.update["default-remote-cluster"],
+              address: ["subsystem", "infinispan", "remote-cache-container", remoteCacheContainers.update.name],
+              "default-remote-cluster": remoteCacheContainers.update["default-remote-cluster"],
             },
             {
               operation: "add",
@@ -126,8 +114,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
             hotRodSingleSignOnManagements.update.name,
           ],
           {
-            "remote-cache-container":
-              hotRodSingleSignOnManagements.update["remote-cache-container"],
+            "remote-cache-container": hotRodSingleSignOnManagements.update["remote-cache-container"],
           }
         );
         cy.addAddress(
@@ -139,8 +126,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
             hotRodSingleSignOnManagements.reset.name,
           ],
           {
-            "remote-cache-container":
-              hotRodSingleSignOnManagements.reset["remote-cache-container"],
+            "remote-cache-container": hotRodSingleSignOnManagements.reset["remote-cache-container"],
           }
         );
         cy.addAddress(
@@ -152,8 +138,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
             hotRodSingleSignOnManagements.delete.name,
           ],
           {
-            "remote-cache-container":
-              hotRodSingleSignOnManagements.delete["remote-cache-container"],
+            "remote-cache-container": hotRodSingleSignOnManagements.delete["remote-cache-container"],
           }
         );
       });
@@ -167,11 +152,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
     cy.addInTable(hotrodSsoManagementTableId);
-    cy.text(
-      "dw-hotrod-sso-management-table-add",
-      "name",
-      hotRodSingleSignOnManagements.create.name
-    );
+    cy.text("dw-hotrod-sso-management-table-add", "name", hotRodSingleSignOnManagements.create.name);
     cy.text(
       "dw-hotrod-sso-management-table-add",
       "remote-cache-container",
@@ -181,12 +162,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "hotrod-single-sign-on-management",
-        hotRodSingleSignOnManagements.create.name,
-      ],
+      ["subsystem", "distributable-web", "hotrod-single-sign-on-management", hotRodSingleSignOnManagements.create.name],
       true
     );
   });
@@ -194,22 +170,14 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   it("Edit cache-configuration", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.selectInTable(
-      hotrodSsoManagementTableId,
-      hotRodSingleSignOnManagements.update.name
-    );
+    cy.selectInTable(hotrodSsoManagementTableId, hotRodSingleSignOnManagements.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "cache-configuration", "example");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "hotrod-single-sign-on-management",
-        hotRodSingleSignOnManagements.update.name,
-      ],
+      ["subsystem", "distributable-web", "hotrod-single-sign-on-management", hotRodSingleSignOnManagements.update.name],
       "cache-configuration",
       "example"
     );
@@ -218,26 +186,14 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   it("Edit remote-cache-container", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.selectInTable(
-      hotrodSsoManagementTableId,
-      hotRodSingleSignOnManagements.update.name
-    );
+    cy.selectInTable(hotrodSsoManagementTableId, hotRodSingleSignOnManagements.update.name);
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "remote-cache-container",
-      remoteCacheContainers.update.name
-    );
+    cy.text(configurationFormId, "remote-cache-container", remoteCacheContainers.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "hotrod-single-sign-on-management",
-        hotRodSingleSignOnManagements.update.name,
-      ],
+      ["subsystem", "distributable-web", "hotrod-single-sign-on-management", hotRodSingleSignOnManagements.update.name],
       "remote-cache-container",
       remoteCacheContainers.update.name
     );
@@ -246,29 +202,16 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   it("Delete HotRod SSO Management", () => {
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "hotrod-single-sign-on-management",
-        hotRodSingleSignOnManagements.delete.name,
-      ],
+      ["subsystem", "distributable-web", "hotrod-single-sign-on-management", hotRodSingleSignOnManagements.delete.name],
       true
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.removeFromTable(
-      hotrodSsoManagementTableId,
-      hotRodSingleSignOnManagements.delete.name
-    );
+    cy.removeFromTable(hotrodSsoManagementTableId, hotRodSingleSignOnManagements.delete.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "hotrod-single-sign-on-management",
-        hotRodSingleSignOnManagements.delete.name,
-      ],
+      ["subsystem", "distributable-web", "hotrod-single-sign-on-management", hotRodSingleSignOnManagements.delete.name],
       false
     );
   });
@@ -276,10 +219,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod SSO",
   it("Reset HotRod SSO Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-sso-management-item").click();
-    cy.selectInTable(
-      hotrodSsoManagementTableId,
-      hotRodSingleSignOnManagements.reset.name
-    );
+    cy.selectInTable(hotrodSsoManagementTableId, hotRodSingleSignOnManagements.reset.name);
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",

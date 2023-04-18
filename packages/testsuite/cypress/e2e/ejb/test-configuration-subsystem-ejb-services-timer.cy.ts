@@ -16,20 +16,12 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Timer", () => 
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          address.concat("file-data-store", fileDataStoreToUpdate.name),
-          {
-            path: fileDataStoreToUpdate.path,
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ejb3", "thread-pool", threadPoolToUpdate],
-          {
-            "max-threads": 10,
-          }
-        );
+        cy.addAddress(managementEndpoint, address.concat("file-data-store", fileDataStoreToUpdate.name), {
+          path: fileDataStoreToUpdate.path,
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ejb3", "thread-pool", threadPoolToUpdate], {
+          "max-threads": 10,
+        });
       });
   });
 
@@ -42,19 +34,10 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Timer", () => 
     cy.get("#ejb3-service-item").click();
     cy.get("#ejb3-service-timer-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "default-data-store",
-      fileDataStoreToUpdate.name
-    );
+    cy.text(configurationFormId, "default-data-store", fileDataStoreToUpdate.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-data-store",
-      fileDataStoreToUpdate.name
-    );
+    cy.verifyAttribute(managementEndpoint, address, "default-data-store", fileDataStoreToUpdate.name);
   });
 
   it("Edit thread-pool-name", () => {
@@ -65,12 +48,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Timer", () => 
     cy.text(configurationFormId, "thread-pool-name", threadPoolToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "thread-pool-name",
-      threadPoolToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "thread-pool-name", threadPoolToUpdate);
   });
 
   it("Reset", () => {

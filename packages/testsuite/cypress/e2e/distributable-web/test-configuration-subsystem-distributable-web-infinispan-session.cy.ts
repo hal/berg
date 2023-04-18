@@ -2,8 +2,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   let managementEndpoint: string;
 
   const configurationFormId = "dw-infinispan-session-management-form";
-  const infinispanSessionManagementTableId =
-    "dw-infinispan-session-management-table";
+  const infinispanSessionManagementTableId = "dw-infinispan-session-management-table";
   const granularity = "granularity";
 
   const cacheToUpdate = "cache-to-update";
@@ -48,18 +47,9 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.create.name,
-          ],
-          {
-            module: "org.wildfly.clustering.ejb.infinispan",
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "infinispan", "cache-container", cacheContainers.create.name], {
+          module: "org.wildfly.clustering.ejb.infinispan",
+        });
         cy.addAddress(managementEndpoint, [
           "subsystem",
           "infinispan",
@@ -79,27 +69,13 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.create.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.create.name],
           name: "default-cache",
           value: cacheContainers.create["default-cache"].name,
         });
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.update.name,
-          ],
-          {
-            module: "org.wildfly.clustering.ejb.infinispan",
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "infinispan", "cache-container", cacheContainers.update.name], {
+          module: "org.wildfly.clustering.ejb.infinispan",
+        });
         cy.addAddress(managementEndpoint, [
           "subsystem",
           "infinispan",
@@ -119,54 +95,31 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.update.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.update.name],
           name: "default-cache",
           value: cacheContainers.update["default-cache"].name,
         });
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "distributable-web",
-            "infinispan-session-management",
-            infinispanSessionManagements.update.name,
-          ],
+          ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.update.name],
           {
-            "cache-container":
-              infinispanSessionManagements.update["cache-container"],
+            "cache-container": infinispanSessionManagements.update["cache-container"],
             granularity: "SESSION",
           }
         );
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "distributable-web",
-            "infinispan-session-management",
-            infinispanSessionManagements.delete.name,
-          ],
+          ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.delete.name],
           {
-            "cache-container":
-              infinispanSessionManagements.delete["cache-container"],
+            "cache-container": infinispanSessionManagements.delete["cache-container"],
             granularity: "SESSION",
           }
         );
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "distributable-web",
-            "infinispan-session-management",
-            infinispanSessionManagements.reset.name,
-          ],
+          ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.reset.name],
           {
-            "cache-container":
-              infinispanSessionManagements.reset["cache-container"],
+            "cache-container": infinispanSessionManagements.reset["cache-container"],
             granularity: "SESSION",
           }
         );
@@ -181,11 +134,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
     cy.addInTable(infinispanSessionManagementTableId);
-    cy.text(
-      "dw-infinispan-session-management-table-add",
-      "name",
-      infinispanSessionManagements.create.name
-    );
+    cy.text("dw-infinispan-session-management-table-add", "name", infinispanSessionManagements.create.name);
     cy.text(
       "dw-infinispan-session-management-table-add",
       "cache-container",
@@ -195,12 +144,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "infinispan-session-management",
-        infinispanSessionManagements.create.name,
-      ],
+      ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.create.name],
       true
     );
   });
@@ -208,22 +152,14 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit cache", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.selectInTable(
-      infinispanSessionManagementTableId,
-      infinispanSessionManagements.update.name
-    );
+    cy.selectInTable(infinispanSessionManagementTableId, infinispanSessionManagements.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "cache", cacheToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "infinispan-session-management",
-        infinispanSessionManagements.update.name,
-      ],
+      ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.update.name],
       "cache",
       cacheToUpdate
     );
@@ -232,26 +168,14 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit cache-container", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.selectInTable(
-      infinispanSessionManagementTableId,
-      infinispanSessionManagements.update.name
-    );
+    cy.selectInTable(infinispanSessionManagementTableId, infinispanSessionManagements.update.name);
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "cache-container",
-      cacheContainers.update.name
-    );
+    cy.text(configurationFormId, "cache-container", cacheContainers.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "infinispan-session-management",
-        infinispanSessionManagements.update.name,
-      ],
+      ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.update.name],
       "cache-container",
       cacheContainers.update.name
     );
@@ -260,10 +184,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Edit granularity", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.selectInTable(
-      infinispanSessionManagementTableId,
-      infinispanSessionManagements.update.name
-    );
+    cy.selectInTable(infinispanSessionManagementTableId, infinispanSessionManagements.update.name);
     cy.editForm(configurationFormId);
     cy.formInput(configurationFormId, granularity).select("ATTRIBUTE", {
       force: true,
@@ -271,19 +192,11 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.formInput(configurationFormId, granularity).trigger("change", {
       force: true,
     });
-    cy.formInput(configurationFormId, granularity).should(
-      "have.value",
-      "ATTRIBUTE"
-    );
+    cy.formInput(configurationFormId, granularity).should("have.value", "ATTRIBUTE");
     cy.saveForm(configurationFormId);
     cy.verifyAttribute(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "infinispan-session-management",
-        infinispanSessionManagements.update.name,
-      ],
+      ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.update.name],
       granularity,
       "ATTRIBUTE"
     );
@@ -292,10 +205,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Reset Infinispan Session Management", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.selectInTable(
-      infinispanSessionManagementTableId,
-      infinispanSessionManagements.reset.name
-    );
+    cy.selectInTable(infinispanSessionManagementTableId, infinispanSessionManagements.reset.name);
     cy.resetForm(configurationFormId, managementEndpoint, [
       "subsystem",
       "distributable-web",
@@ -307,29 +217,16 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
   it("Delete Infinispan Session Management", () => {
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "infinispan-session-management",
-        infinispanSessionManagements.delete.name,
-      ],
+      ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.delete.name],
       true
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
-    cy.removeFromTable(
-      infinispanSessionManagementTableId,
-      infinispanSessionManagements.delete.name
-    );
+    cy.removeFromTable(infinispanSessionManagementTableId, infinispanSessionManagements.delete.name);
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
-      [
-        "subsystem",
-        "distributable-web",
-        "infinispan-session-management",
-        infinispanSessionManagements.delete.name,
-      ],
+      ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.delete.name],
       false
     );
   });

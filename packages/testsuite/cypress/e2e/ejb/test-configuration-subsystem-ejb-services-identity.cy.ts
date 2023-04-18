@@ -13,12 +13,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Identity", () 
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(managementEndpoint, [
-          "subsystem",
-          "elytron",
-          "security-domain",
-          securityDomainToUpdate,
-        ]);
+        cy.addAddress(managementEndpoint, ["subsystem", "elytron", "security-domain", securityDomainToUpdate]);
       });
   });
 
@@ -48,12 +43,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Identity", () 
       .trigger("change");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address,
-      "outflow-security-domains",
-      securityDomainToUpdate
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address, "outflow-security-domains", securityDomainToUpdate);
   });
 
   it("Reset", () => {

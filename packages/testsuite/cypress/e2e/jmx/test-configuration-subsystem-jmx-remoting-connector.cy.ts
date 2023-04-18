@@ -29,12 +29,7 @@ describe("TESTS: Configuration => Subsystem => JMX => Remoting Connector", () =>
       cy.flip(configurationFormId, useManagementEndpoint, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        address,
-        useManagementEndpoint,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, address, useManagementEndpoint, !value);
     });
   });
 

@@ -49,12 +49,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Cache"
       .then(() => {
         cy.addAddress(
           managementEndpoint,
-          [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.default.name,
-          ],
+          ["subsystem", "infinispan", "cache-container", cacheContainers.default.name],
           {
             module: "org.wildfly.clustering.ejb.infinispan",
           }
@@ -70,24 +65,15 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Cache"
         cy.task("execute:cli", {
           operation: "write-attribute",
           managementApi: `${managementEndpoint}/management`,
-          address: [
-            "subsystem",
-            "infinispan",
-            "cache-container",
-            cacheContainers.default.name,
-          ],
+          address: ["subsystem", "infinispan", "cache-container", cacheContainers.default.name],
           name: "default-cache",
           value: cacheContainers.default["default-cache"].name,
         });
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ejb3", "passivation-store", passivations.update.name],
-          {
-            "bean-cache": cacheContainers.default["default-cache"].name,
-            "cache-container": cacheContainers.default.name,
-            "max-size": 1000,
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "ejb3", "passivation-store", passivations.update.name], {
+          "bean-cache": cacheContainers.default["default-cache"].name,
+          "cache-container": cacheContainers.default.name,
+          "max-size": 1000,
+        });
         cy.addAddress(managementEndpoint, address.concat(caches.remove.name));
         cy.addAddress(managementEndpoint, address.concat(caches.reset.name));
         cy.addAddress(managementEndpoint, address.concat(caches.update.name));
@@ -106,11 +92,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Cache"
     cy.text("ejb3-cache-table-add", "name", caches.create.name);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(caches.create.name),
-      true
-    );
+    cy.validateAddress(managementEndpoint, address.concat(caches.create.name), true);
   });
 
   it("Edit aliases", () => {
@@ -119,18 +101,10 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Cache"
     cy.get("#ejb3-cache-item").click();
     cy.selectInTable(cacheTableId, caches.update.name);
     cy.editForm(configurationFormId);
-    cy.formInput(configurationFormId, "aliases")
-      .clear()
-      .type("another-alias{enter}")
-      .trigger("change");
+    cy.formInput(configurationFormId, "aliases").clear().type("another-alias{enter}").trigger("change");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyListAttributeContains(
-      managementEndpoint,
-      address.concat(caches.update.name),
-      "aliases",
-      "another-alias"
-    );
+    cy.verifyListAttributeContains(managementEndpoint, address.concat(caches.update.name), "aliases", "another-alias");
   });
 
   it("Edit passivation-store", () => {
@@ -156,11 +130,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Cache"
     cy.get("#ejb3-cache-item").click();
     cy.removeFromTable(cacheTableId, caches.remove.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(caches.remove.name),
-      false
-    );
+    cy.validateAddress(managementEndpoint, address.concat(caches.remove.name), false);
   });
 
   it("Reset", () => {
@@ -168,10 +138,6 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Cache"
     cy.get("#ejb3-state-item").click();
     cy.get("#ejb3-cache-item").click();
     cy.selectInTable(cacheTableId, caches.reset.name);
-    cy.resetForm(
-      configurationFormId,
-      managementEndpoint,
-      address.concat(caches.reset.name)
-    );
+    cy.resetForm(configurationFormId, managementEndpoint, address.concat(caches.reset.name));
   });
 });

@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["./packages/testsuite/cypress/support/", "./packages/commands/src/"],
+  "exclude": "**/*+(e2e|commands|index).ts",
+  "out": "docs",
+  "entryPointStrategy": "Expand",
+  "name": "Berg",
+  "sidebarLinks": { "Contributing guide": "https://github.com/hal/berg/blob/main/CONTRIBUTING.md" }
+}

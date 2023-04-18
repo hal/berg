@@ -15,7 +15,9 @@
     "pregenerate-report": "npx copyfiles -u 4 \"packages/testsuite/cypress/videos/*.mp4\" mochawesome-report/assets/videos",
     "generate-report": "npx mochawesome-merge packages/testsuite/results/cypress/e2e/*.json > mochawesome.json && npx marge mochawesome.json -f index.html",
     "predevelop": "npm run compile",
-    "develop": "npm run develop -w @berg/testsuite"
+    "develop": "npm run develop -w @berg/testsuite",
+    "predocs": "npm run compile",
+    "docs": "npx typedoc"
   },
   "workspaces": {
     "packages": [
@@ -37,6 +39,7 @@
     "mochawesome-report-generator": "6.2.0",
     "prettier": "2.8.5",
     "testcontainers": "9.2.1",
+    "typedoc": "0.23.28",
     "typescript": "5.0.2"
   }
 }

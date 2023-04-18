@@ -16,6 +16,9 @@
 // Import commands.js using ES2015 syntax:
 import "./commands";
 import "./resource-utils";
+import "./verification-utils";
+import "./navigation";
+import "./form-editing";
 /* eslint @typescript-eslint/no-unsafe-assignment: off */
 /* eslint @typescript-eslint/no-var-requires: off */
 const addContext = require("mochawesome/addContext");

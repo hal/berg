@@ -24,9 +24,7 @@ const optionDefinitions: OptionDefinition[] = [
     },
     config: {
       e2e: {
-        baseUrl: `http://localhost:${berg
-          .getHalContainer()
-          .getMappedPort(9090)}`,
+        baseUrl: `http://localhost:${berg.getHalContainer().getMappedPort(9090)}`,
         specPattern: (options.specs as string).split(","),
       },
     },

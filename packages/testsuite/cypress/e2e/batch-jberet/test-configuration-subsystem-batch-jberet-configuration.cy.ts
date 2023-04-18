@@ -29,34 +29,19 @@ describe("TESTS: Configuration => Subsystem => Batch => Configuration", () => {
       cy.flip(configurationFormId, restartJobsOnResume, value);
       cy.saveForm(configurationFormId);
       cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        ["subsystem", "batch-jberet"],
-        restartJobsOnResume,
-        !value
-      );
+      cy.verifyAttribute(managementEndpoint, ["subsystem", "batch-jberet"], restartJobsOnResume, !value);
     });
   });
 
   it("Edit default-job-repository", () => {
     const jobRepository = "some-other-value";
-    cy.addAddress(managementEndpoint, [
-      "subsystem",
-      "batch-jberet",
-      "in-memory-job-repository",
-      jobRepository,
-    ]);
+    cy.addAddress(managementEndpoint, ["subsystem", "batch-jberet", "in-memory-job-repository", jobRepository]);
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-configuration-item").click();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, defaultJobRepository, jobRepository);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      ["subsystem", "batch-jberet"],
-      "default-job-repository",
-      jobRepository
-    );
+    cy.verifyAttribute(managementEndpoint, ["subsystem", "batch-jberet"], "default-job-repository", jobRepository);
   });
 });

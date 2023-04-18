@@ -1,17 +1,11 @@
 describe("TESTS: Configuration => Subsystem => Security => Settings => Factories/Transformers => HTTP Factories => Provider HTTP Server Mechanism Factory", () => {
   let managementEndpoint: string;
 
-  const address = [
-    "subsystem",
-    "elytron",
-    "provider-http-server-mechanism-factory",
-  ];
+  const address = ["subsystem", "elytron", "provider-http-server-mechanism-factory"];
 
-  const configurationFormId =
-    "elytron-provider-http-server-mechanism-factory-form";
+  const configurationFormId = "elytron-provider-http-server-mechanism-factory-form";
 
-  const providerHttpServerMechanismFactoryTableId =
-    "elytron-provider-http-server-mechanism-factory-table";
+  const providerHttpServerMechanismFactoryTableId = "elytron-provider-http-server-mechanism-factory-table";
   const providerHttpServiceMechanismFactories = {
     create: {
       name: "p-http-smf-create",
@@ -33,24 +27,10 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(providerHttpServiceMechanismFactories.remove.name)
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(providerHttpServiceMechanismFactories.reset.name)
-        );
-        cy.addAddress(
-          managementEndpoint,
-          address.concat(providerHttpServiceMechanismFactories.update.name)
-        );
-        cy.addAddress(managementEndpoint, [
-          "subsystem",
-          "elytron",
-          "provider-loader",
-          "pl-to-update",
-        ]);
+        cy.addAddress(managementEndpoint, address.concat(providerHttpServiceMechanismFactories.remove.name));
+        cy.addAddress(managementEndpoint, address.concat(providerHttpServiceMechanismFactories.reset.name));
+        cy.addAddress(managementEndpoint, address.concat(providerHttpServiceMechanismFactories.update.name));
+        cy.addAddress(managementEndpoint, ["subsystem", "elytron", "provider-loader", "pl-to-update"]);
       });
   });
 
@@ -70,37 +50,23 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     );
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(providerHttpServiceMechanismFactories.create.name),
-      true
-    );
+    cy.validateAddress(managementEndpoint, address.concat(providerHttpServiceMechanismFactories.create.name), true);
   });
 
   it("Remove", () => {
     cy.navigateTo(managementEndpoint, "elytron-factories-transformers");
     cy.get("#http-factories-item").click();
     cy.get("#elytron-provider-http-server-mechanism-factory-item").click();
-    cy.removeFromTable(
-      providerHttpServerMechanismFactoryTableId,
-      providerHttpServiceMechanismFactories.remove.name
-    );
+    cy.removeFromTable(providerHttpServerMechanismFactoryTableId, providerHttpServiceMechanismFactories.remove.name);
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      address.concat(providerHttpServiceMechanismFactories.remove.name),
-      false
-    );
+    cy.validateAddress(managementEndpoint, address.concat(providerHttpServiceMechanismFactories.remove.name), false);
   });
 
   it("Reset", () => {
     cy.navigateTo(managementEndpoint, "elytron-factories-transformers");
     cy.get("#http-factories-item").click();
     cy.get("#elytron-provider-http-server-mechanism-factory-item").click();
-    cy.selectInTable(
-      providerHttpServerMechanismFactoryTableId,
-      providerHttpServiceMechanismFactories.reset.name
-    );
+    cy.selectInTable(providerHttpServerMechanismFactoryTableId, providerHttpServiceMechanismFactories.reset.name);
     cy.resetForm(
       configurationFormId,
       managementEndpoint,
@@ -112,10 +78,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     cy.navigateTo(managementEndpoint, "elytron-factories-transformers");
     cy.get("#http-factories-item").click();
     cy.get("#elytron-provider-http-server-mechanism-factory-item").click();
-    cy.selectInTable(
-      providerHttpServerMechanismFactoryTableId,
-      providerHttpServiceMechanismFactories.update.name
-    );
+    cy.selectInTable(providerHttpServerMechanismFactoryTableId, providerHttpServiceMechanismFactories.update.name);
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "providers", "pl-to-update");
     cy.saveForm(configurationFormId);

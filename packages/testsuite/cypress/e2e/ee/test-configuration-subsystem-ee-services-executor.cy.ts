@@ -36,44 +36,18 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ee", "context-service", contextServices.update.name],
-          {
-            "jndi-name": contextServices.update["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "ee",
-            "managed-executor-service",
-            executors.update.name,
-          ],
-          {
-            "jndi-name": executors.update["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ee", "managed-executor-service", executors.reset.name],
-          {
-            "jndi-name": executors.reset["jndi-name"],
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          [
-            "subsystem",
-            "ee",
-            "managed-executor-service",
-            executors.remove.name,
-          ],
-          {
-            "jndi-name": executors.remove["jndi-name"],
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "context-service", contextServices.update.name], {
+          "jndi-name": contextServices.update["jndi-name"],
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "managed-executor-service", executors.update.name], {
+          "jndi-name": executors.update["jndi-name"],
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "managed-executor-service", executors.reset.name], {
+          "jndi-name": executors.reset["jndi-name"],
+        });
+        cy.addAddress(managementEndpoint, ["subsystem", "ee", "managed-executor-service", executors.remove.name], {
+          "jndi-name": executors.remove["jndi-name"],
+        });
       });
   });
 
@@ -87,11 +61,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
     cy.get("#ee-service-executor").click();
     cy.addInTable(managedExecutorServiceTableId);
     cy.text("ee-service-executor-add", "name", executors.create.name);
-    cy.text(
-      "ee-service-executor-add",
-      "jndi-name",
-      executors.create["jndi-name"]
-    );
+    cy.text("ee-service-executor-add", "jndi-name", executors.create["jndi-name"]);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
@@ -133,11 +103,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
     cy.get("#ee-service-executor").click();
     cy.selectInTable(managedExecutorServiceTableId, executors.update.name);
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      "context-service",
-      contextServices.update.name
-    );
+    cy.text(configurationFormId, "context-service", contextServices.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(
@@ -238,12 +204,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
     cy.task("execute:cli", {
       managementApi: managementEndpoint + "/management",
       operation: "read-attribute",
-      address: [
-        "subsystem",
-        "ee",
-        "managed-executor-service",
-        executors.update.name,
-      ],
+      address: ["subsystem", "ee", "managed-executor-service", executors.update.name],
       name: "long-running-tasks",
     }).then((result) => {
       value = (result as { result: boolean }).result;
@@ -310,10 +271,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
     cy.formInput(configurationFormId, "reject-policy").trigger("change", {
       force: true,
     });
-    cy.formInput(configurationFormId, "reject-policy").should(
-      "have.value",
-      "RETRY_ABORT"
-    );
+    cy.formInput(configurationFormId, "reject-policy").should("have.value", "RETRY_ABORT");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
     cy.verifyAttribute(

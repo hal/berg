@@ -27,12 +27,7 @@ describe("TESTS: Configuration => Subsystem => EE => Default Bindings", () => {
     cy.text(configurationFormId, contextService, "cs-to-update");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      contextService,
-      "cs-to-update"
-    );
+    cy.verifyAttribute(managementEndpoint, address, contextService, "cs-to-update");
   });
 
   it("Edit datasource", () => {
@@ -52,12 +47,7 @@ describe("TESTS: Configuration => Subsystem => EE => Default Bindings", () => {
     cy.text(configurationFormId, jmsConnectionFactory, "jms-cf-to-update");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      jmsConnectionFactory,
-      "jms-cf-to-update"
-    );
+    cy.verifyAttribute(managementEndpoint, address, jmsConnectionFactory, "jms-cf-to-update");
   });
 
   it("Edit managed-executor-service", () => {
@@ -67,31 +57,17 @@ describe("TESTS: Configuration => Subsystem => EE => Default Bindings", () => {
     cy.text(configurationFormId, managedExecutorService, "mes-to-update");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      managedExecutorService,
-      "mes-to-update"
-    );
+    cy.verifyAttribute(managementEndpoint, address, managedExecutorService, "mes-to-update");
   });
 
   it("Edit managed-scheduled-executor-service", () => {
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-default-bindings-item").click();
     cy.editForm(configurationFormId);
-    cy.text(
-      configurationFormId,
-      managedScheduledExecutorService,
-      "mses-to-update"
-    );
+    cy.text(configurationFormId, managedScheduledExecutorService, "mses-to-update");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      managedScheduledExecutorService,
-      "mses-to-update"
-    );
+    cy.verifyAttribute(managementEndpoint, address, managedScheduledExecutorService, "mses-to-update");
   });
 
   it("Edit managed-thread-factory", () => {
@@ -101,12 +77,7 @@ describe("TESTS: Configuration => Subsystem => EE => Default Bindings", () => {
     cy.text(configurationFormId, managedThreadFactory, "mtf-to-update");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      managedThreadFactory,
-      "mtf-to-update"
-    );
+    cy.verifyAttribute(managementEndpoint, address, managedThreadFactory, "mtf-to-update");
   });
 
   it("Reset", () => {

@@ -109,38 +109,7 @@ describe("TESTS: Path => To => Tested => Resource", () => {
     cy.verifySuccess();
     // Checks that /path=to/tested=resource:read-attribute(name=module)
     // returns "sample" and is succesful
-    cy.verifyAttribute(
-      managementEndpoint,
-      ["path", "to", "tested", "resource"],
-      "module",
-      "sample"
-    );
+    cy.verifyAttribute(managementEndpoint, ["path", "to", "tested", "resource"], "module", "sample");
   });
 });
 ```
-
-If you want to run your developed test, you can either see it live by running Cypress interactively:
-
-```
-npm run develop
-```
-
-from the project root. If you want to execute it non-interactively, run
-
-```
-npm test -- --specs=cypress/e2e/test-to-be-added.cy.ts
-```
-
-from [testsuite root](packages/testsuite). You can also specify the desired browser by supplying `--browser=firefox|chrome` when running
-
-```
-npm test
-```
-
-e.g
-
-```
-npm test -- --browser=chrome --specs=cypress/e2e/test-to-be-added.cy.ts
-```
-
-Above is just a simple blueprint on how to write tests for Berg. See other tests for some "advanced" scenarios and make sure to visit our [custom commands](packages/testsuite/cypress/support/commands.ts) :slightly_smiling_face:

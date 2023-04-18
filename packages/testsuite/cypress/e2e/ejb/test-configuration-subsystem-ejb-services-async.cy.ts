@@ -12,13 +12,9 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Async", () => 
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "ejb3", "thread-pool", threadPoolToUpdate],
-          {
-            "max-threads": 10,
-          }
-        );
+        cy.addAddress(managementEndpoint, ["subsystem", "ejb3", "thread-pool", threadPoolToUpdate], {
+          "max-threads": 10,
+        });
       });
   });
 
@@ -34,12 +30,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Async", () => 
     cy.text(configurationFormId, "thread-pool-name", threadPoolToUpdate);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "thread-pool-name",
-      threadPoolToUpdate
-    );
+    cy.verifyAttribute(managementEndpoint, address, "thread-pool-name", threadPoolToUpdate);
   });
 
   it("Reset", () => {

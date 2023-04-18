@@ -1,8 +1,4 @@
-import {
-  AddModuleCommandBuilder,
-  AddDataSourceBuilder,
-  AddXADataSourceBuilder,
-} from "@berg/commands";
+import { AddModuleCommandBuilder, AddDataSourceBuilder, AddXADataSourceBuilder } from "@berg/commands";
 
 describe("TESTS: Configuration => Datasource => PostgreSQL", () => {
   const postgresUser = "admin";
@@ -15,13 +11,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL", () => {
   const postgresDSToAdd = {
     name: "PostgreToAddDS",
     jndiName: "java:/PostgreToAddDS",
-    connectionUrl:
-      "jdbc:" +
-      postgresDriverName +
-      "://" +
-      postgresContainerName +
-      "/" +
-      postgresDatabaseName,
+    connectionUrl: "jdbc:" + postgresDriverName + "://" + postgresContainerName + "/" + postgresDatabaseName,
   };
 
   const xaPostgreDSToAdd = {
@@ -53,12 +43,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL", () => {
         cy.task("execute:cli", {
           managementApi: managementEndpoint + "/management",
           operation: "add",
-          address: [
-            "subsystem",
-            "datasources",
-            "jdbc-driver",
-            postgresDriverName,
-          ],
+          address: ["subsystem", "datasources", "jdbc-driver", postgresDriverName],
           "driver-module-name": "org.postgres",
           "driver-xa-datasource-class-name": "org.postgresql.xa.PGXADataSource",
         }).then(() => {

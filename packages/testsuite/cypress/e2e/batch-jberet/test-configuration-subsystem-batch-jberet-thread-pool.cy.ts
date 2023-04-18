@@ -26,22 +26,13 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
   before(() => {
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
-      cy.addAddress(managementEndpoint, [
-        "subsystem",
-        "batch-jberet",
-        "thread-factory",
-        threadFactoryEdit,
-      ]);
-      cy.addAddress(
-        managementEndpoint,
-        ["subsystem", "batch-jberet", "thread-pool", threadPools.edit.name],
-        { "max-threads": threadPools.edit.maxThreads }
-      );
-      cy.addAddress(
-        managementEndpoint,
-        ["subsystem", "batch-jberet", "thread-pool", threadPools.remove.name],
-        { "max-threads": threadPools.remove.maxThreads }
-      );
+      cy.addAddress(managementEndpoint, ["subsystem", "batch-jberet", "thread-factory", threadFactoryEdit]);
+      cy.addAddress(managementEndpoint, ["subsystem", "batch-jberet", "thread-pool", threadPools.edit.name], {
+        "max-threads": threadPools.edit.maxThreads,
+      });
+      cy.addAddress(managementEndpoint, ["subsystem", "batch-jberet", "thread-pool", threadPools.remove.name], {
+        "max-threads": threadPools.remove.maxThreads,
+      });
     });
   });
 
@@ -54,18 +45,10 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
     cy.get("#batch-thread-pool-item").click();
     cy.addInTable(threadPoolTableId);
     cy.text("batch-thread-pool-table-add", "name", threadPools.create.name);
-    cy.text(
-      "batch-thread-pool-table-add",
-      "max-threads",
-      threadPools.create.maxThreads.toString()
-    );
+    cy.text("batch-thread-pool-table-add", "max-threads", threadPools.create.maxThreads.toString());
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
-    cy.validateAddress(
-      managementEndpoint,
-      ["subsystem", "batch-jberet", "thread-pool", threadPools.create.name],
-      true
-    );
+    cy.validateAddress(managementEndpoint, ["subsystem", "batch-jberet", "thread-pool", threadPools.create.name], true);
   });
 
   it("Remove Thread Pool", () => {
