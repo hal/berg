@@ -1,0 +1,5 @@
+[allowlist]
+description = "Global Allow List"
+paths = [
+  '''.*\.cy\.ts'''
+]
