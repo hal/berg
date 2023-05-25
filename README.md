@@ -75,6 +75,7 @@ Following is a table of supported environment properties that can be used when r
 | :--------------- | :---------------------------------------------- | :-------------------------------------------------------------------------------------------- |
 | `HAL_IMAGE`      | `quay.io/halconsole/hal-development:latest`     | [HAL standalone image](https://hal.github.io/documentation/get-started/#container) to be used |
 | `WILDFLY_IMAGE`  | `quay.io/halconsole/wildfly-development:latest` | WildFly/JBoss EAP image to be used                                                            |
+| `KEYCLOAK_IMAGE` | `quay.io/keycloak/keycloak:latest`              | Keycloak/RH-SSO image to be used for OIDC tests                                               |
 | `POSTGRES_IMAGE` | `docker.io/library/postgres:latest`             | PostgreSQL image to be used for datasource tests                                              |
 | `MYSQL_IMAGE`    | `docker.io/library/mysql:latest`                | MySQL image to be used for datasource tests                                                   |
 | `MARIADB_IMAGE`  | `docker.io/library/mariadb:latest`              | MariaDB image to be used for datasource tests                                                 |

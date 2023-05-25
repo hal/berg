@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 Cypress.Commands.add("verifySuccess", () => {
   cy.get(".toast-notifications-list-pf .alert-success").should("be.visible");
 });
@@ -68,6 +66,20 @@ Cypress.Commands.add("verifyRemovedFromTable", (tableId, resourceName) => {
 Cypress.Commands.add("verifyAttributeAsExpression", (managementEndpoint, address, attributeName, expectedValue) => {
   cy.readAttributeAsExpression(managementEndpoint, address, attributeName).then((result) => {
     expect(result).to.equal(expectedValue);
+  });
+});
+
+Cypress.Commands.add("verifyErrorMessage", (errorMessageText) => {
+  cy.get("div.alert.alert-danger.margin-top-large > span:nth-child(2)").should("have.text", errorMessageText);
+});
+
+Cypress.Commands.add("verifyUserName", (expectedUserName) => {
+  cy.get("#header-username").should("have.text", expectedUserName);
+});
+
+Cypress.Commands.add("verifyUserRole", (expectedRoleName) => {
+  cy.get(".active-roles").should(($roles) => {
+    expect($roles.attr(`title`)).contains(expectedRoleName);
   });
 });
 
@@ -174,6 +186,23 @@ declare global {
         attributeName: string,
         expectedValue: string
       ): void;
+      /**
+       * Verify the forbiden error message is displayd
+       * @category Verification
+       */
+      verifyErrorMessage(errorMessageText: string): void;
+      /**
+       * Verify the name of logged user
+       *
+       * @param expectedUserName expected name of user
+       */
+      verifyUserName(expectedUserName: string): void;
+      /**
+       * Verify a user have assigned roles
+       *
+       * @param expectedRoleName expected roles
+       */
+      verifyUserRole(expectedRoleName: string): void;
     }
   }
 }

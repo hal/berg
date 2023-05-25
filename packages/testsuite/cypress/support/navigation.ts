@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 Cypress.Commands.add("navigateTo", (managementEndpoint, subsystem) => {
   cy.visit(`?connect=${managementEndpoint}#${subsystem}`);
   cy.get("#hal-root-container").should("be.visible");
@@ -41,6 +39,11 @@ Cypress.Commands.add("navigateToUpdateManagerPage", (managementEndpoint, address
   const subsystemSeparator = "~";
   cy.visit(`?connect=${managementEndpoint}#update-manager;path=${address.join(subsystemSeparator)}`);
   cy.get("#hal-root-container").should("be.visible");
+});
+
+Cypress.Commands.add("logoutFromWebConsole", () => {
+  cy.get("#header-username").parents("a").click();
+  cy.get("#logout-link").click();
 });
 
 export {};
@@ -108,6 +111,11 @@ declare global {
        * @param address - key words from URL parameter "address". e.g. "update-manager" and "updates"
        */
       navigateToUpdateManagerPage(managementEndpoint: string, address: string[]): Chainable<void>;
+      /**
+       * Logout from console. Click on profile and then logout button.
+       * @category Navigation
+       */
+      logoutFromWebConsole(): void;
     }
   }
 }
