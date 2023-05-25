@@ -29,36 +29,19 @@ describe("TESTS: Runtime => Server => Status", () => {
 
   it("Read used heap", () => {
     cy.get("#server-runtime-status-heap-used").should("be.visible");
-    cy.task("execute:cli", {
-      managementApi: `${managementEndpoint}/management`,
-      operation: "read-attribute",
-      address: ["core-service", "platform-mbean", "type", "memory"],
-      name: "heap-memory-usage",
-    }).then((result) => {
-      let usedHeapMemory =
-        (
-          result as {
-            result: {
-              init: number;
-              used: number;
-              committed: number;
-              max: number;
-            };
-          }
-        ).result.used /
-        1024 ** 2;
-      let maxMemory =
-        (
-          result as {
-            result: {
-              init: number;
-              used: number;
-              committed: number;
-              max: number;
-            };
-          }
-        ).result.max /
-        1024 ** 2;
+    cy.readAttributeAsObject(
+      managementEndpoint,
+      ["core-service", "platform-mbean", "type", "memory"],
+      "heap-memory-usage"
+    ).then((result) => {
+      const memoryObject = result as {
+        init: number;
+        used: number;
+        committed: number;
+        max: number;
+      };
+      const usedHeapMemory = memoryObject.used / 1024 ** 2;
+      const maxMemory = memoryObject.max / 1024 ** 2;
       cy.get("#server-runtime-status-heap-used div.progress-bar-success")
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
@@ -74,36 +57,19 @@ describe("TESTS: Runtime => Server => Status", () => {
 
   it("Read commited heap", () => {
     cy.get("#server-runtime-status-heap-committed").should("be.visible");
-    cy.task("execute:cli", {
-      managementApi: `${managementEndpoint}/management`,
-      operation: "read-attribute",
-      address: ["core-service", "platform-mbean", "type", "memory"],
-      name: "heap-memory-usage",
-    }).then((result) => {
-      let commitedHeapMemory =
-        (
-          result as {
-            result: {
-              init: number;
-              used: number;
-              committed: number;
-              max: number;
-            };
-          }
-        ).result.committed /
-        1024 ** 2;
-      let maxMemory =
-        (
-          result as {
-            result: {
-              init: number;
-              used: number;
-              committed: number;
-              max: number;
-            };
-          }
-        ).result.max /
-        1024 ** 2;
+    cy.readAttributeAsObject(
+      managementEndpoint,
+      ["core-service", "platform-mbean", "type", "memory"],
+      "heap-memory-usage"
+    ).then((result) => {
+      const memoryObject = result as {
+        init: number;
+        used: number;
+        committed: number;
+        max: number;
+      };
+      const commitedHeapMemory = memoryObject.committed / 1024 ** 2;
+      const maxMemory = memoryObject.max / 1024 ** 2;
       cy.get("#server-runtime-status-heap-committed div.progress-bar-success")
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
@@ -119,40 +85,23 @@ describe("TESTS: Runtime => Server => Status", () => {
 
   it("Read used non-heap", () => {
     cy.get("#server-runtime-status-non-heap-used").should("be.visible");
-    cy.task("execute:cli", {
-      managementApi: `${managementEndpoint}/management`,
-      operation: "read-attribute",
-      address: ["core-service", "platform-mbean", "type", "memory"],
-      name: "non-heap-memory-usage",
-    }).then((result) => {
-      let usedHeapMemory =
-        (
-          result as {
-            result: {
-              init: number;
-              used: number;
-              committed: number;
-              max: number;
-            };
-          }
-        ).result.used /
-        1024 ** 2;
-      let maxMemory =
-        (
-          result as {
-            result: {
-              init: number;
-              used: number;
-              committed: number;
-              max: number;
-            };
-          }
-        ).result.max /
-        1024 ** 2;
+    cy.readAttributeAsObject(
+      managementEndpoint,
+      ["core-service", "platform-mbean", "type", "memory"],
+      "non-heap-memory-usage"
+    ).then((result) => {
+      const memoryObject = result as {
+        init: number;
+        used: number;
+        committed: number;
+        max: number;
+      };
+      const usedNonHeapMemory = memoryObject.used / 1024 ** 2;
+      const maxMemory = memoryObject.max / 1024 ** 2;
       cy.get("#server-runtime-status-non-heap-used div.progress-bar-success")
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(usedHeapMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(usedNonHeapMemory, 1);
         });
       cy.get("#server-runtime-status-non-heap-used div.progress-bar-success")
         .invoke("attr", "aria-valuemax")
@@ -164,40 +113,23 @@ describe("TESTS: Runtime => Server => Status", () => {
 
   it("Read commited non-heap", () => {
     cy.get("#server-runtime-status-non-heap-committed").should("be.visible");
-    cy.task("execute:cli", {
-      managementApi: `${managementEndpoint}/management`,
-      operation: "read-attribute",
-      address: ["core-service", "platform-mbean", "type", "memory"],
-      name: "non-heap-memory-usage",
-    }).then((result) => {
-      let commitedHeapMemory =
-        (
-          result as {
-            result: {
-              init: number;
-              used: number;
-              committed: number;
-              max: number;
-            };
-          }
-        ).result.committed /
-        1024 ** 2;
-      let maxMemory =
-        (
-          result as {
-            result: {
-              init: number;
-              used: number;
-              committed: number;
-              max: number;
-            };
-          }
-        ).result.max /
-        1024 ** 2;
+    cy.readAttributeAsObject(
+      managementEndpoint,
+      ["core-service", "platform-mbean", "type", "memory"],
+      "non-heap-memory-usage"
+    ).then((result) => {
+      const memoryObject = result as {
+        init: number;
+        used: number;
+        committed: number;
+        max: number;
+      };
+      const commitedNonHeapMemory = memoryObject.committed / 1024 ** 2;
+      const maxMemory = memoryObject.max / 1024 ** 2;
       cy.get("#server-runtime-status-non-heap-committed div.progress-bar-success")
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(commitedHeapMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(commitedNonHeapMemory, 1);
         });
       cy.get("#server-runtime-status-non-heap-committed div.progress-bar-success")
         .invoke("attr", "aria-valuemax")
@@ -209,22 +141,16 @@ describe("TESTS: Runtime => Server => Status", () => {
 
   it("Read daemon threads", () => {
     cy.get("#server-runtime-status-threads").scrollIntoView().should("be.visible");
-    let deamonThreads: number;
-    let totalThreads: number;
-    cy.task("execute:cli", {
-      managementApi: `${managementEndpoint}/management`,
-      operation: "read-attribute",
-      address: ["core-service", "platform-mbean", "type", "threading"],
-      name: "daemon-thread-count",
-    }).then((result) => {
-      deamonThreads = (result as { result: number }).result;
-      cy.task("execute:cli", {
-        managementApi: `${managementEndpoint}/management`,
-        operation: "read-attribute",
-        address: ["core-service", "platform-mbean", "type", "threading"],
-        name: "thread-count",
-      }).then((result) => {
-        totalThreads = (result as { result: number }).result;
+    cy.readAttributeAsNumber(
+      managementEndpoint,
+      ["core-service", "platform-mbean", "type", "threading"],
+      "daemon-thread-count"
+    ).then((deamonThreads) => {
+      cy.readAttributeAsNumber(
+        managementEndpoint,
+        ["core-service", "platform-mbean", "type", "threading"],
+        "thread-count"
+      ).then((totalThreads) => {
         cy.get("#server-runtime-status-threads div.progress-bar")
           .invoke("attr", "aria-valuenow")
           .then(($attributeValue) => {

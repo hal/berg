@@ -55,7 +55,7 @@ describe("TESTS: Configuration => Subsystems => Mail => Attributes", () => {
   });
 
   it("Toggle debug", () => {
-    cy.getDefaultBooleanValue(managementEndpoint, address, attributesForm.debug).then((defaultValue: boolean) => {
+    cy.readAttributeAsBoolean(managementEndpoint, address, attributesForm.debug).then((defaultValue: boolean) => {
       cy.editForm(attributesForm.id);
       cy.flip(attributesForm.id, attributesForm.debug, defaultValue);
       cy.saveForm(attributesForm.id);

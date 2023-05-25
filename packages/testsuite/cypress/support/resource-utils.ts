@@ -60,7 +60,7 @@ Cypress.Commands.add("removeAddressIfExists", (managementEndpoint, address) => {
   });
 });
 
-Cypress.Commands.add("getDefaultBooleanValue", (managementEndpoint, address, name) => {
+Cypress.Commands.add("readAttributeAsBoolean", (managementEndpoint, address, name) => {
   return cy
     .task("execute:cli", {
       managementApi: `${managementEndpoint}/management`,
@@ -70,6 +70,58 @@ Cypress.Commands.add("getDefaultBooleanValue", (managementEndpoint, address, nam
     })
     .then((result) => {
       return (result as { result: boolean }).result;
+    });
+});
+
+Cypress.Commands.add("readAttributeAsObject", (managementEndpoint, address, name) => {
+  return cy
+    .task("execute:cli", {
+      managementApi: `${managementEndpoint}/management`,
+      operation: "read-attribute",
+      address: address,
+      name: name,
+    })
+    .then((result) => {
+      return (result as { result: object }).result;
+    });
+});
+
+Cypress.Commands.add("readAttributeAsNumber", (managementEndpoint, address, name) => {
+  return cy
+    .task("execute:cli", {
+      managementApi: `${managementEndpoint}/management`,
+      operation: "read-attribute",
+      address: address,
+      name: name,
+    })
+    .then((result) => {
+      return (result as { result: number }).result;
+    });
+});
+
+Cypress.Commands.add("readAttributeAsString", (managementEndpoint, address, name) => {
+  return cy
+    .task("execute:cli", {
+      managementApi: `${managementEndpoint}/management`,
+      operation: "read-attribute",
+      address: address,
+      name: name,
+    })
+    .then((result) => {
+      return (result as { result: string }).result;
+    });
+});
+
+Cypress.Commands.add("readAttributeAsObjectList", (managementEndpoint, address, name) => {
+  return cy
+    .task("execute:cli", {
+      managementApi: `${managementEndpoint}/management`,
+      operation: "read-attribute",
+      address: address,
+      name: name,
+    })
+    .then((result) => {
+      return (result as { result: object[] }).result;
     });
 });
 
@@ -86,8 +138,8 @@ declare global {
        * Create a mail session.
        * @category Specific resource
        *
-       * @param managementEndpoint - Host name of currently used container.
-       * @param mailSession - The object must contain:
+       * @param managementEndpoint - Management endpoint of the WildFly server instance.
+       * @param mailSession - Mail Session object to be created. This object must contain "mailSessionName" and "jndiName" properties.
        */
       createMailSession(
         managementEndpoint: string,
@@ -100,8 +152,8 @@ declare global {
        * Create a outbound socket binding.
        * @category Specific resource
        *
-       * @param managementEndpoint - Host name of currently used container.
-       * @param outBoundSocketBinding - The object must contain:
+       * @param managementEndpoint - Management endpoint of the WildFly server instance.
+       * @param outBoundSocketBinding - Outbound Socket Binding object to be created. This object must contain: "name", "host" and "port" properties.
        */
       createOutboundSocketBinding(
         managementEndpoint: string,
@@ -115,7 +167,7 @@ declare global {
        * Create a generic resource. The resource can't exist otherwise it fail.
        * @category Generic resource
        *
-       * @param managementEndpoint - Host name of currently used container.
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
        * @param address - CLI address of subsystem where need to be added a new resource.
        * @param parameters - if is used can specify all details of new resource.
        */
@@ -124,7 +176,7 @@ declare global {
        * Check if the resource exist if not then create it.
        * @category Generic resource
        *
-       * @param managementEndpoint - Host name of currently used container.
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
        * @param address - CLI address of subsystem where need to be added a new resource.
        * @param parameters - if is used can specify all details of new resource.
        */
@@ -133,21 +185,71 @@ declare global {
        * if the resource exist remove it.
        * @category Generic resource
        *
-       * @param managementEndpoint - Host name of currently used container.
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
        * @param address - CLI address of subsystem which will be removed.
        */
       removeAddressIfExists(managementEndpoint: string, address: string[]): void;
       /**
-       * Load via CLI saved configuration value.
+       * Executes :read-attribute operation at given address and attribute name.
+       * Returns read value as boolean
        * @category Get value
        *
-       * @param managementEndpoint - Host name of currently used container.
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
        * @param address - CLI address of subsystem.
        * @param name - name of attribute from subsystem configuration.
        *
-       * @returns The the attribute value of subsystem configuration.
+       * @returns The the attribute value of subsystem configuration as a boolean.
        */
-      getDefaultBooleanValue(managementEndpoint: string, address: string[], name: string): Chainable<boolean>;
+      readAttributeAsBoolean(managementEndpoint: string, address: string[], name: string): Chainable<boolean>;
+      /**
+       * Executes :read-attribute operation at given address and attribute name.
+       * Returns read value as object. Until further types development is ready,
+       * the user is responsible for type casting safety of the returned object.
+       * @category Get value
+       *
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
+       * @param address - CLI address of subsystem.
+       * @param name - name of attribute from subsystem configuration.
+       *
+       * @returns The the attribute value of subsystem configuration as generic object.
+       */
+      readAttributeAsObject(managementEndpoint: string, address: string[], name: string): Chainable<object>;
+      /**
+       * Executes :read-attribute operation at given address and attribute name.
+       * Returns read value as number.
+       *
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
+       * @param address - CLI address of subsystem.
+       * @param name - name of attribute from subsystem configuration.
+       *
+       * @returns The the attribute value of subsystem configuration as number.
+       */
+      readAttributeAsNumber(managementEndpoint: string, address: string[], name: string): Chainable<number>;
+      /**
+       * Executes :read-attribute operation at given address and attribute name.
+       * Returns read value as string.
+       *
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
+       * @param address - CLI address of subsystem.
+       * @param name - name of attribute from subsystem configuration.
+       *
+       * @returns The the attribute value of subsystem configuration as string.
+       */
+      readAttributeAsString(managementEndpoint: string, address: string[], name: string): Chainable<string>;
+
+      /**
+       * Executes :read-attribute operation at given address and attribute name.
+       * Returns read value as object list. Until further types development is ready,
+       * the user is responsible for type casting safety of the returned object list.
+       * @category Get value
+       *
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
+       * @param address - CLI address of subsystem.
+       * @param name - name of attribute from subsystem configuration.
+       *
+       * @returns The the attribute value of subsystem configuration as generic object.
+       */
+      readAttributeAsObjectList(managementEndpoint: string, address: string[], name: string): Chainable<object[]>;
       /**
        * Get HTML element from form.
        * @category Get value

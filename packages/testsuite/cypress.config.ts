@@ -28,7 +28,7 @@ export default defineConfig({
               ])
               .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")))
               .withStartupTimeout(333000)
-              .withCommand(["-c", configuration || "standalone-insecure.xml"])
+              .withCommand(["-c", configuration || "standalone-insecure.xml"] as string[])
               .start()
               .then((wildflyContainer) => {
                 startedContainers.set(name as string, wildflyContainer);

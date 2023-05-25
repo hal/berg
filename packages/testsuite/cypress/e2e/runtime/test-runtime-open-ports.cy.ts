@@ -5,13 +5,8 @@ describe("TESTS: Runtime => Server => Open Ports", () => {
   before(() => {
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
-      cy.task("execute:cli", {
-        managementApi: managementEndpoint + "/management",
-        operation: "read-attribute",
-        address: [],
-        name: "name",
-      }).then((result) => {
-        serverHost = (result as { result: string }).result;
+      cy.readAttributeAsString(managementEndpoint, [], "name").then((result) => {
+        serverHost = result;
       });
     });
   });
@@ -25,31 +20,33 @@ describe("TESTS: Runtime => Server => Open Ports", () => {
     cy.get(`#standalone-host-${serverHost}`).click();
     cy.get("#hal-finder-preview").should("be.visible");
     cy.get("#h2-open-ports").should("be.visible");
-    cy.task("execute:cli", {
-      managementApi: `${managementEndpoint}/management`,
-      operation: "read-attribute",
-      address: ["socket-binding-group", "standard-sockets", "socket-binding", "*"],
-      name: "bound-port",
-    }).then((result) => {
-      let boundPorts = (
-        result as {
-          result: [
-            {
-              result: number;
-              outcome: string;
+    cy.readAttributeAsObjectList(
+      `${managementEndpoint}/management`,
+      ["socket-binding-group", "standard-sockets", "socket-binding", "*"],
+      "bound-port"
+    ).then((objects) => {
+      const boundPorts = objects
+        .map((obj) => {
+          const portNumber = (obj as { result: number }).result;
+          const address = (
+            obj as {
               address: {
                 "socket-binding-group"?: string;
                 "socket-binding"?: string;
               }[];
             }
-          ];
-        }
-      ).result.map((res) => {
-        return {
-          port: res.result,
-          portName: res.address[1]["socket-binding"],
-        };
-      });
+          ).address;
+          return {
+            port: portNumber,
+            address: address,
+          };
+        })
+        .map((res) => {
+          return {
+            port: res.port,
+            portName: res.address[1]["socket-binding"],
+          };
+        });
       cy.get("#open-ports li.list-group-item").should("have.length", boundPorts.length);
       boundPorts.forEach((boundPort) => {
         cy.get(`#open-ports span.value:contains("${boundPort.port}")`).should("exist");
