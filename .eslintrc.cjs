@@ -19,5 +19,6 @@ module.exports = {
         ignoreIIFE: true,
       },
     ],
+    "@typescript-eslint/no-namespace": "off",
   },
 };

@@ -111,7 +111,7 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
 
   it("Toggle ssl", () => {
     cy.selectInTable(mailSessionTable.id, mailSessionTable.outboundSocketType);
-    cy.getDefaultBooleanValue(managementEndpoint, address, serverForm.ssl).then((defaultValue: boolean) => {
+    cy.readAttributeAsBoolean(managementEndpoint, address, serverForm.ssl).then((defaultValue: boolean) => {
       cy.editForm(serverForm.id);
       cy.flip(serverForm.id, serverForm.ssl, defaultValue);
       cy.saveForm(serverForm.id);
@@ -122,7 +122,7 @@ describe("TESTS: Configuration => Subsystems => Mail => Server", () => {
 
   it("Toggle tls", () => {
     cy.selectInTable(mailSessionTable.id, mailSessionTable.outboundSocketType);
-    cy.getDefaultBooleanValue(managementEndpoint, address, serverForm.tls).then((defaultValue: boolean) => {
+    cy.readAttributeAsBoolean(managementEndpoint, address, serverForm.tls).then((defaultValue: boolean) => {
       cy.editForm(serverForm.id);
       cy.flip(serverForm.id, serverForm.tls, defaultValue);
       cy.saveForm(serverForm.id);

@@ -79,7 +79,7 @@ describe("TESTS: Configuration => Subsystems => IO => Buffer Pool", () => {
   });
 
   it("Toggle direct-buffers", () => {
-    cy.getDefaultBooleanValue(managementEndpoint, address, bufferPoolForm.directBuffers).then(
+    cy.readAttributeAsBoolean(managementEndpoint, address, bufferPoolForm.directBuffers).then(
       (defaultValue: boolean) => {
         cy.selectInTable(itemSelectors.ioBufferPoolTableId, testDefaultValues.name);
         cy.editForm(bufferPoolForm.idUpdate);
