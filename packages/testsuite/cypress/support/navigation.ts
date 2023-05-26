@@ -11,6 +11,11 @@ Cypress.Commands.add("navigateToGenericSubsystemPage", (managementEndpoint, addr
   cy.get("#hal-root-container").should("be.visible");
 });
 
+Cypress.Commands.add("navigateToSpecificChannel", (managementEndpoint, channel) => {
+  cy.visit(`?connect=${managementEndpoint}#channel;name=${channel}`);
+  cy.get("#hal-root-container").should("be.visible");
+});
+
 Cypress.Commands.add("selectInTable", (tableId, resourceName) => {
   const tableWrapper = `#${tableId}_wrapper`;
   cy.get(`${tableWrapper} td:contains("${resourceName}")`).click();
@@ -18,6 +23,20 @@ Cypress.Commands.add("selectInTable", (tableId, resourceName) => {
 
 Cypress.Commands.add("confirmAddResourceWizard", () => {
   cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")').click({ force: true });
+});
+
+Cypress.Commands.add("confirmNextInWizard", () => {
+  cy.get('div.modal-footer > button.btn.btn-primary:contains("Next")').click({ force: true });
+});
+
+Cypress.Commands.add("confirmFinishInWizard", () => {
+  cy.get('div.modal-footer > button.btn.btn-primary:contains("Finish")').click({ force: true });
+});
+
+Cypress.Commands.add("navigateToUpdateManagerPage", (managementEndpoint, address) => {
+  const subsystemSeparator = "~";
+  cy.visit(`?connect=${managementEndpoint}#update-manager;path=${address.join(subsystemSeparator)}`);
+  cy.get("#hal-root-container").should("be.visible");
 });
 
 export {};
@@ -42,6 +61,14 @@ declare global {
        */
       navigateToGenericSubsystemPage(managementEndpoint: string, address: string[]): Chainable<void>;
       /**
+       * Load a channel page
+       * @category Navigation
+       *
+       * @param managementEndpoint - Host name of currently used container.
+       * @param channel - The name of channel.
+       */
+      navigateToSpecificChannel(managementEndpoint: string, channel: string): Chainable<void>;
+      /**
        * Select resource in table.
        * @category Navigation
        *
@@ -54,6 +81,24 @@ declare global {
        * @category Navigation
        */
       confirmAddResourceWizard(): void;
+      /**
+       * Confirm the next resource dialog
+       * @category Navigation
+       */
+      confirmNextInWizard(): void;
+      /**
+       * Confirm the finish resource dialog
+       * @category Navigation
+       */
+      confirmFinishInWizard(): void;
+      /**
+       * Load a Update Manager page
+       * @category Navigation
+       *
+       * @param managementEndpoint - Host name of currently used container.
+       * @param address - key words from URL parameter "address". e.g. "update-manager" and "updates"
+       */
+      navigateToUpdateManagerPage(managementEndpoint: string, address: string[]): Chainable<void>;
     }
   }
 }
