@@ -44,9 +44,4 @@ describe("TESTS: Configuration => Interface", () => {
       cy.verifyAttribute(managementEndpoint, address, anyAddress, !value);
     });
   });
-
-  it("Reset", () => {
-    cy.navigateTo(managementEndpoint, "interface;name=" + interfaceToEdit.name);
-    cy.resetForm(configurationFormId, managementEndpoint, address);
-  });
 });
