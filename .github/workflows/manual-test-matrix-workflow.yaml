@@ -26,6 +26,7 @@ jobs:
             "jpa",
             "jsf",
             "mail",
+            "metrics",
             "runtime",
             "system-property",
             "weld",
