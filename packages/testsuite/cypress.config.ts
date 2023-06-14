@@ -24,6 +24,7 @@ export default defineConfig({
                 {
                   source: __dirname + "/cypress/fixtures",
                   target: "/home/fixtures",
+                  mode: "z",
                 },
               ])
               .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")))
