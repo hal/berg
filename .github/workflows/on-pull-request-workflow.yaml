@@ -20,9 +20,12 @@ jobs:
         with:
           distribution: "adopt"
           java-version: "17"
-      - run: npm install
-      - run: npm run compile
-      - run: npm run lint
+      - name: Install Dependencies
+        run: npm install
+      - name: Compile TypeScript
+        run: npm run compile
+      - name: Lint
+        run: npm run lint
       - name: Get changed files
         id: changed-files-specific
         uses: tj-actions/changed-files@v36
@@ -37,7 +40,8 @@ jobs:
           SPECS=$(echo ${{ steps.changed-files-specific.outputs.all_changed_files }} | sed 's/packages/testsuite//g')
           npm test -- --specs=$SPECS
 
-      - run: npm run format
+      - name: Format code
+        run: npm run format
       - name: Fetch last 2 commits
         uses: actions/checkout@master
         with:
