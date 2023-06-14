@@ -74,7 +74,7 @@ export default defineConfig({
           });
         },
         "start:postgres:container": ({ name, environmentProperties }) => {
-          const postgreContainerBuilder = new GenericContainer("postgres")
+          const postgreContainerBuilder = new GenericContainer(process.env.POSTGRES_IMAGE || "postgres")
             .withPullPolicy(new AlwaysPullPolicy())
             .withName(name as string)
             .withNetworkAliases(name as string)
@@ -99,7 +99,7 @@ export default defineConfig({
           });
         },
         "start:mysql:container": ({ name, environmentProperties }) => {
-          const mysqlContainerBuilder = new GenericContainer("mysql")
+          const mysqlContainerBuilder = new GenericContainer(process.env.MYSQL_IMAGE || "mysql")
             .withPullPolicy(new AlwaysPullPolicy())
             .withName(name as string)
             .withNetworkAliases(name as string)
@@ -123,7 +123,7 @@ export default defineConfig({
           });
         },
         "start:mariadb:container": ({ name, environmentProperties }) => {
-          const mariadbContainerBuilder = new GenericContainer("mariadb")
+          const mariadbContainerBuilder = new GenericContainer(process.env.MARIADB_IMAGE || "mariadb")
             .withPullPolicy(new AlwaysPullPolicy())
             .withName(name as string)
             .withNetworkAliases(name as string)
@@ -146,7 +146,9 @@ export default defineConfig({
           });
         },
         "start:sqlserver:container": ({ name, environmentProperties }) => {
-          const sqlserverContainerBuilder = new GenericContainer("mcr.microsoft.com/mssql/server:2022-latest")
+          const sqlserverContainerBuilder = new GenericContainer(
+            process.env.MSSQL_IMAGE || "mcr.microsoft.com/mssql/server:2022-latest"
+          )
             .withPullPolicy(new AlwaysPullPolicy())
             .withName(name as string)
             .withNetworkAliases(name as string)
