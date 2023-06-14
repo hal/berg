@@ -205,7 +205,6 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "3");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "JDBC Driver");
     cy.text("ds-configuration-driver-form", "driver-name", sqlserverDriverName);
-    cy.text("ds-configuration-driver-form", "driver-module-name", sqlserverDriverModuleName);
     cy.get(".modal-footer .btn-primary").click();
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "4");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "Connection");
@@ -245,7 +244,6 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "3");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "JDBC Driver");
     cy.text("ds-configuration-driver-form", "driver-name", sqlserverDriverName);
-    cy.text("ds-configuration-driver-form", "driver-module-name", sqlserverDriverModuleName);
     cy.get(".modal-footer .btn-primary").click();
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "4");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "XA Properties");
