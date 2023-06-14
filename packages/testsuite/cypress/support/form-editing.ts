@@ -13,15 +13,16 @@ Cypress.Commands.add("saveForm", (formId) => {
 Cypress.Commands.add("resetForm", (formId, managementApi, address) => {
   const resetButton = "#" + formId + ' a.clickable[data-operation="reset"';
   cy.get(resetButton).click();
-  cy.get('body').then($body => {
+  cy.get("body").then(($body) => {
     if ($body.find(".modal-footer .btn-hal.btn-primary").length) {
       cy.get(".modal-footer .btn-hal.btn-primary").click({ force: true });
       cy.verifySuccess();
     } else {
-      cy.get(".toast-notifications-list-pf .alert-warning").contains("None of the attributes could be reset.")
+      cy.get(".toast-notifications-list-pf .alert-warning")
+        .contains("None of the attributes could be reset.")
         .should("be.visible");
     }
-  })
+  });
   cy.task("execute:cli", {
     managementApi: `${managementApi}/management`,
     operation: "read-resource-description",
