@@ -152,7 +152,12 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, relativeTo, "jboss.server.base.dir");
     cy.saveForm(configurationFormId);
-    cy.verifyAttribute(managementEndpoint, address.concat(deploymentScanners.update.name), relativeTo, "jboss.server.base.dir");
+    cy.verifyAttribute(
+      managementEndpoint,
+      address.concat(deploymentScanners.update.name),
+      relativeTo,
+      "jboss.server.base.dir"
+    );
   });
 
   it("Toggle runtime-failure-causes-rollback", () => {

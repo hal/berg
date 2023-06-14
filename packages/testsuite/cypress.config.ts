@@ -15,7 +15,7 @@ export default defineConfig({
       on("task", {
         "start:wildfly:container": ({ name, configuration }) => {
           return new Promise((resolve, reject) => {
-            new GenericContainer(process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly:latest")
+            new GenericContainer(process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest")
               .withName(name as string)
               .withNetworkMode(config.env.NETWORK_NAME as string)
               .withNetworkAliases("wildfly")
