@@ -126,6 +126,12 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
     );
   });
 
+  it("Reset", () => {
+    cy.navigateTo(managementEndpoint, "distributable-web");
+    cy.get("#dw-configuration-item").click();
+    cy.resetForm(configurationFormId, managementEndpoint, ["subsystem", "distributable-web"]);
+  });
+
   after(() => {
     cy.task("stop:containers");
   });
