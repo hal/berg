@@ -23,6 +23,20 @@ jobs:
       - run: npm install
       - run: npm run compile
       - run: npm run lint
+      - name: Get changed files
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v36
+        with:
+          separator: ","
+          files: |
+            packages/testsuite/cypress/e2e/**/*.cy.ts
+      - name: "Run tests of modified files"
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: |
+          cd packages/testsuite
+          SPECS=$(echo ${{ steps.changed-files-specific.outputs.all_changed_files }} | sed 's/packages/testsuite//g')
+          npm test -- --specs=$SPECS
+
       - run: npm run format
       - name: Fetch last 2 commits
         uses: actions/checkout@master
