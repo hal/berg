@@ -63,7 +63,7 @@ jobs:
       - name: "Run test(s)"
         run: "cd packages/testsuite && npm test -- --browser=firefox --specs=cypress/e2e/${{ matrix.specs }}"
       - name: "Archive test report(s) and video(s)"
-        if: '!cancelled()'
+        if: ${{ !cancelled() }}
         uses: "actions/upload-artifact@v3"
         with:
           name: "${{ github.run_id}}-${{ strategy.job-index }}-artifacts"
