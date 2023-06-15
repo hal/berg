@@ -16,7 +16,7 @@ const optionDefinitions: OptionDefinition[] = [
   const options = commandLineArgs(optionDefinitions);
   console.log(options);
   const berg = await Berg.getInstance();
-  await cypress.run({
+  const testRunResult = await cypress.run({
     browser: options.browser as string,
     env: {
       NETWORK_NAME: berg.getNetwork().getName(),
@@ -30,4 +30,7 @@ const optionDefinitions: OptionDefinition[] = [
     },
   });
   await berg.stop();
+  if (testRunResult.status == "failed" || testRunResult.totalFailed > 0) {
+    process.exit(1);
+  }
 })();
