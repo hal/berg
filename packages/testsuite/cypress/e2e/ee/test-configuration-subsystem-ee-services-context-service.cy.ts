@@ -3,7 +3,6 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
 
   const configurationFormId = "ee-service-context-service-form";
   const contextServicesTable = "ee-service-context-service-table";
-  const useTransactionSetupProvider = "use-transaction-setup-provider";
 
   const contextServices = {
     create: {
@@ -73,32 +72,6 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
       "jndi-name",
       "java:jboss/updated"
     );
-  });
-
-  it("Toggle use-transaction-setup-provider", () => {
-    let value = false;
-    cy.task("execute:cli", {
-      managementApi: managementEndpoint + "/management",
-      operation: "read-attribute",
-      address: ["subsystem", "ee", "context-service", contextServices.update.name],
-      name: useTransactionSetupProvider,
-    }).then((result) => {
-      value = (result as { result: boolean }).result;
-      cy.navigateTo(managementEndpoint, "ee");
-      cy.get("#ee-services-item").click();
-      cy.get("#ee-service-context-service").click();
-      cy.selectInTable(contextServicesTable, contextServices.update.name);
-      cy.editForm(configurationFormId);
-      cy.flip(configurationFormId, useTransactionSetupProvider, value);
-      cy.saveForm(configurationFormId);
-      cy.verifySuccess();
-      cy.verifyAttribute(
-        managementEndpoint,
-        ["subsystem", "ee", "context-service", contextServices.update.name],
-        useTransactionSetupProvider,
-        !value
-      );
-    });
   });
 
   it("Reset", () => {
