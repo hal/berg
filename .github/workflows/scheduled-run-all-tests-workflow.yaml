@@ -8,6 +8,7 @@ concurrency:
 jobs:
   test_matrix:
     strategy:
+      fail-fast: false
       matrix:
         specs:
           [
@@ -64,6 +65,7 @@ jobs:
       - name: "Run test(s)"
         run: "cd packages/testsuite && npm test -- --browser=chrome --specs=cypress/e2e/${{ matrix.specs }}/*.cy.ts"
       - name: "Archive test report(s) and video(s)"
+        if: ${{ !cancelled() }}
         uses: "actions/upload-artifact@v3"
         with:
           name: "${{ github.run_id}}-${{ strategy.job-index }}-artifacts"
@@ -72,6 +74,7 @@ jobs:
             packages/testsuite/cypress/videos
   process_report:
     name: "Collect results & deploy GH pages"
+    if: ${{ !cancelled() }}
     needs: test_matrix
     runs-on: ubuntu-latest
     steps:
