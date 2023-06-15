@@ -99,42 +99,6 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
     cy.verifyAttribute(managementEndpoint, address, "default-distinct-name", "distinct-name-updated");
   });
 
-  it("Edit default-entity-bean-instance-pool", () => {
-    cy.navigateTo(managementEndpoint, "ejb3-configuration");
-    cy.get("#ejb3-container-item").click();
-    cy.get("#ejb3-configuration-item").click();
-    cy.editForm(configurationFormId);
-    cy.text(configurationFormId, "default-entity-bean-instance-pool", "default-entity-bean-instance-pool-updated");
-    cy.saveForm(configurationFormId);
-    cy.verifySuccess();
-    cy.verifyAttribute(
-      managementEndpoint,
-      address,
-      "default-entity-bean-instance-pool",
-      "default-entity-bean-instance-pool-updated"
-    );
-  });
-
-  it("Toggle default-entity-bean-optimistic-locking", () => {
-    let value = false;
-    cy.task("execute:cli", {
-      managementApi: managementEndpoint + "/management",
-      operation: "read-attribute",
-      address: address,
-      name: "default-entity-bean-optimistic-locking",
-    }).then((result) => {
-      value = (result as { result: boolean }).result;
-      cy.navigateTo(managementEndpoint, "ejb3-configuration");
-      cy.get("#ejb3-container-item").click();
-      cy.get("#ejb3-configuration-item").click();
-      cy.editForm(configurationFormId);
-      cy.flip(configurationFormId, "default-entity-bean-optimistic-locking", value);
-      cy.saveForm(configurationFormId);
-      cy.verifySuccess();
-      cy.verifyAttribute(managementEndpoint, address, "default-entity-bean-optimistic-locking", !value);
-    });
-  });
-
   it("Edit default-mdb-instance-pool", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-container-item").click();
