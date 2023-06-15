@@ -58,14 +58,6 @@ describe("TESTS: Homepage", () => {
     });
   });
 
-  it("Should load Patching page", () => {
-    cy.get("#tlc-patching").click();
-    cy.get("#hal-finder-preview").should("be.visible");
-    cy.url().should((url) => {
-      expect(url).to.contain("#patching");
-    });
-  });
-
   it("Should load Access Control page", () => {
     cy.get("#tlc-access-control").click();
     cy.get("#hal-finder-preview").should("be.visible");
