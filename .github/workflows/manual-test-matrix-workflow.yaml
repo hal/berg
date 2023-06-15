@@ -6,6 +6,7 @@ concurrency:
 jobs:
   test_matrix:
     strategy:
+      fail-fast: false
       matrix:
         specs:
           [
@@ -33,7 +34,6 @@ jobs:
           ]
     name: "Run tests"
     runs-on: "ubuntu-latest"
-    continue-on-error: true
     steps:
       - name: "Checkout project"
         uses: actions/checkout@v3
@@ -63,6 +63,7 @@ jobs:
       - name: "Run test(s)"
         run: "cd packages/testsuite && npm test -- --browser=firefox --specs=cypress/e2e/${{ matrix.specs }}"
       - name: "Archive test report(s) and video(s)"
+        if: '!cancelled()'
         uses: "actions/upload-artifact@v3"
         with:
           name: "${{ github.run_id}}-${{ strategy.job-index }}-artifacts"
