@@ -73,6 +73,7 @@ jobs:
   process_report:
     name: "Collect results & deploy GH pages"
     needs: test_matrix
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
       - name: "Download artifacts"
