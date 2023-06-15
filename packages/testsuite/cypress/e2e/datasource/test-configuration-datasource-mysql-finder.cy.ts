@@ -189,7 +189,6 @@ describe("TESTS: Configuration => Datasource => MySQL (Finder)", () => {
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "3");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "JDBC Driver");
     cy.text("ds-configuration-driver-form", "driver-name", mysqlDriver);
-    cy.text("ds-configuration-driver-form", "driver-module-name", mysqlDriverModuleName);
     cy.get(".modal-footer .btn-primary").click();
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "4");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "Connection");
@@ -229,7 +228,6 @@ describe("TESTS: Configuration => Datasource => MySQL (Finder)", () => {
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "3");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "JDBC Driver");
     cy.text("ds-configuration-driver-form", "driver-name", mysqlDriver);
-    cy.text("ds-configuration-driver-form", "driver-module-name", mysqlDriverModuleName);
     cy.get(".modal-footer .btn-primary").click();
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "4");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "XA Properties");

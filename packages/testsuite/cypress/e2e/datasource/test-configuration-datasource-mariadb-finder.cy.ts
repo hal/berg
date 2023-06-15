@@ -184,7 +184,6 @@ describe("TESTS: Configuration => Datasource => MariaDB (Finder)", () => {
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "3");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "JDBC Driver");
     cy.text("ds-configuration-driver-form", "driver-name", mariadbDriver);
-    cy.text("ds-configuration-driver-form", "driver-module-name", mariadbDriverModuleName);
     cy.get(".modal-footer .btn-primary").click();
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "4");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "Connection");
@@ -224,7 +223,6 @@ describe("TESTS: Configuration => Datasource => MariaDB (Finder)", () => {
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "3");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "JDBC Driver");
     cy.text("ds-configuration-driver-form", "driver-name", mariadbDriver);
-    cy.text("ds-configuration-driver-form", "driver-module-name", mariadbDriverModuleName);
     cy.get(".modal-footer .btn-primary").click();
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "4");
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-title").should("have.text", "XA Properties");
