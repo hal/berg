@@ -58,6 +58,20 @@ describe("TESTS: Homepage", () => {
     });
   });
 
+  it("Should load Update Manager page if product version is EAP", function() {
+    cy.get("#about-modal").then(($productInfo) => {
+      if ($productInfo.text().includes("EAP")) {
+        cy.get("#tlc-installer").click();
+        cy.get("#hal-finder-preview").should("be.visible");
+        cy.url().should((url) => {
+          expect(url).to.contain("#update-manager");
+        });
+      } else {
+        this.skip();
+      }
+    });
+  });
+
   it("Should load Access Control page", () => {
     cy.get("#tlc-access-control").click();
     cy.get("#hal-finder-preview").should("be.visible");

@@ -33,7 +33,10 @@ jobs:
             "weld",
             "homepage",
             "smoke",
+            "update-manager",
           ]
+        exclude:
+          - specs: "update-manager"
     name: "Run tests"
     runs-on: "ubuntu-latest"
     steps:
