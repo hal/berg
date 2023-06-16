@@ -118,6 +118,15 @@ Cypress.Commands.add("clearAttribute", (formId, attributeName) => {
   cy.formInput(formId, attributeName).trigger("change");
 });
 
+Cypress.Commands.add("clearListAttributeItems", (attributeName) => {
+  cy.get(attributeName)
+    .get("div.tag-manager-container")
+    .children("span")
+    .each((span) => {
+      cy.wrap(span).find("a[href]").click({ multiple: true });
+    });
+});
+
 export {};
 /* eslint @typescript-eslint/no-namespace: off */
 declare global {
@@ -193,6 +202,13 @@ declare global {
        * @param value - the value which needs to be write to form input.
        */
       text(formId: string, attributeName: string, value: string | number): Chainable<void>;
+      /**
+       * Clear all selected list attribute items from the form input.
+       * @category Data removing
+       *
+       * @param attributeName - name of form input.
+       */
+      clearListAttributeItems(attributeName: string): Chainable<void>;
       /**
        * Remove text value from form input.
        * @category Data inserting
