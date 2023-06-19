@@ -1,9 +1,8 @@
 describe("TESTS: Homepage", () => {
-  const specName = Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_");
   let managementEndpoint: string;
 
   before(() => {
-    cy.task("start:wildfly:container", { name: specName }).then((result) => {
+    cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
     });
   });
@@ -58,17 +57,12 @@ describe("TESTS: Homepage", () => {
     });
   });
 
-  it("Should load Update Manager page if product version is EAP", function() {
-    cy.get("#about-modal").then(($productInfo) => {
-      if ($productInfo.text().includes("EAP")) {
-        cy.get("#tlc-installer").click();
-        cy.get("#hal-finder-preview").should("be.visible");
-        cy.url().should((url) => {
-          expect(url).to.contain("#update-manager");
-        });
-      } else {
-        this.skip();
-      }
+  it("Should load Update Manager page", function () {
+    cy.skipIfNot(cy.isEAP(managementEndpoint), this);
+    cy.get("#tlc-installer").click();
+    cy.get("#hal-finder-preview").should("be.visible");
+    cy.url().should((url) => {
+      expect(url).to.contain("#update-manager");
     });
   });
 
