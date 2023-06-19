@@ -129,6 +129,12 @@ Cypress.Commands.add("formInput", (configurationFormId, attributeName) => {
   return cy.get("#" + configurationFormId + "-" + attributeName + "-editing");
 });
 
+Cypress.Commands.add("isEAP", (managementEndpoint) => {
+  return cy.readAttributeAsString(managementEndpoint, [], "product-name").then((productName) => {
+    return productName.includes("EAP");
+  });
+});
+
 export {};
 
 declare global {
@@ -261,6 +267,15 @@ declare global {
        */
 
       formInput(configurationFormId: string, attributeName: string): Chainable<JQuery<HTMLElement>>;
+
+      /**
+       * Executes :read-attribute(name=product-name) at the root address and determines, whether the
+       * running WildFly server instance is WildFly/EAP
+       * @category Get value
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
+       * @returns true if the running server instance is EAP
+       */
+      isEAP(managementEndpoint: string): Chainable<boolean>;
     }
   }
 }
