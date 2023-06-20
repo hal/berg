@@ -1,6 +1,6 @@
 import axios from "axios";
 import { defineConfig } from "cypress";
-import { GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
+import { AlwaysPullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
 import { Environment } from "testcontainers/dist/src/docker/types";
 
 export default defineConfig({
@@ -16,6 +16,7 @@ export default defineConfig({
         "start:wildfly:container": ({ name, configuration }) => {
           return new Promise((resolve, reject) => {
             new GenericContainer(process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest")
+              .withPullPolicy(new AlwaysPullPolicy())
               .withName(name as string)
               .withNetworkMode(config.env.NETWORK_NAME as string)
               .withNetworkAliases("wildfly")
@@ -74,6 +75,7 @@ export default defineConfig({
         },
         "start:postgres:container": ({ name, environmentProperties }) => {
           const postgreContainerBuilder = new GenericContainer("postgres")
+            .withPullPolicy(new AlwaysPullPolicy())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
@@ -98,6 +100,7 @@ export default defineConfig({
         },
         "start:mysql:container": ({ name, environmentProperties }) => {
           const mysqlContainerBuilder = new GenericContainer("mysql")
+            .withPullPolicy(new AlwaysPullPolicy())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withExposedPorts(3306)
@@ -121,6 +124,7 @@ export default defineConfig({
         },
         "start:mariadb:container": ({ name, environmentProperties }) => {
           const mariadbContainerBuilder = new GenericContainer("mariadb")
+            .withPullPolicy(new AlwaysPullPolicy())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withExposedPorts(3306)
@@ -143,6 +147,7 @@ export default defineConfig({
         },
         "start:sqlserver:container": ({ name, environmentProperties }) => {
           const sqlserverContainerBuilder = new GenericContainer("mcr.microsoft.com/mssql/server:2022-latest")
+            .withPullPolicy(new AlwaysPullPolicy())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
