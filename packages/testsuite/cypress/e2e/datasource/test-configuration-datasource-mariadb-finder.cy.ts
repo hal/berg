@@ -37,15 +37,19 @@ describe("TESTS: Configuration => Datasource => MariaDB (Finder)", () => {
   let managementEndpoint: string;
 
   before(() => {
-    cy.task("start:mariadb:container", {
-      name: mariadbContainerName,
-      environmentProperties: {
-        MARIADB_USER: mariadbUser,
-        MARIADB_PASSWORD: mariadbPassword,
-        MARIADB_DATABASE: mariadbDatabaseName,
-        MARIADB_ROOT_PASSWORD: "redhat",
+    cy.task(
+      "start:mariadb:container",
+      {
+        name: mariadbContainerName,
+        environmentProperties: {
+          MARIADB_USER: mariadbUser,
+          MARIADB_PASSWORD: mariadbPassword,
+          MARIADB_DATABASE: mariadbDatabaseName,
+          MARIADB_ROOT_PASSWORD: "redhat",
+        },
       },
-    });
+      { timeout: 120_000 }
+    );
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
       cy.executeInWildflyContainer(

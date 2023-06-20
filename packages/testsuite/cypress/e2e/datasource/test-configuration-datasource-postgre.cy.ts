@@ -22,14 +22,18 @@ describe("TESTS: Configuration => Datasource => PostgreSQL", () => {
   let managementEndpoint: string;
 
   before(() => {
-    cy.task("start:postgres:container", {
-      name: postgresContainerName,
-      environmentProperties: {
-        POSTGRES_USER: postgresUser,
-        POSTGRES_PASSWORD: postgresPassword,
-        POSTGRES_DB: postgresDatabaseName,
+    cy.task(
+      "start:postgres:container",
+      {
+        name: postgresContainerName,
+        environmentProperties: {
+          POSTGRES_USER: postgresUser,
+          POSTGRES_PASSWORD: postgresPassword,
+          POSTGRES_DB: postgresDatabaseName,
+        },
       },
-    });
+      { timeout: 120_000 }
+    );
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
       cy.executeInWildflyContainer(
