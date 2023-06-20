@@ -99,30 +99,90 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
           name: "default-cache",
           value: cacheContainers.update["default-cache"].name,
         });
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.update.name],
-          {
-            "cache-container": infinispanSessionManagements.update["cache-container"],
-            granularity: "SESSION",
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.delete.name],
-          {
-            "cache-container": infinispanSessionManagements.delete["cache-container"],
-            granularity: "SESSION",
-          }
-        );
-        cy.addAddress(
-          managementEndpoint,
-          ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.reset.name],
-          {
-            "cache-container": infinispanSessionManagements.reset["cache-container"],
-            granularity: "SESSION",
-          }
-        );
+        cy.task("execute:cli", {
+          operation: "composite",
+          managementApi: `${managementEndpoint}/management`,
+          steps: [
+            {
+              operation: "add",
+              address: [
+                "subsystem",
+                "distributable-web",
+                "infinispan-session-management",
+                infinispanSessionManagements.update.name,
+              ],
+              "cache-container": infinispanSessionManagements.update["cache-container"],
+              granularity: "SESSION",
+            },
+            {
+              operation: "add",
+              address: [
+                "subsystem",
+                "distributable-web",
+                "infinispan-session-management",
+                infinispanSessionManagements.update.name,
+                "affinity",
+                "local",
+              ],
+            },
+          ],
+        });
+        cy.task("execute:cli", {
+          operation: "composite",
+          managementApi: `${managementEndpoint}/management`,
+          steps: [
+            {
+              operation: "add",
+              address: [
+                "subsystem",
+                "distributable-web",
+                "infinispan-session-management",
+                infinispanSessionManagements.delete.name,
+              ],
+              "cache-container": infinispanSessionManagements.delete["cache-container"],
+              granularity: "SESSION",
+            },
+            {
+              operation: "add",
+              address: [
+                "subsystem",
+                "distributable-web",
+                "infinispan-session-management",
+                infinispanSessionManagements.delete.name,
+                "affinity",
+                "local",
+              ],
+            },
+          ],
+        });
+        cy.task("execute:cli", {
+          operation: "composite",
+          managementApi: `${managementEndpoint}/management`,
+          steps: [
+            {
+              operation: "add",
+              address: [
+                "subsystem",
+                "distributable-web",
+                "infinispan-session-management",
+                infinispanSessionManagements.reset.name,
+              ],
+              "cache-container": infinispanSessionManagements.reset["cache-container"],
+              granularity: "SESSION",
+            },
+            {
+              operation: "add",
+              address: [
+                "subsystem",
+                "distributable-web",
+                "infinispan-session-management",
+                infinispanSessionManagements.reset.name,
+                "affinity",
+                "local",
+              ],
+            },
+          ],
+        });
       });
   });
 
