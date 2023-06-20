@@ -59,7 +59,7 @@ describe("TESTS: Homepage", () => {
 
   it("Should load Update Manager page", function () {
     cy.skipIfNot(cy.isEAP(managementEndpoint), this);
-    cy.get("#tlc-installer").click();
+    cy.get("#tlc-update-manager").click();
     cy.get("#hal-finder-preview").should("be.visible");
     cy.url().should((url) => {
       expect(url).to.contain("#update-manager");
