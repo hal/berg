@@ -1,7 +1,11 @@
 Cypress.Commands.add("startWildflyContainer", () => {
-  return cy.task("start:wildfly:container", {
-    name: Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_"),
-  });
+  return cy.task(
+    "start:wildfly:container",
+    {
+      name: Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_"),
+    },
+    { timeout: 240_000 }
+  );
 });
 
 Cypress.Commands.add("executeInWildflyContainer", (command) => {

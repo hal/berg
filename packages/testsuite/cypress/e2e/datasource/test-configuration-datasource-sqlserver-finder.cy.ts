@@ -54,13 +54,17 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
   let managementEndpoint: string;
 
   before(() => {
-    cy.task("start:sqlserver:container", {
-      name: "sqlserver",
-      environmentProperties: {
-        ACCEPT_EULA: "Y",
-        MSSQL_SA_PASSWORD: sqlserverPassword,
+    cy.task(
+      "start:sqlserver:container",
+      {
+        name: "sqlserver",
+        environmentProperties: {
+          ACCEPT_EULA: "Y",
+          MSSQL_SA_PASSWORD: sqlserverPassword,
+        },
       },
-    });
+      { timeout: 360_000 }
+    );
     cy.startWildflyContainer()
       .then((result) => {
         managementEndpoint = result as string;
