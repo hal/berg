@@ -60,6 +60,10 @@ Cypress.Commands.add("resetForm", (formId, managementApi, address) => {
   });
 });
 
+Cypress.Commands.add("help", () => {
+  cy.get(`span.form-link-label:contains("Help")`).click();
+});
+
 Cypress.Commands.add("addInTable", (tableId) => {
   const tableWrapper = `#${tableId}_wrapper`;
   cy.get(`${tableWrapper} button.btn.btn-default > span:contains("Add")`).click();
@@ -155,6 +159,12 @@ declare global {
        * @param address - Indexes contains values between "/" from request address.
        */
       resetForm(formId: string, managementApi: string, address: string[]): Chainable<void>;
+      /**
+       * Click on "Help" button to show documentation for attributes on editing form
+       * @category Form Editing
+       *
+       */
+      help(): Chainable<void>;
       /**
        * Click on "add" to create a new resource in a table.
        * @category Resource management
