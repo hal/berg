@@ -35,6 +35,8 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
 
   it("Edit default-authentication-context", () => {
     cy.navigateTo(managementEndpoint, "elytron");
+    // this call is just workaround to prevent of occuring JBEAP-25005
+    cy.help();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "default-authentication-context", authenticationContextToUpdate);
     cy.saveForm(configurationFormId);
@@ -44,6 +46,8 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
 
   it("Edit default-ssl-context", () => {
     cy.navigateTo(managementEndpoint, "elytron");
+    // this call is just workaround to prevent of occuring JBEAP-25005
+    cy.help();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "default-ssl-context", sslContextToUpdate);
     cy.saveForm(configurationFormId);
@@ -53,6 +57,8 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
 
   it("Edit disallowed-providers", () => {
     cy.navigateTo(managementEndpoint, "elytron");
+    // this call is just workaround to prevent of occuring JBEAP-25005
+    cy.help();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "disallowed-providers", "DisallowedProvider");
     cy.formInput(configurationFormId, "disallowed-providers").type("{enter}").trigger("change");
@@ -63,6 +69,8 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
 
   it("Edit final-providers", () => {
     cy.navigateTo(managementEndpoint, "elytron");
+    // this call is just workaround to prevent of occuring JBEAP-25005
+    cy.help();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "final-providers", providerLoaders.final.name);
     cy.saveForm(configurationFormId);
@@ -72,6 +80,8 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
 
   it("Edit initial-providers", () => {
     cy.navigateTo(managementEndpoint, "elytron");
+    // this call is just workaround to prevent of occuring JBEAP-25005
+    cy.help();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "initial-providers", providerLoaders.initial.name);
     cy.saveForm(configurationFormId);
@@ -89,6 +99,8 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
     }).then((result) => {
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "elytron");
+      // this call is just workaround to prevent of occuring JBEAP-25005
+      cy.help();
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, "register-jaspi-factory", value);
       cy.saveForm(configurationFormId);
@@ -99,6 +111,8 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Global Se
 
   it("Edit security-properties", () => {
     cy.navigateTo(managementEndpoint, "elytron");
+    // this call is just workaround to prevent of occuring JBEAP-25005
+    cy.help();
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "security-properties", "prop=val");
     cy.formInput(configurationFormId, "security-properties").type("{enter}").trigger("change");
