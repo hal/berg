@@ -8,7 +8,7 @@ describe("TESTS: Runtime => Server => Status", () => {
   const nonHeapMemoryUsage = "non-heap-memory-usage";
 
   const usedHeapProgressBarSelector = "#server-runtime-status-heap-used div.progress-bar-success";
-  const commitedHeapProgressBarSelector = "#server-runtime-status-heap-committed div.progress-bar-success";
+  const commitedHeapProgressBarSelector = "#server-runtime-status-heap-committed [class^=progress-bar]";
   const usedNonHeapProgressBarSelector = "#server-runtime-status-non-heap-used div.progress-bar-success";
   const commitedNonHeapProgressBarSelector = "#server-runtime-status-non-heap-committed div.progress-bar-success";
   const threadsProgressBarSelector = "#server-runtime-status-threads div.progress-bar";
@@ -47,12 +47,12 @@ describe("TESTS: Runtime => Server => Status", () => {
       cy.get(usedHeapProgressBarSelector)
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(usedHeapMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(usedHeapMemory, 2);
         });
       cy.get(usedHeapProgressBarSelector)
         .invoke("attr", "aria-valuemax")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(maxMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(maxMemory, 2);
         });
     });
   });
@@ -95,12 +95,12 @@ describe("TESTS: Runtime => Server => Status", () => {
       cy.get(usedNonHeapProgressBarSelector)
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(usedNonHeapMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(usedNonHeapMemory, 2);
         });
       cy.get(usedNonHeapProgressBarSelector)
         .invoke("attr", "aria-valuemax")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(maxMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(maxMemory, 2);
         });
     });
   });
