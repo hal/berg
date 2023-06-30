@@ -73,6 +73,8 @@ describe("TESTS: Update Manager => Channels", () => {
 
   it("Update gav channel parameters", () => {
     cy.navigateToSpecificChannel(managementEndpoint, channels.gav.name);
+    // Same workaround as for JBEAP-25005 and JBEAP-25046 when try to edit form the cypress is to fast
+    cy.help();
     cy.editForm(channelForm);
     cy.formInput(channelForm, "repositories")
       .clear()
@@ -85,6 +87,8 @@ describe("TESTS: Update Manager => Channels", () => {
 
   it("Update url channel parameters", () => {
     cy.navigateToSpecificChannel(managementEndpoint, channels.url.name);
+    // Same workaround as for JBEAP-25005 and JBEAP-25046 when try to edit form the cypress is to fast
+    cy.help();
     cy.editForm(channelForm);
     cy.formInput(channelForm, "repositories")
       .clear()

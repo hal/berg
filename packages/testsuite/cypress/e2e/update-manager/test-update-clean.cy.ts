@@ -14,7 +14,7 @@ describe("TESTS: Update Manager => Updates => Clean", () => {
     cy.task("stop:containers");
   });
 
-  it("Update server by custom patch", () => {
+  it("Clean update cache", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
     cy.get("#update-manager-clean").click();
     cy.verifySuccess();
