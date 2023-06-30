@@ -25,6 +25,10 @@ Cypress.Commands.add("confirmAddResourceWizard", () => {
   cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Add")').click({ force: true });
 });
 
+Cypress.Commands.add("closeWizard", () => {
+  cy.get("div.modal-header > button.close >").click({ force: true, multiple: true });
+});
+
 Cypress.Commands.add("confirmNextInWizard", () => {
   cy.get('div.modal-footer > button.btn.btn-primary:contains("Next")').click({ force: true });
 });
@@ -83,6 +87,11 @@ declare global {
       confirmAddResourceWizard(): void;
       /**
        * Confirm the next resource dialog
+       * @category Navigation
+       */
+      closeWizard(): void;
+      /**
+       * Close the dialog
        * @category Navigation
        */
       confirmNextInWizard(): void;

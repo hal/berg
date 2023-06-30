@@ -10,6 +10,11 @@ Cypress.Commands.add("saveForm", (formId) => {
   cy.get(saveButton).scrollIntoView().click();
 });
 
+Cypress.Commands.add("cancelForm", (formId) => {
+  const saveButton = "#" + formId + '-editing button.btn.btn-hal.btn-default:contains("Cancel")';
+  cy.get(saveButton).scrollIntoView().click();
+});
+
 Cypress.Commands.add("resetForm", (formId, managementApi, address) => {
   const resetButton = "#" + formId + ' a.clickable[data-operation="reset"';
   cy.get(resetButton).click();
@@ -159,6 +164,13 @@ declare global {
        * @param address - Indexes contains values between "/" from request address.
        */
       resetForm(formId: string, managementApi: string, address: string[]): Chainable<void>;
+      /**
+       * Click on "Cancel" for cancelling editing mode.
+       * @category Form Editing
+       *
+       * @param formId - The ID of section which need to be canceled.
+       */
+      cancelForm(formId: string): Chainable<void>;
       /**
        * Click on "Help" button to show documentation for attributes on editing form
        * @category Form Editing
