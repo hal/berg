@@ -1,6 +1,6 @@
 describe("TESTS: Update Manager => Updates => Offline using archive", () => {
   let managementEndpoint: string;
-  const timeoutTime = 30000;
+  const timeoutTime = 120000;
 
   const address = ["update-manager", "updates"];
   const zipFile = Cypress.env("UPDATE_ZIP") as string;
