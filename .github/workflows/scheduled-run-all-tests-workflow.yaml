@@ -30,6 +30,7 @@ jobs:
             "mail",
             "metrics",
             "runtime",
+            "security-manager",
             "system-property",
             "weld",
             "homepage",

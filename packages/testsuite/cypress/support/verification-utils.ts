@@ -4,6 +4,12 @@ Cypress.Commands.add("verifySuccess", () => {
   cy.get(".toast-notifications-list-pf .alert-success").should("be.visible");
 });
 
+Cypress.Commands.add("verifyElementHasClass", (formId, attributeName, elementName, className) => {
+  cy.formInput(formId, attributeName)
+    .get(elementName + "." + className)
+    .should("exist");
+});
+
 Cypress.Commands.add("verifyAttribute", (managementEndpoint, address, attributeName, expectedValue) => {
   cy.task("execute:cli", {
     managementApi: managementEndpoint + "/management",
@@ -69,6 +75,21 @@ declare global {
        * @category Verification
        */
       verifySuccess(): Chainable<void>;
+      /**
+       * Verify the specified HTML element has a specified class.
+       * @category Verification
+       *
+       * @param configurationFormId - The ID of section with the form input.
+       * @param attributeName - name of form input.
+       * @param elementName - Name of HTML element
+       * @param className - Name of class that has to be presented in the HTML element
+       */
+      verifyElementHasClass(
+        formId: string,
+        attributeName: string,
+        elementName: string,
+        className: string
+      ): Chainable<void>;
       /**
        * Verify the specific configuration is saved.
        * @category Verification
