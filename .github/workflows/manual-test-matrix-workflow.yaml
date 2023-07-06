@@ -35,6 +35,7 @@ jobs:
             "homepage",
             "smoke",
             "update-manager",
+            "undertow",
           ]
         exclude:
           - specs: "update-manager"
