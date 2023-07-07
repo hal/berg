@@ -32,6 +32,7 @@ jobs:
             "runtime",
             "security-manager",
             "system-property",
+            "transaction",
             "weld",
             "homepage",
             "smoke",
