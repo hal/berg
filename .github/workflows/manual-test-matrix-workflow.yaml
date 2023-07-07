@@ -29,6 +29,7 @@ jobs:
             "metrics",
             "runtime",
             "system-property",
+            "transaction",
             "weld",
             "homepage",
             "smoke",
