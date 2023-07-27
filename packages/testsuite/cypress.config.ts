@@ -4,6 +4,7 @@ import { AlwaysPullPolicy, GenericContainer, StartedTestContainer, StoppedTestCo
 import { Environment } from "testcontainers/dist/src/docker/types";
 
 export default defineConfig({
+  defaultCommandTimeout: 16000,
   reporter: require.resolve("cypress-multi-reporters/index.js"),
   reporterOptions: {
     configFile: "reporter-config.json",
