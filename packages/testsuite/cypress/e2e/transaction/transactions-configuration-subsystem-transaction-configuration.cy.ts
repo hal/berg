@@ -52,7 +52,7 @@ describe("TESTS: Configuration => Sybsystem => Transaction => Configuration", ()
   });
 
   it("Toggle Journal Store Enable Async IO", () => {
-    cy.writeAttrubute(managementEndpoint, address, useJurnalStore, true);
+    cy.writeAttribute(managementEndpoint, address, useJurnalStore, true);
     cy.readAttributeAsBoolean(managementEndpoint, address, journalStoreEnableAIO).then((defaultValue: boolean) => {
       cy.navigateTo(managementEndpoint, transactions);
       cy.get(configTab).click();
@@ -114,7 +114,7 @@ describe("TESTS: Configuration => Sybsystem => Transaction => Configuration", ()
   });
 
   it("Toggle Use Jurnal Store", () => {
-    cy.writeAttrubute(managementEndpoint, address, journalStoreEnableAIO, false);
+    cy.writeAttribute(managementEndpoint, address, journalStoreEnableAIO, false);
     cy.readAttributeAsBoolean(managementEndpoint, address, useJurnalStore).then((defaultValue: boolean) => {
       cy.navigateTo(managementEndpoint, transactions);
       cy.get(configTab).click();
