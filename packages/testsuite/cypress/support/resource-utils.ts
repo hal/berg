@@ -125,7 +125,7 @@ Cypress.Commands.add("readAttributeAsObjectList", (managementEndpoint, address, 
     });
 });
 
-Cypress.Commands.add("writeAttrubute", (managementEndpoint, address, name, value) => {
+Cypress.Commands.add("writeAttribute", (managementEndpoint, address, name, value) => {
   cy.task("execute:cli", {
     managementApi: managementEndpoint + "/management",
     operation: "write-attribute",
@@ -273,7 +273,7 @@ declare global {
        * @param name - name of attribute from subsystem configuration.
        * @param value - value to be set to the attribute
        */
-      writeAttrubute(
+      writeAttribute(
         managementEndpoint: string,
         address: string[],
         name: string,
