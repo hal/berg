@@ -125,6 +125,12 @@ Cypress.Commands.add("readAttributeAsObjectList", (managementEndpoint, address, 
     });
 });
 
+Cypress.Commands.add("readAttributeAsExpression", (managementEndpoint, address, name) => {
+  cy.readAttributeAsObject(managementEndpoint, address, name).then((result) => {
+    return (result as { EXPRESSION_VALUE: string })["EXPRESSION_VALUE"];
+  });
+});
+
 Cypress.Commands.add("writeAttribute", (managementEndpoint, address, name, value) => {
   cy.task("execute:cli", {
     managementApi: managementEndpoint + "/management",
@@ -279,6 +285,20 @@ declare global {
         name: string,
         value: string | boolean | number
       ): Chainable<object[]>;
+
+      /**
+       * Executes :read-attribute operation at given address and attribute name.
+       * The managementEndpoint API is expected to return JSON with key "EXPRESSION_VALUE"
+       * Returns read value as string.
+       *
+       * @param managementEndpoint - Management endpoint of the WildFly server container instance.
+       * @param address - CLI address of subsystem.
+       * @param name - name of attribute from subsystem configuration. The attribute value is expected to be an expression
+       *
+       * @returns The the attribute value of subsystem configuration as string.
+       */
+      readAttributeAsExpression(managementEndpoint: string, address: string[], name: string): Chainable<string>;
+
       /**
        * Get HTML element from form.
        * @category Get value

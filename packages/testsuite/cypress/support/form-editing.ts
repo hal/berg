@@ -114,11 +114,27 @@ Cypress.Commands.add("flip", (formId, attributeName, value) => {
   });
 });
 
-Cypress.Commands.add("text", (formId, attributeName, value) => {
-  cy.formInput(formId, attributeName).click({ force: true }).wait(200).clear();
-  cy.formInput(formId, attributeName).type(value as string);
-  cy.formInput(formId, attributeName).should("have.value", value);
-  cy.formInput(formId, attributeName).trigger("change");
+Cypress.Commands.add(
+  "text",
+  (formId, attributeName, value, options = { selector: "", parseSpecialCharSequences: true }) => {
+    const selector = options.selector;
+    const parseSpecialCharSequences = options.parseSpecialCharSequences;
+    let formInput;
+    if (selector) {
+      formInput = cy.get(selector);
+    } else {
+      formInput = cy.formInput(formId, attributeName);
+    }
+
+    formInput.click({ force: true }).wait(200).clear();
+    formInput.type(value as string, { parseSpecialCharSequences: parseSpecialCharSequences });
+    formInput.should("have.value", value);
+    formInput.trigger("change");
+  }
+);
+
+Cypress.Commands.add("textExpression", (formId, attributeName, value, options = { selector: "" }) => {
+  cy.text(formId, attributeName, value, { selector: options.selector, parseSpecialCharSequences: false });
 });
 
 Cypress.Commands.add("clearAttribute", (formId, attributeName) => {
@@ -222,8 +238,31 @@ declare global {
        * @param formId - The ID of section which contain form inputs.
        * @param attributeName - specific ID part of form input with text form input.
        * @param value - the value which needs to be write to form input.
+       * @param options - an object which might contain any of the following:
+       *                     - a custom selector for text field (the name of the text field will not be guessed)
        */
-      text(formId: string, attributeName: string, value: string | number): Chainable<void>;
+      text(
+        formId: string,
+        attributeName: string,
+        value: string | number,
+        options?: { selector?: string; parseSpecialCharSequences?: boolean }
+      ): Chainable<void>;
+      /**
+       * Set text value to form input.
+       * @category Data inserting
+       *
+       * @param formId - The ID of section which contain form inputs.
+       * @param attributeName - specific ID part of form input with text form input.
+       * @param value - the value which needs to be write to form input.
+       * @param options - an object which might contain any of the following:
+       *                     - a custom selector for text field (the name of the text field will not be guessed)
+       */
+      textExpression(
+        formId: string,
+        attributeName: string,
+        value: string | number,
+        options?: { selector?: string }
+      ): Chainable<void>;
       /**
        * Clear all selected list attribute items from the form input.
        * @category Data removing

@@ -65,6 +65,12 @@ Cypress.Commands.add("verifyRemovedFromTable", (tableId, resourceName) => {
   cy.get(`${tableWrapper} td:contains("${resourceName}")`).should("not.exist");
 });
 
+Cypress.Commands.add("verifyAttributeAsExpression", (managementEndpoint, address, attributeName, expectedValue) => {
+  cy.readAttributeAsExpression(managementEndpoint, address, attributeName).then((result) => {
+    expect(result).to.equal(expectedValue);
+  });
+});
+
 export {};
 
 declare global {
@@ -152,6 +158,22 @@ declare global {
        * @param resourceName - The name of a resource
        */
       verifyRemovedFromTable(tableId: string, resourceName: string): void;
+
+      /**
+       * Verify the specific configuration is saved.
+       * @category Verification
+       *
+       * @param managementEndpoint - Host name of currently used container.
+       * @param address - CLI address of subsystem which needs to be verified.
+       * @param attributeName - Attribute of subsystem which needs to be verified.
+       * @param expectedValue - The expected value of the attribute. The value is expected to be an expression
+       */
+      verifyAttributeAsExpression(
+        managementEndpoint: string,
+        address: string[],
+        attributeName: string,
+        expectedValue: string
+      ): void;
     }
   }
 }
