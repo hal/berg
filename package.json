@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "npx del \"packages/testsuite/cypress/fixtures/**\" \"packages/testsuite/results\" \"mochawesome*\"",
+    "clean": "npx del \"packages/testsuite/cypress/fixtures/*/\" \"packages/testsuite/results\" \"mochawesome*\"",
     "preformat": "npm run clean",
     "format": "npx prettier --write .",
     "lint": "npx eslint .",
@@ -27,6 +27,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/portscanner": "2.1.1",
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
     "axios": "1.3.4",
@@ -41,5 +42,8 @@
     "testcontainers": "9.2.1",
     "typedoc": "0.23.28",
     "typescript": "5.0.2"
+  },
+  "dependencies": {
+    "portscanner": "2.1.1"
   }
 }

@@ -2,6 +2,7 @@ import axios from "axios";
 import { defineConfig } from "cypress";
 import { AlwaysPullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
 import { Environment } from "testcontainers/dist/src/docker/types";
+import { findAPortNotInUse } from "portscanner";
 
 export default defineConfig({
   defaultCommandTimeout: 16000,
@@ -13,15 +14,16 @@ export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
       const startedContainers: Map<string, StartedTestContainer> = new Map<string, StartedTestContainer>();
+      const startedContainersManagementPorts: Map<string, number> = new Map<string, number>();
       on("task", {
-        "start:wildfly:container": ({ name, configuration }) => {
+        "start:wildfly:container": ({ name, configuration, useNetworkHostMode }) => {
           return new Promise((resolve, reject) => {
-            new GenericContainer(process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest")
+            let portOffset = 0;
+            const wildfly = new GenericContainer(
+              process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest"
+            )
               .withPullPolicy(new AlwaysPullPolicy())
               .withName(name as string)
-              .withNetworkMode(config.env.NETWORK_NAME as string)
-              .withNetworkAliases("wildfly")
-              .withExposedPorts(9990)
               .withBindMounts([
                 {
                   source: __dirname + "/cypress/fixtures",
@@ -30,48 +32,149 @@ export default defineConfig({
                 },
               ])
               .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")))
-              .withStartupTimeout(333000)
-              .withCommand(["-c", configuration || "standalone-insecure.xml"] as string[])
+              .withStartupTimeout(333000);
+            if (useNetworkHostMode === true) {
+              console.log("host mode");
+              findAPortNotInUse(8080, 8180)
+                .then((freePort) => {
+                  portOffset = freePort - 8080;
+                  wildfly
+                    .withNetworkMode("host")
+                    .withCommand([
+                      "-c",
+                      configuration || "standalone-insecure.xml",
+                      `-Djboss.socket.binding.port-offset=${portOffset.toString()}`,
+                    ] as string[]);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            } else {
+              console.log(`default network mode, network name: ${config.env.NETWORK_NAME as string}`);
+              wildfly
+                .withNetworkMode(config.env.NETWORK_NAME as string)
+                .withNetworkAliases("wildfly")
+                .withExposedPorts(9990)
+                .withCommand(["-c", configuration || "standalone-insecure.xml"] as string[]);
+            }
+            wildfly
               .start()
               .then((wildflyContainer) => {
+                const managementPortWithOffset = portOffset + 9990;
                 startedContainers.set(name as string, wildflyContainer);
-                const managementApi = `http://localhost:${wildflyContainer.getMappedPort(9990)}/management`;
-                return axios
-                  .post(managementApi, {
-                    operation: "list-add",
-                    address: ["core-service", "management", "management-interface", "http-interface"],
-                    name: "allowed-origins",
-                    value: `http://localhost:${config.env.HAL_CONTAINER_PORT as string}`,
-                  })
-                  .then(() => {
-                    return axios.post(managementApi, {
-                      operation: "reload",
-                    });
-                  })
-                  .then(() => {
-                    const startTime = new Date().getTime();
-                    const interval = setInterval(() => {
-                      if (new Date().getTime() - startTime > 10000) {
-                        clearInterval(interval);
-                        reject();
-                      }
-                      axios
-                        .post(managementApi, {
-                          operation: "read-attribute",
-                          name: "server-state",
-                        })
+                if (useNetworkHostMode === true) {
+                  startedContainersManagementPorts.set(name as string, portOffset + 9990);
+                  return wildflyContainer
+                    .exec([
+                      `/bin/bash`,
+                      `-c`,
+                      `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="/core-service=management/management-interface=http-interface:list-add(name=allowed-origins,value=http://localhost:${
+                        config.env.HAL_CONTAINER_PORT as string
+                      }"`,
+                    ])
+                    .then((result) => {
+                      console.log(result.output);
+                      return wildflyContainer.exec([
+                        `/bin/bash`,
+                        `-c`,
+                        `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="reload"`,
+                      ]);
+                    })
+                    .then((result) => {
+                      console.log(result.output);
+                      wildflyContainer
+                        .exec([
+                          `/bin/bash`,
+                          `-c`,
+                          `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="read-attribute server-state"`,
+                        ])
                         .then((response) => {
-                          if ((response as { data: { result: string } }).data.result == "running") {
-                            clearInterval(interval);
-                            resolve(`http://localhost:${wildflyContainer.getMappedPort(9990)}`);
+                          console.log(response.output);
+                          if (response.output.includes("running")) {
+                            resolve(`http://localhost:${managementPortWithOffset}`);
                           }
                         })
-                        /* eslint @typescript-eslint/no-empty-function: off */
-                        .catch(() => {});
-                    }, 500);
-                  });
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    });
+                } else {
+                  startedContainersManagementPorts.set(name as string, wildflyContainer.getMappedPort(9990));
+                  const managementApi = `http://localhost:${wildflyContainer.getMappedPort(9990)}/management`;
+                  return axios
+                    .post(managementApi, {
+                      operation: "list-add",
+                      address: ["core-service", "management", "management-interface", "http-interface"],
+                      name: "allowed-origins",
+                      value: `http://localhost:${config.env.HAL_CONTAINER_PORT as string}`,
+                    })
+                    .then(() => {
+                      return axios.post(managementApi, {
+                        operation: "reload",
+                      });
+                    })
+                    .then(() => {
+                      const startTime = new Date().getTime();
+                      const interval = setInterval(() => {
+                        if (new Date().getTime() - startTime > 10000) {
+                          clearInterval(interval);
+                          reject();
+                        }
+                        axios
+                          .post(managementApi, {
+                            operation: "read-attribute",
+                            name: "server-state",
+                          })
+                          .then((response) => {
+                            if ((response as { data: { result: string } }).data.result == "running") {
+                              clearInterval(interval);
+                              const wildflyServer = `http://localhost:${wildflyContainer.getMappedPort(9990)}`;
+                              resolve(wildflyServer);
+                            }
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                      }, 500);
+                    });
+                }
               })
-              .catch((err) => reject(err));
+              .catch((err) => {
+                console.log(err);
+                reject(err);
+              });
+          });
+        },
+        "start:keycloak:container": ({ name }) => {
+          return findAPortNotInUse(8888, 8988).then((freePort: number) => {
+            const keycloak = new GenericContainer(process.env.KEYCLOAK_IMAGE || "quay.io/keycloak/keycloak:latest")
+              .withName(name as string)
+              .withNetworkMode("host")
+              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(Keycloak.*) started in.*")))
+              .withEnvironment({
+                KEYCLOAK_ADMIN: "admin",
+                KEYCLOAK_ADMIN_PASSWORD: "admin",
+              })
+              .withBindMounts([
+                {
+                  source: __dirname + "/cypress/fixtures/realm-configuration.json",
+                  target: "/opt/keycloak/data/import/realm-configuration.json",
+                  mode: "z",
+                },
+              ])
+              .withCommand(["start-dev", `--http-port=${freePort.toString()}`, "--import-realm"] as string[]);
+            return new Promise((resolve, reject) => {
+              keycloak
+                .start()
+                .then((keycloakContainer) => {
+                  startedContainers.set(name as string, keycloakContainer);
+                  resolve(`http://localhost:${freePort ?? "unknown port"}`);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  reject(err);
+                });
+            });
           });
         },
         "start:postgres:container": ({ name, environmentProperties }) => {
@@ -173,8 +276,16 @@ export default defineConfig({
         "execute:in:container": ({ containerName, command }) => {
           return new Promise((resolve, reject) => {
             const containerToExec = startedContainers.get(containerName as string);
+            let managementPort = startedContainersManagementPorts.get(containerName as string);
+            managementPort = managementPort ?? 9990;
             containerToExec
-              ?.exec(["/bin/bash", "-c", `$JBOSS_HOME/bin/jboss-cli.sh -c --command=${command as string}`])
+              ?.exec([
+                "/bin/bash",
+                "-c",
+                `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPort} --commands=${
+                  command as string
+                }`,
+              ])
               .then((value) => {
                 console.log(value.output);
                 resolve(value.output);
@@ -204,6 +315,7 @@ export default defineConfig({
           startedContainers.forEach((container, key) => {
             console.log("Stopping container for test " + key);
             startedContainers.delete(key);
+            startedContainersManagementPorts.delete(key);
             promises.push(container.stop());
           });
           return Promise.all(promises);
