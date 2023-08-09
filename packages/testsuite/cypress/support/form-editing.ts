@@ -163,6 +163,12 @@ Cypress.Commands.add("clearListAttributeItems", (attributeName) => {
     });
 });
 
+Cypress.Commands.add("selectText", (formId, attributeName, value) => {
+  cy.formInput(formId, attributeName).select(value, { force: true });
+  cy.formInput(formId, attributeName).should("have.value", value);
+  cy.formInput(formId, attributeName).trigger("change", { force: true });
+});
+
 export {};
 /* eslint @typescript-eslint/no-namespace: off */
 declare global {
@@ -289,6 +295,20 @@ declare global {
        * @param attributeName - specific ID part of form input with text form input.
        */
       clearAttribute(formId: string, attributeName: string): Chainable<void>;
+      /**
+       * Select value from <select> form input.
+       * @category Data inserting
+       *
+       * @example The form input have select with id "#model-browser-root-secure-server-add-ssl-required-editing""
+       *  - The formId is: "model-browser-root-provider-add"
+       *  - The attributeName is: "auth-server-url"
+       *  - value: what you want write to input
+       *
+       * @param formId - The ID of section which contain form inputs.
+       * @param attributeName - specific ID part of form input with select input.
+       * @param value - the value which needs to be selected.
+       */
+      selectText(formId: string, attributeName: string, value: string): Chainable<void>;
     }
   }
 }
