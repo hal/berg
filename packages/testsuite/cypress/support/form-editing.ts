@@ -1,7 +1,19 @@
 Cypress.Commands.add("editForm", (formId) => {
-  const editButton = "#" + formId + ' a.clickable[data-operation="edit"';
+  const editButton = "#" + formId + ' a.clickable[data-operation="edit"]';
   cy.get(`#${formId}-editing`).should("not.be.visible");
   cy.get(editButton).click();
+  // Workaround - JBEAP-25005,JBEAP-25046 - the form is sometimes not loaded in time and Cypress is not able to recover
+  // from such state and click the button. Waiting does not help, but multiple manual checks for the visibility
+  // of the button do. Note that the button is clicked just one time (probably) once visible.
+  for (let reClickTry = 0; reClickTry < 2; reClickTry++) {
+    cy.wait(1000);
+    cy.get(editButton).then(($button) => {
+      if ($button.is(":visible")) {
+        cy.get(editButton).click();
+      }
+    });
+  }
+  // workaround - end
   cy.get(`#${formId}-editing`).should("be.visible");
 });
 
