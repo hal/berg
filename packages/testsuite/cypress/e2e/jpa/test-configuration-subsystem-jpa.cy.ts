@@ -15,8 +15,6 @@ describe("TESTS: Configuration => Subsystem => JPA", () => {
 
   it("Edit default-extended-persistence-inheritance", () => {
     cy.navigateTo(managementEndpoint, "jpa-configuration");
-    // this call is just workaround to prevent of occuring JBEAP-25046
-    cy.help();
     cy.editForm(configurationFormId);
     cy.formInput(configurationFormId, "default-extended-persistence-inheritance").select("SHALLOW", { force: true });
     cy.formInput(configurationFormId, "default-extended-persistence-inheritance").trigger("change", { force: true });
