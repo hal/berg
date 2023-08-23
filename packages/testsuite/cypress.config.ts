@@ -129,11 +129,12 @@ export default defineConfig({
                             if ((response as { data: { result: string } }).data.result == "running") {
                               clearInterval(interval);
                               const wildflyServer = `http://localhost:${wildflyContainer.getMappedPort(9990)}`;
+                              console.log(`WildFly server is ready: ${wildflyServer}`);
                               resolve(wildflyServer);
                             }
                           })
-                          .catch((error) => {
-                            console.log(error);
+                          .catch(() => {
+                            console.log("WildFly server is not ready yet");
                           });
                       }, 500);
                     });
