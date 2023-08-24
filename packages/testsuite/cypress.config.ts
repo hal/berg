@@ -1,7 +1,7 @@
 import axios from "axios";
 import { defineConfig } from "cypress";
-import { AlwaysPullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
-import { Environment } from "testcontainers/dist/src/docker/types";
+import { PullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
+import { Environment } from "testcontainers/build/types";
 import { findAPortNotInUse } from "portscanner";
 
 export default defineConfig({
@@ -22,13 +22,13 @@ export default defineConfig({
             const wildfly = new GenericContainer(
               process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest"
             )
-              .withPullPolicy(new AlwaysPullPolicy())
+              .withPullPolicy(PullPolicy.alwaysPull())
               .withName(name as string)
-              .withBindMounts([
+              .withCopyDirectoriesToContainer([
                 {
                   source: __dirname + "/cypress/fixtures",
                   target: "/home/fixtures",
-                  mode: "z",
+                  mode: parseInt("0777", 8),
                 },
               ])
               .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")))
@@ -180,7 +180,7 @@ export default defineConfig({
         },
         "start:postgres:container": ({ name, environmentProperties }) => {
           const postgreContainerBuilder = new GenericContainer(process.env.POSTGRES_IMAGE || "postgres")
-            .withPullPolicy(new AlwaysPullPolicy())
+            .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
@@ -205,7 +205,7 @@ export default defineConfig({
         },
         "start:mysql:container": ({ name, environmentProperties }) => {
           const mysqlContainerBuilder = new GenericContainer(process.env.MYSQL_IMAGE || "mysql")
-            .withPullPolicy(new AlwaysPullPolicy())
+            .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withExposedPorts(3306)
@@ -229,7 +229,7 @@ export default defineConfig({
         },
         "start:mariadb:container": ({ name, environmentProperties }) => {
           const mariadbContainerBuilder = new GenericContainer(process.env.MARIADB_IMAGE || "mariadb")
-            .withPullPolicy(new AlwaysPullPolicy())
+            .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withExposedPorts(3306)
@@ -254,7 +254,7 @@ export default defineConfig({
           const sqlserverContainerBuilder = new GenericContainer(
             process.env.MSSQL_IMAGE || "mcr.microsoft.com/mssql/server:2022-latest"
           )
-            .withPullPolicy(new AlwaysPullPolicy())
+            .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
