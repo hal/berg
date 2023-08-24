@@ -193,7 +193,7 @@ export default defineConfig({
             postgreContainerBuilder
               .start()
               .then((postgreContainer) => {
-                console.log(postgreContainer);
+                console.log("PostgreSQL started successfully");
                 startedContainers.set("postgres", postgreContainer);
                 resolve(postgreContainer);
               })
@@ -212,12 +212,11 @@ export default defineConfig({
             .withEnvironment(environmentProperties as Environment)
             .withNetworkMode(config.env.NETWORK_NAME as string)
             .withWaitStrategy(Wait.forLogMessage(new RegExp(".*MySQL init process done. Ready for start up.*")));
-          console.log(mysqlContainerBuilder);
           return new Promise((resolve, reject) => {
             mysqlContainerBuilder
               .start()
               .then((mysqlContainer) => {
-                console.log(mysqlContainer);
+                console.log("MySQL started successfully");
                 startedContainers.set("mysql", mysqlContainer);
                 resolve(mysqlContainer);
               })
@@ -240,7 +239,7 @@ export default defineConfig({
             mariadbContainerBuilder
               .start()
               .then((mariadbContainer) => {
-                console.log(mariadbContainer);
+                console.log("Mariadb started successfully");
                 startedContainers.set("mariadb", mariadbContainer);
                 resolve(mariadbContainer);
               })
@@ -265,6 +264,7 @@ export default defineConfig({
             sqlserverContainerBuilder
               .start()
               .then((sqlServerContainer) => {
+                console.log("SQL server started successfully");
                 startedContainers.set("sqlserver", sqlServerContainer);
                 resolve(sqlServerContainer);
               })
@@ -288,10 +288,9 @@ export default defineConfig({
                 }`,
               ])
               .then((value) => {
-                console.log(value.output);
                 resolve(value.output);
               })
-              .catch((err) => reject(err));
+              .catch((err: { response: { data: string } }) => reject(err.response.data));
           });
         },
         "execute:cli": ({ managementApi, operation, address, ...args }) => {
@@ -305,8 +304,8 @@ export default defineConfig({
               .then((response) => {
                 resolve(response.data);
               })
-              .catch((err) => {
-                console.log(err);
+              .catch((err: { response: { data: string } }) => {
+                console.log(err.response.data);
                 return reject(err);
               });
           });
