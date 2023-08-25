@@ -1,4 +1,4 @@
-import { AlwaysPullPolicy, GenericContainer, Network, StartedNetwork, StartedTestContainer } from "testcontainers";
+import { PullPolicy, GenericContainer, Network, StartedNetwork, StartedTestContainer } from "testcontainers";
 
 export class Berg {
   private static _instance: Berg;
@@ -17,7 +17,7 @@ export class Berg {
       const halContainer = await new GenericContainer(
         process.env.HAL_IMAGE || "quay.io/halconsole/hal-development:latest"
       )
-        .withPullPolicy(new AlwaysPullPolicy())
+        .withPullPolicy(PullPolicy.alwaysPull())
         .withExposedPorts(9090)
         .withNetworkMode(network.getName())
         .withNetworkAliases("hal")

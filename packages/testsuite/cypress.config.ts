@@ -1,7 +1,7 @@
 import axios from "axios";
 import { defineConfig } from "cypress";
-import { AlwaysPullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
-import { Environment } from "testcontainers/dist/src/docker/types";
+import { PullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
+import { Environment } from "testcontainers/build/types";
 import { findAPortNotInUse } from "portscanner";
 
 export default defineConfig({
@@ -22,13 +22,13 @@ export default defineConfig({
             const wildfly = new GenericContainer(
               process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest"
             )
-              .withPullPolicy(new AlwaysPullPolicy())
+              .withPullPolicy(PullPolicy.alwaysPull())
               .withName(name as string)
-              .withBindMounts([
+              .withCopyDirectoriesToContainer([
                 {
                   source: __dirname + "/cypress/fixtures",
                   target: "/home/fixtures",
-                  mode: "z",
+                  mode: parseInt("0777", 8),
                 },
               ])
               .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")))
@@ -180,7 +180,7 @@ export default defineConfig({
         },
         "start:postgres:container": ({ name, environmentProperties }) => {
           const postgreContainerBuilder = new GenericContainer(process.env.POSTGRES_IMAGE || "postgres")
-            .withPullPolicy(new AlwaysPullPolicy())
+            .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
@@ -193,7 +193,7 @@ export default defineConfig({
             postgreContainerBuilder
               .start()
               .then((postgreContainer) => {
-                console.log(postgreContainer);
+                console.log("PostgreSQL started successfully");
                 startedContainers.set("postgres", postgreContainer);
                 resolve(postgreContainer);
               })
@@ -205,19 +205,18 @@ export default defineConfig({
         },
         "start:mysql:container": ({ name, environmentProperties }) => {
           const mysqlContainerBuilder = new GenericContainer(process.env.MYSQL_IMAGE || "mysql")
-            .withPullPolicy(new AlwaysPullPolicy())
+            .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withExposedPorts(3306)
             .withEnvironment(environmentProperties as Environment)
             .withNetworkMode(config.env.NETWORK_NAME as string)
             .withWaitStrategy(Wait.forLogMessage(new RegExp(".*MySQL init process done. Ready for start up.*")));
-          console.log(mysqlContainerBuilder);
           return new Promise((resolve, reject) => {
             mysqlContainerBuilder
               .start()
               .then((mysqlContainer) => {
-                console.log(mysqlContainer);
+                console.log("MySQL started successfully");
                 startedContainers.set("mysql", mysqlContainer);
                 resolve(mysqlContainer);
               })
@@ -229,7 +228,7 @@ export default defineConfig({
         },
         "start:mariadb:container": ({ name, environmentProperties }) => {
           const mariadbContainerBuilder = new GenericContainer(process.env.MARIADB_IMAGE || "mariadb")
-            .withPullPolicy(new AlwaysPullPolicy())
+            .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withExposedPorts(3306)
@@ -240,7 +239,7 @@ export default defineConfig({
             mariadbContainerBuilder
               .start()
               .then((mariadbContainer) => {
-                console.log(mariadbContainer);
+                console.log("Mariadb started successfully");
                 startedContainers.set("mariadb", mariadbContainer);
                 resolve(mariadbContainer);
               })
@@ -254,7 +253,7 @@ export default defineConfig({
           const sqlserverContainerBuilder = new GenericContainer(
             process.env.MSSQL_IMAGE || "mcr.microsoft.com/mssql/server:2022-latest"
           )
-            .withPullPolicy(new AlwaysPullPolicy())
+            .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
@@ -265,6 +264,7 @@ export default defineConfig({
             sqlserverContainerBuilder
               .start()
               .then((sqlServerContainer) => {
+                console.log("SQL server started successfully");
                 startedContainers.set("sqlserver", sqlServerContainer);
                 resolve(sqlServerContainer);
               })
@@ -288,10 +288,9 @@ export default defineConfig({
                 }`,
               ])
               .then((value) => {
-                console.log(value.output);
                 resolve(value.output);
               })
-              .catch((err) => reject(err));
+              .catch((err: { response: { data: string } }) => reject(err.response.data));
           });
         },
         "execute:cli": ({ managementApi, operation, address, ...args }) => {
@@ -305,8 +304,8 @@ export default defineConfig({
               .then((response) => {
                 resolve(response.data);
               })
-              .catch((err) => {
-                console.log(err);
+              .catch((err: { response: { data: string } }) => {
+                console.log(err.response.data);
                 return reject(err);
               });
           });
