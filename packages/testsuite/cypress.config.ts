@@ -99,7 +99,6 @@ export default defineConfig({
                         });
                     });
                 } else {
-                  startedContainersManagementPorts.set(name as string, wildflyContainer.getMappedPort(9990));
                   const managementApi = `http://localhost:${wildflyContainer.getMappedPort(9990)}/management`;
                   return axios
                     .post(managementApi, {
