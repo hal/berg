@@ -276,6 +276,7 @@ export default defineConfig({
         },
         "execute:in:container": ({ containerName, command }) => {
           return new Promise((resolve, reject) => {
+            console.log(`CLI commands: ${command as string}`);
             const containerToExec = startedContainers.get(containerName as string);
             let managementPort = startedContainersManagementPorts.get(containerName as string);
             managementPort = managementPort ?? 9990;
@@ -288,7 +289,12 @@ export default defineConfig({
                 }`,
               ])
               .then((value) => {
-                resolve(value.output);
+                if (value.exitCode === 0) {
+                  resolve(value);
+                } else {
+                  console.log(value);
+                  reject(value);
+                }
               })
               .catch((err: { response: { data: string } }) => reject(err.response.data));
           });
