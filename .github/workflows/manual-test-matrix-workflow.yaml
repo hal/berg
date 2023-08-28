@@ -20,6 +20,7 @@ jobs:
             "ee",
             "ejb",
             "elytron",
+            "elytron-oidc-client",
             "health",
             "io",
             "jmx",
