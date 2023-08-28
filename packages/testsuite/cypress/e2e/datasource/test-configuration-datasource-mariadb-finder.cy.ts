@@ -56,7 +56,7 @@ describe("TESTS: Configuration => Datasource => MariaDB (Finder)", () => {
         new AddModuleCommandBuilder()
           .withName(mariadbDriverModuleName)
           .withResource("/home/fixtures/jdbc-drivers/mariadb-java-client-3.1.0.jar")
-          .withDependencies(["javax.api", "javax.transaction.api"])
+          .withDependencies(["javax.api"])
           .build()
           .toCLICommand()
       ).then(() => {

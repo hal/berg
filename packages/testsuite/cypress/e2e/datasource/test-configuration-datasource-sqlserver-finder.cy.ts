@@ -74,7 +74,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
           new AddModuleCommandBuilder()
             .withName(sqlserverDriverModuleName)
             .withResource("/home/fixtures/jdbc-drivers/mssql-jdbc-11.2.1.jre11.jar")
-            .withDependencies(["javax.api", "javax.transaction.api"])
+            .withDependencies(["javax.api"])
             .build()
             .toCLICommand()
         );
