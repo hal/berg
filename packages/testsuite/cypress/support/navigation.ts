@@ -46,6 +46,10 @@ Cypress.Commands.add("logoutFromWebConsole", () => {
   cy.get("#logout-link").click();
 });
 
+Cypress.Commands.add("confirmYesInWizard", () => {
+  cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")').click();
+});
+
 export {};
 /* eslint @typescript-eslint/no-namespace: off */
 declare global {
@@ -116,6 +120,11 @@ declare global {
        * @category Navigation
        */
       logoutFromWebConsole(): void;
+      /**
+       * Confirm modal dialog by click on "YES" button
+       * @category Navigation
+       */
+      confirmYesInWizard(): void;
     }
   }
 }

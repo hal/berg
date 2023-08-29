@@ -26,10 +26,7 @@ describe("TESTS: Access secured by Elytron OIDC client", () => {
   });
 
   it("Logs in successfully and logs out", () => {
-    cy.visit(`?connect=${wildfly}#home`);
-    cy.get("#username").type("userwithoutrole");
-    cy.get("#password").type("password");
-    cy.get("#kc-login").click();
+    logIn("userwithoutrole", "password");
     cy.url().should(`include`, `localhost:${Cypress.env("HAL_CONTAINER_PORT") as string}`);
     cy.verifyUserName("userwithoutrole");
     cy.logoutFromWebConsole();
@@ -37,12 +34,16 @@ describe("TESTS: Access secured by Elytron OIDC client", () => {
   });
 
   it("Fails to log in with bad credentials", () => {
-    cy.visit(`?connect=${wildfly}#home`);
-    cy.get("#username").type("userwithoutrole");
-    cy.get("#password").type("wrongPassword");
-    cy.get("#kc-login").click();
+    logIn("userwithoutrole", "wrongPassword");
     verifyNotLoggedIn(keycloak);
   });
+
+  function logIn(login: string, password: string) {
+    cy.visit(`/?connect=${wildfly}#home`);
+    cy.get("#username").type(login);
+    cy.get("#password").type(password);
+    cy.get("#kc-login").click();
+  }
 
   function verifyNotLoggedIn(keycloak: string): void {
     cy.url().should(`include`, keycloak);

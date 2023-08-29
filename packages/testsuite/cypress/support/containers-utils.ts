@@ -1,10 +1,10 @@
-Cypress.Commands.add("startWildflyContainer", () => {
+Cypress.Commands.add("startWildflyContainer", (options = { useNetworkHostMode: false }) => {
   return cy.task(
     "start:wildfly:container",
     {
       name: Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_"),
       configuration: "standalone-insecure.xml",
-      useNetworkHostMode: false,
+      useNetworkHostMode: options.useNetworkHostMode,
     },
     { timeout: 240_000 }
   );
@@ -46,7 +46,7 @@ declare global {
        *
        * @category Containers util
        */
-      startWildflyContainer(): Chainable<unknown>;
+      startWildflyContainer(options?: { useNetworkHostMode?: boolean }): Chainable<unknown>;
       /**
        * Start a Wildfly container wich is secured. This is not for a common use.
        *
