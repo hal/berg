@@ -56,7 +56,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
         new AddModuleCommandBuilder()
           .withName(postgresDriverModuleName)
           .withResource("/home/fixtures/jdbc-drivers/postgresql-42.5.1.jar")
-          .withDependencies(["javax.api", "javax.transaction.api"])
+          .withDependencies(["javax.api"])
           .build()
           .toCLICommand()
       ).then(() => {

@@ -57,7 +57,7 @@ describe("TESTS: Configuration => Datasource => MySQL (Finder)", () => {
         new AddModuleCommandBuilder()
           .withName(mysqlDriverModuleName)
           .withResource("/home/fixtures/jdbc-drivers/mysql-connector-j-8.0.31.jar")
-          .withDependencies(["javax.api", "javax.transaction.api"])
+          .withDependencies(["javax.api"])
           .build()
           .toCLICommand()
       ).then(() => {
