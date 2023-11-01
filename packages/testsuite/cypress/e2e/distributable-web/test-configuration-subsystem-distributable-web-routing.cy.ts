@@ -87,7 +87,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
   it("Switch routing to Infinispan", () => {
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-routing-item").click();
-    cy.get("#dw-routing-select").select("Infinispan", { force: true });
+    cy.selectInDropdownMenuOnPage("dw-routing-select", "Infinispan");
     cy.text("dw-routing-infinispan-add", "cache-container", cacheContainers.create.name);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
@@ -145,7 +145,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
     });
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-routing-item").click();
-    cy.get("#dw-routing-select").select("local", { force: true });
+    cy.selectInDropdownMenuOnPage("dw-routing-select", "local");
     cy.verifySuccess();
     cy.validateAddress(managementEndpoint, ["subsystem", "distributable-web", "routing", "local"], true);
   });

@@ -106,7 +106,7 @@ describe("TESTS: Access secured by Elytron OIDC client, performed in Web Console
     cy.addInTable("model-browser-children-table");
     cy.text(secureDeployment.id, secureDeployment.resource, "wildfly-management");
     cy.get(optionalFields).click();
-    cy.selectText(secureDeployment.id, secureDeployment.sslRequired, "EXTERNAL");
+    cy.selectInDropdownMenu(secureDeployment.id, secureDeployment.sslRequired, "EXTERNAL");
     cy.text(secureDeployment.id, secureDeployment.principal, "preferred_username");
     cy.text(secureDeployment.id, secureDeployment.provider, "keycloak");
     cy.text(secureDeployment.id, secureDeployment.clientId, "wildfly-management");
