@@ -20,20 +20,20 @@ describe("TESTS: Configuration => Sybsystem => Transaction => Path", () => {
 
   const datasourceBase = {
     connectionUrl:
-      "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=${wildfly.h2.compatibility.mode:REGULAR}",
+      "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=\\${wildfly.h2.compatibility.mode:REGULAR}",
     driverName: "h2",
   };
 
   const nonEmptyDS = {
     ...datasourceBase,
     name: "nonEmptyDS",
-    jndiName: "java:jboss/datasources/nonEmptyDS,",
+    jndiName: "java:jboss/datasources/nonEmptyDS",
   };
 
   const nonEmptyDSUpdated = {
     ...datasourceBase,
-    name: "nonEmptyDS",
-    jndiName: "java:jboss/datasources/nonEmptyDS,",
+    name: "nonEmptyDSUpdated",
+    jndiName: "java:jboss/datasources/nonEmptyDSUpdated",
   };
 
   // Here we start our WildFly container prior to test execution
@@ -87,6 +87,9 @@ describe("TESTS: Configuration => Sybsystem => Transaction => Path", () => {
       //When use-jdbc-store toggled to true, it needs jdbc-datasource to be set
       if (!defaultValue) {
         cy.text(jdbcForm, jdbcStoreDatasource, nonEmptyDS.name);
+        // the value need to be picked from the suggestions. this is not a dropdown menu.
+        // the suggestion are over save button. -> Is not possible to clik on save button.
+        cy.get(`.autocomplete-suggestion[data-val=${nonEmptyDS.name}]`).click();
       }
 
       cy.flip(jdbcForm, useJdbcStore, defaultValue);
