@@ -83,6 +83,12 @@ Cypress.Commands.add("verifyUserRole", (expectedRoleName) => {
   });
 });
 
+Cypress.Commands.add("closeAllPopUpNotifications", () => {
+  cy.get(".alert.alert-dismissable").each(($popupNotification) => {
+    $popupNotification.find(".close").trigger("click");
+  });
+});
+
 export {};
 
 declare global {
@@ -203,6 +209,11 @@ declare global {
        * @param expectedRoleName expected roles
        */
       verifyUserRole(expectedRoleName: string): void;
+
+      /**
+       * Close all pop-up notifications
+       */
+      closeAllPopUpNotifications(): void;
     }
   }
 }

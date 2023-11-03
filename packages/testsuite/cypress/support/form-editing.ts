@@ -163,10 +163,19 @@ Cypress.Commands.add("clearListAttributeItems", (attributeName) => {
     });
 });
 
-Cypress.Commands.add("selectText", (formId, attributeName, value) => {
-  cy.formInput(formId, attributeName).select(value, { force: true });
-  cy.formInput(formId, attributeName).should("have.value", value);
-  cy.formInput(formId, attributeName).trigger("change", { force: true });
+Cypress.Commands.add("selectInDropdownMenuOnPage", (elementId, value) => {
+  // somtimes can be the dropdown menu behind a pop-up alert notification. So we need close them.
+  cy.closeAllPopUpNotifications();
+  cy.get(`button[data-id="${elementId}"]`).click();
+  cy.get(`button[data-id="${elementId}"]`)
+    .parent()
+    .within(() => {
+      cy.get(`a.dropdown-item`).contains(value).click();
+    });
+});
+
+Cypress.Commands.add("selectInDropdownMenu", (formId, attributeName, value) => {
+  cy.selectInDropdownMenuOnPage(`${formId}-${attributeName}-editing`, value);
 });
 
 export {};
@@ -296,6 +305,18 @@ declare global {
        */
       clearAttribute(formId: string, attributeName: string): Chainable<void>;
       /**
+       * Select value from <select> input which isn't part of a form. 
+       * @category Data inserting
+       *
+       * @example The form input have select with id "#dw-routing-select"
+       *  - The elementId is: "dw-routing-select"
+       *  - value: what you want select.
+       *
+       * @param elementId - The element ID of section
+       * @param value - the value which needs to be selected.
+       */
+      selectInDropdownMenuOnPage(elementId: string, value: string): Chainable<void>;
+      /**
        * Select value from <select> form input.
        * @category Data inserting
        *
@@ -308,7 +329,7 @@ declare global {
        * @param attributeName - specific ID part of form input with select input.
        * @param value - the value which needs to be selected.
        */
-      selectText(formId: string, attributeName: string, value: string): Chainable<void>;
+      selectInDropdownMenu(formId: string, attributeName: string, value: string): Chainable<void>;
     }
   }
 }
