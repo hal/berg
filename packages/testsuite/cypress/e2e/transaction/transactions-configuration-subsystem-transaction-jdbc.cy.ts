@@ -87,9 +87,6 @@ describe("TESTS: Configuration => Sybsystem => Transaction => Path", () => {
       //When use-jdbc-store toggled to true, it needs jdbc-datasource to be set
       if (!defaultValue) {
         cy.text(jdbcForm, jdbcStoreDatasource, nonEmptyDS.name);
-        // the value need to be picked from the suggestions. this is not a dropdown menu.
-        // the suggestion are over save button. -> Is not possible to clik on save button.
-        cy.get(`.autocomplete-suggestion[data-val=${nonEmptyDS.name}]`).click();
       }
 
       cy.flip(jdbcForm, useJdbcStore, defaultValue);
