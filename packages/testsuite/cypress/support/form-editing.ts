@@ -141,6 +141,8 @@ Cypress.Commands.add(
     formInput.type(value as string, { parseSpecialCharSequences: parseSpecialCharSequences });
     formInput.should("have.value", value);
     formInput.trigger("change");
+    // lose focus of current input to close suggestions which can hide buttons. 
+    formInput.blur();
   }
 );
 
@@ -305,7 +307,7 @@ declare global {
        */
       clearAttribute(formId: string, attributeName: string): Chainable<void>;
       /**
-       * Select value from <select> input which isn't part of a form. 
+       * Select value from <select> input which isn't part of a form.
        * @category Data inserting
        *
        * @example The form input have select with id "#dw-routing-select"

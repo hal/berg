@@ -17,7 +17,7 @@ export class AddDataSource {
 
   toCLICommand(): string {
     return (
-      '"data-source add --name= ' +
+      '"data-source add --name=' +
       this.name +
       " --jndi-name=" +
       this.jndiName +
