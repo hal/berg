@@ -310,9 +310,11 @@ export default defineConfig({
                 resolve(response.data);
               })
               .catch((err: { response: { data: string } }) => {
-                console.log(err.response.data);
-                return reject(err);
+                reject(err.response.data);
               });
+          }).catch((error) => {
+            console.log(error);
+            throw new Error(JSON.stringify(error));
           });
         },
         "stop:containers": () => {
