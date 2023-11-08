@@ -141,7 +141,7 @@ Cypress.Commands.add(
     formInput.type(value as string, { parseSpecialCharSequences: parseSpecialCharSequences });
     formInput.should("have.value", value);
     formInput.trigger("change");
-    // lose focus of current input to close suggestions which can hide buttons. 
+    // lose focus of current input to close suggestions which can hide buttons.
     formInput.blur();
   }
 );
