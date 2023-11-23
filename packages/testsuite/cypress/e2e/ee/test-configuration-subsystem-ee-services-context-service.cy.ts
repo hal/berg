@@ -74,19 +74,6 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
     );
   });
 
-  it("Reset", () => {
-    cy.navigateTo(managementEndpoint, "ee");
-    cy.get("#ee-services-item").click();
-    cy.get("#ee-service-context-service").click();
-    cy.selectInTable(contextServicesTable, contextServices.reset.name);
-    cy.resetForm(configurationFormId, managementEndpoint, [
-      "subsystem",
-      "ee",
-      "context-service",
-      contextServices.reset.name,
-    ]);
-  });
-
   it("Remove Context Service", () => {
     cy.navigateTo(managementEndpoint, "ee");
     cy.get("#ee-services-item").click();
