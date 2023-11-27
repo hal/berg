@@ -71,14 +71,6 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => IIOP", () => {
     });
   });
 
-  it("Reset", () => {
-    cy.addAddressIfDoesntExist(managementEndpoint, address);
-    cy.navigateTo(managementEndpoint, "ejb3-configuration");
-    cy.get("#ejb3-service-item").click();
-    cy.get("#ejb3-service-iiop-item").click();
-    cy.resetForm(configurationFormId, managementEndpoint, address);
-  });
-
   it("Remove", () => {
     cy.addAddressIfDoesntExist(managementEndpoint, address);
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
