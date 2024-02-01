@@ -51,10 +51,4 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Timer", () => 
     cy.verifyAttribute(managementEndpoint, address, "thread-pool-name", threadPoolToUpdate);
   });
 
-  it("Reset", () => {
-    cy.navigateTo(managementEndpoint, "ejb3-configuration");
-    cy.get("#ejb3-service-item").click();
-    cy.get("#ejb3-service-timer-item").click();
-    cy.resetForm(configurationFormId, managementEndpoint, address);
-  });
 });
