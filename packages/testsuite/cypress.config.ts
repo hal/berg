@@ -31,7 +31,7 @@ export default defineConfig({
                   mode: parseInt("0777", 8),
                 },
               ])
-              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly Full.*|JBoss EAP.*)started in.*")))
+              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly.*|JBoss EAP.*)started in.*")))
               .withStartupTimeout(333000);
             if (useNetworkHostMode === true) {
               console.log("host mode");
