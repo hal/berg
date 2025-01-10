@@ -84,9 +84,11 @@ Cypress.Commands.add("verifyUserRole", (expectedRoleName) => {
 });
 
 Cypress.Commands.add("closeAllPopUpNotifications", () => {
-  cy.get(".alert.alert-dismissable").each(($popupNotification) => {
-    $popupNotification.find(".close").trigger("click");
-  });
+  if (Cypress.$(".alert.alert-dismissable").length > 0) {
+    cy.get(".alert.alert-dismissable").each(($popupNotification) => {
+      $popupNotification.find(".close").trigger("click");
+    });
+  }
 });
 
 export {};

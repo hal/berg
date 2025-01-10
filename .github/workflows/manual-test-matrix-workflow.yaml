@@ -27,6 +27,7 @@ jobs:
             "jpa",
             "jsf",
             "mail",
+            "microprofile",
             "metrics",
             "runtime",
             "security-manager",
