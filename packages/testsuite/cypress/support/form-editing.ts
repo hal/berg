@@ -172,7 +172,11 @@ Cypress.Commands.add("selectInDropdownMenuOnPage", (elementId, value) => {
   cy.get(`button[data-id="${elementId}"]`)
     .parent()
     .within(() => {
-      cy.get(`a.dropdown-item`).contains(value).click();
+      if (value == "") {
+        cy.get(`a.dropdown-item:has(span:empty)`).click();
+      } else {
+        cy.get(`a.dropdown-item`).contains(value).click();
+      }
     });
 });
 
