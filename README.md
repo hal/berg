@@ -73,13 +73,14 @@ Following is a table of supported environment properties that can be used when r
 
 | Property name    | Default value                                   | Description                                                                                   |
 | :--------------- | :---------------------------------------------- | :-------------------------------------------------------------------------------------------- |
-| `HAL_IMAGE`      | `quay.io/halconsole/hal-development:latest`     | [HAL standalone image](https://hal.github.io/documentation/get-started/#container) to be used |
-| `WILDFLY_IMAGE`  | `quay.io/halconsole/wildfly-development:latest` | WildFly/JBoss EAP image to be used                                                            |
-| `KEYCLOAK_IMAGE` | `quay.io/keycloak/keycloak:latest`              | Keycloak/RH-SSO image to be used for OIDC tests                                               |
-| `POSTGRES_IMAGE` | `docker.io/library/postgres:latest`             | PostgreSQL image to be used for datasource tests                                              |
-| `MYSQL_IMAGE`    | `docker.io/library/mysql:latest`                | MySQL image to be used for datasource tests                                                   |
-| `MARIADB_IMAGE`  | `docker.io/library/mariadb:latest`              | MariaDB image to be used for datasource tests                                                 |
-| `MSSQL_IMAGE`    | `mcr.microsoft.com/mssql/server:2022-latest`    | Microsoft SQL Server image to be used for datasource tests                                    |
+| `HAL_IMAGE`                  | `quay.io/halconsole/hal-development:latest`     | [HAL standalone image](https://hal.github.io/documentation/get-started/#container) to be used |
+| `WILDFLY_IMAGE`              | `quay.io/halconsole/wildfly-development:latest` | WildFly/JBoss EAP image to be used                                                            |
+| `KEYCLOAK_IMAGE`             | `quay.io/keycloak/keycloak:latest`              | Keycloak/RH-SSO image to be used for OIDC tests                                               |
+| `POSTGRES_IMAGE`             | `docker.io/library/postgres:latest`             | PostgreSQL image to be used for datasource tests                                              |
+| `MYSQL_IMAGE`                | `docker.io/library/mysql:latest`                | MySQL image to be used for datasource tests                                                   |
+| `MARIADB_IMAGE`              | `docker.io/library/mariadb:latest`              | MariaDB image to be used for datasource tests                                                 |
+| `MSSQL_IMAGE`                | `mcr.microsoft.com/mssql/server:2022-latest`    | Microsoft SQL Server image to be used for datasource tests                                    |
+| `WILDFLY_STABILITY_LEVEL`    | NO DEFAULT VALUE                                | Value for `--stability=<VALUE>` in WildFly startup command, if not set, parameter is not used |
 
 ## Custom method documentation
 

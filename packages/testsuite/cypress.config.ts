@@ -19,6 +19,10 @@ export default defineConfig({
         "start:wildfly:container": ({ name, configuration, useNetworkHostMode }) => {
           return new Promise((resolve, reject) => {
             let portOffset = 0;
+            let wildflyCmdParameters = ["-c", configuration || "standalone-insecure.xml"];
+            if (process.env.WILDFLY_STABILITY_LEVEL) {
+              wildflyCmdParameters.push("--stability=" + process.env.WILDFLY_STABILITY_LEVEL);
+            }
             const wildfly = new GenericContainer(
               process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest"
             )
@@ -35,16 +39,11 @@ export default defineConfig({
               .withStartupTimeout(333000);
             if (useNetworkHostMode === true) {
               console.log("host mode");
+              wildflyCmdParameters.push(`-Djboss.socket.binding.port-offset=${portOffset.toString()}`);
               findAPortNotInUse(8080, 8180)
                 .then((freePort) => {
                   portOffset = freePort - 8080;
-                  wildfly
-                    .withNetworkMode("host")
-                    .withCommand([
-                      "-c",
-                      configuration || "standalone-insecure.xml",
-                      `-Djboss.socket.binding.port-offset=${portOffset.toString()}`,
-                    ] as string[]);
+                  wildfly.withNetworkMode("host").withCommand(wildflyCmdParameters as string[]);
                 })
                 .catch((error) => {
                   console.log(error);
@@ -55,7 +54,7 @@ export default defineConfig({
                 .withNetworkMode(config.env.NETWORK_NAME as string)
                 .withNetworkAliases("wildfly")
                 .withExposedPorts(9990)
-                .withCommand(["-c", configuration || "standalone-insecure.xml"] as string[]);
+                .withCommand(wildflyCmdParameters as string[]);
             }
             wildfly
               .start()
