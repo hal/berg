@@ -91,7 +91,9 @@ export default defineConfig({
                         .then((response) => {
                           console.log(response.output);
                           if (response.output.includes("running")) {
-                            resolve(`http://localhost:${managementPortWithOffset}`);
+                            const wildflyServer = `http://localhost:${managementPortWithOffset}`;
+                            console.log(`WildFly server is ready: ${wildflyServer}`);
+                            resolve(wildflyServer);
                           }
                         })
                         .catch((error) => {
@@ -162,13 +164,20 @@ export default defineConfig({
                   mode: "z",
                 },
               ])
-              .withCommand(["start-dev", `--http-port=${freePort.toString()}`, "--import-realm"] as string[]);
+              .withCommand([
+                "start-dev",
+                "--db=dev-mem",
+                `--http-port=${freePort.toString()}`,
+                "--import-realm",
+              ] as string[]);
             return new Promise((resolve, reject) => {
               keycloak
                 .start()
                 .then((keycloakContainer) => {
                   startedContainers.set(name as string, keycloakContainer);
-                  resolve(`http://localhost:${freePort ?? "unknown port"}`);
+                  const keycloakServer = `http://localhost:${freePort ?? "unknown port"}`;
+                  console.log(`Keycloak is ready: ${keycloakServer}`);
+                  resolve(keycloakServer);
                 })
                 .catch((err) => {
                   console.log(err);
