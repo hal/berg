@@ -38,4 +38,4 @@ jobs:
         run: |
           cd packages/testsuite
           SPECS=$(echo ${{ steps.changed-files-specific.outputs.all_changed_files }} | sed "s|packages/testsuite/||g")
-          npm test -- --specs=$SPECS
+          npm run test-compiled -- --browser=chrome --specs=$SPECS
