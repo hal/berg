@@ -93,16 +93,15 @@ describe("TESTS: Access secured by Elytron OIDC client with RBAC", () => {
 
   function logIn(login: string, password: string) {
     cy.visit(`/?connect=${wildfly}#home`);
-    cy.origin(keycloak, {args: {login: login, password: password}} , 
-      ({login: login, password: password}) => {
-        cy.get("#username").type(login);
-        cy.get("#password").type(password);
-        cy.get("#kc-login").click();
+    cy.origin(keycloak, { args: { login: login, password: password } }, ({ login: login, password: password }) => {
+      cy.get("#username").type(login);
+      cy.get("#password").type(password);
+      cy.get("#kc-login").click();
     });
   }
 
   function verifyNotLoggedIn(keycloak: string): void {
-    cy.url().should(`include`, keycloak);
+    cy.url().should("include", keycloak);
     cy.get("#username").should("exist");
     cy.get("#password").should("exist");
     cy.get("#kc-login").should("exist");

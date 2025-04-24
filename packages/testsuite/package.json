@@ -13,6 +13,7 @@
   "scripts": {
     "pretest": "npm run --prefix ../.. compile",
     "test": "node dist/run-e2e-tests.js",
+    "test-compiled": "node dist/run-e2e-tests.js",
     "develop": "node dist/open-cypress.js"
   },
   "devDependencies": {

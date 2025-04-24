@@ -91,7 +91,7 @@ describe("TESTS: Runtime => Server => Status", () => {
         max: number;
       };
       const usedNonHeapMemory = memoryObject.used / 1024 ** 2;
-      const maxMemory = memoryObject.max / 1024 ** 2;
+      const maxMemory = (memoryObject.max == -1 ? memoryObject.committed * 2 : memoryObject.max) / 1024 ** 2;
       cy.get(usedNonHeapProgressBarSelector)
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
@@ -115,7 +115,7 @@ describe("TESTS: Runtime => Server => Status", () => {
         max: number;
       };
       const commitedNonHeapMemory = memoryObject.committed / 1024 ** 2;
-      const maxMemory = memoryObject.max / 1024 ** 2;
+      const maxMemory = (memoryObject.max == -1 ? memoryObject.committed * 2 : memoryObject.max) / 1024 ** 2;
       cy.get(commitedNonHeapProgressBarSelector)
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
