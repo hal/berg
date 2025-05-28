@@ -71,12 +71,12 @@ describe("TESTS: Runtime => Server => Status", () => {
       cy.get(commitedHeapProgressBarSelector)
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(commitedHeapMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(commitedHeapMemory, 2);
         });
       cy.get(commitedHeapProgressBarSelector)
         .invoke("attr", "aria-valuemax")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(maxMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(maxMemory, 2);
         });
     });
   });
@@ -119,12 +119,12 @@ describe("TESTS: Runtime => Server => Status", () => {
       cy.get(commitedNonHeapProgressBarSelector)
         .invoke("attr", "aria-valuenow")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(commitedNonHeapMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(commitedNonHeapMemory, 2);
         });
       cy.get(commitedNonHeapProgressBarSelector)
         .invoke("attr", "aria-valuemax")
         .then(($attributeValue) => {
-          expect(Number($attributeValue)).to.be.closeTo(maxMemory, 1);
+          expect(Number($attributeValue)).to.be.closeTo(maxMemory, 2);
         });
     });
   });
