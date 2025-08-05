@@ -283,7 +283,7 @@ declare global {
         managementEndpoint: string,
         address: string[],
         name: string,
-        value: string | boolean | number
+        value: string | boolean | number | object | object[]
       ): Chainable<object[]>;
 
       /**
