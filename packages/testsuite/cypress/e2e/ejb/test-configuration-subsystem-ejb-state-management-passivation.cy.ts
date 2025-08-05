@@ -128,7 +128,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
     cy.addInTable(passivationTableId);
     cy.text("ejb3-passivation-table-add", "name", passivations.create.name);
     cy.text("ejb3-passivation-table-add", "bean-cache", cacheContainers.default["default-cache"].name);
-    cy.text("ejb3-passivation-table-add", "bean-cache", cacheContainers.default.name);
+    cy.text("ejb3-passivation-table-add", "cache-container", cacheContainers.default.name);
     cy.text("ejb3-passivation-table-add", "max-size", "1000");
     cy.confirmAddResourceWizard();
     cy.verifySuccess();

@@ -67,6 +67,8 @@ npm run develop
   HAL_IMAGE=quay.io/myorg/hal WILDFLY_IMAGE=quay.io/myorg/wildfly npm test ...
   ```
 
+- For debugging purposes videos (and screenshots) of failed tests are stored after the test run (works only with chrome).
+
 ## Available environment properties
 
 Following is a table of supported environment properties that can be used when running the testsuite.

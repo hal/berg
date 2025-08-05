@@ -2,8 +2,8 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
   let managementEndpoint: string;
 
   const address = ["subsystem", "ejb3", "remoting-profile"];
-  const remotingProfilesTableId = "ejb3-remoting-profile-table";
-  const configurationFormId = "ejb3-remoting-profile-form";
+  const remotingProfilesTableId = "remoting-profile-table";
+  const configurationFormId = "remoting-profile-form";
 
   const remotingProfiles = {
     create: {
@@ -39,9 +39,9 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
   it("Create Remoting Profile", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-container-item").click();
-    cy.get("#ejb3-remoting-profile-item").click();
+    cy.get("#remoting-profile-item").click();
     cy.addInTable(remotingProfilesTableId);
-    cy.text("ejb3-remoting-profile-table-add", "name", remotingProfiles.create.name);
+    cy.text("remoting-profile-table-add", "name", remotingProfiles.create.name);
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(managementEndpoint, address.concat(remotingProfiles.create.name), true);
@@ -58,7 +58,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "ejb3-configuration");
       cy.get("#ejb3-container-item").click();
-      cy.get("#ejb3-remoting-profile-item").click();
+      cy.get("#remoting-profile-item").click();
       cy.selectInTable(remotingProfilesTableId, remotingProfiles.update.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, "exclude-local-receiver", value);
@@ -84,7 +84,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
       value = (result as { result: boolean }).result;
       cy.navigateTo(managementEndpoint, "ejb3-configuration");
       cy.get("#ejb3-container-item").click();
-      cy.get("#ejb3-remoting-profile-item").click();
+      cy.get("#remoting-profile-item").click();
       cy.selectInTable(remotingProfilesTableId, remotingProfiles.update.name);
       cy.editForm(configurationFormId);
       cy.flip(configurationFormId, "local-receiver-pass-by-value", value);
@@ -102,7 +102,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
   it("Edit static-ejb-discovery via type", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-container-item").click();
-    cy.get("#ejb3-remoting-profile-item").click();
+    cy.get("#remoting-profile-item").click();
     cy.selectInTable(remotingProfilesTableId, remotingProfiles.update.name);
     cy.editForm(configurationFormId);
     cy.formInput(configurationFormId, "static-ejb-discovery")
@@ -127,7 +127,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
   it("Edit static-ejb-discovery via wizard", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-container-item").click();
-    cy.get("#ejb3-remoting-profile-item").click();
+    cy.get("#remoting-profile-item").click();
     cy.selectInTable(remotingProfilesTableId, remotingProfiles.update.name);
     cy.editForm(configurationFormId);
     cy.formInput(configurationFormId, "static-ejb-discovery")
@@ -158,7 +158,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
   it("Remove", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-container-item").click();
-    cy.get("#ejb3-remoting-profile-item").click();
+    cy.get("#remoting-profile-item").click();
     cy.removeFromTable(remotingProfilesTableId, remotingProfiles.remove.name);
     cy.verifySuccess();
     cy.validateAddress(managementEndpoint, address.concat(remotingProfiles.remove.name), false);
@@ -167,7 +167,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
   it("Reset", () => {
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-container-item").click();
-    cy.get("#ejb3-remoting-profile-item").click();
+    cy.get("#remoting-profile-item").click();
     cy.selectInTable(remotingProfilesTableId, remotingProfiles.reset.name);
     cy.resetForm(configurationFormId, managementEndpoint, address.concat(remotingProfiles.reset.name));
   });

@@ -3,6 +3,7 @@ import { defineConfig } from "cypress";
 import { PullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
 import { Environment } from "testcontainers/build/types";
 import { findAPortNotInUse } from "portscanner";
+import fs from "fs";
 
 export default defineConfig({
   defaultCommandTimeout: 16000,
@@ -10,6 +11,7 @@ export default defineConfig({
   reporterOptions: {
     configFile: "reporter-config.json",
   },
+  video: true,
   videoCompression: false,
   e2e: {
     setupNodeEvents(on, config) {
@@ -336,6 +338,12 @@ export default defineConfig({
           });
           return Promise.all(promises);
         },
+      });
+      on("after:spec", (spec: Cypress.Spec, results: CypressCommandLine.RunResult) => {
+        // Keep videos only for failed specs
+        if (results && results.video && results.stats.failures === 0 && fs.existsSync(results.video)) {
+          fs.unlinkSync(results.video);
+        }
       });
       return config;
     },
