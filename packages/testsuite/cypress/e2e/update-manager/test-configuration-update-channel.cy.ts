@@ -86,8 +86,8 @@ describe("TESTS: Update Manager => Channels", () => {
   it("Update url channel parameters", () => {
     cy.navigateToSpecificChannel(managementEndpoint, channels.url.name);
     cy.editForm(channelForm);
+    cy.get(".tm-tag-remove").click()
     cy.formInput(channelForm, "repositories")
-      .clear()
       .type(channels.updateUrl.repositories + "{enter}")
       .trigger("change");
     cy.text(channelForm, "manifesturl", channels.updateUrl.manifest);

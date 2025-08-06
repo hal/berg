@@ -4,7 +4,7 @@ describe("TESTS: Update Manager => Updates => Offline using archive", () => {
 
   const address = ["update-manager", "updates"];
   const zipFile = Cypress.env("UPDATE_ZIP") as string;
-  const artifactToBeUpdated = "com.amazonaws:aws-java-sdk-kms";
+  const artifactToBeUpdated = "software.amazon.awssdk:aws-core";
 
   before(function () {
     cy.startWildflyContainer().then((result) => {
