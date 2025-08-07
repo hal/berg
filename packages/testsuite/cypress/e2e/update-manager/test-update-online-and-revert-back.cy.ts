@@ -3,7 +3,7 @@ describe("TESTS: Update Manager => Updates => Online updates => Revert", () => {
   const timeoutTime = 120000;
 
   const address = ["update-manager", "updates"];
-  const artifactToBeUpdated = "com.amazonaws:aws-java-sdk-kms";
+  const artifactToBeUpdated = "software.amazon.awssdk:aws-core";
 
   before(function () {
     cy.startWildflyContainer().then((result) => {

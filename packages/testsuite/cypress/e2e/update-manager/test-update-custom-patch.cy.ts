@@ -4,7 +4,7 @@ describe("TESTS: Update Manager => Updates => Custom patches", () => {
 
   const address = ["update-manager", "updates"];
   const zipFile = Cypress.env("PATCH_ZIP") as string;
-  const artifactToBeUpdated = "com.amazonaws:aws-java-sdk-kms";
+  const artifactToBeUpdated = "software.amazon.awssdk:aws-core";
 
   before(function () {
     cy.startWildflyContainer().then((result) => {
@@ -33,7 +33,7 @@ describe("TESTS: Update Manager => Updates => Custom patches", () => {
     cy.confirmNextInWizard();
     cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Updates applied");
     cy.confirmFinishInWizard();
-    // After the update there should be visible 3 items in history
-    cy.get("#update-manager-update > ul > li").should("have.length", 3);
+    // After the update there should be visible 4 items in history
+    cy.get("#update-manager-update > ul > li").should("have.length", 4);
   });
 });
