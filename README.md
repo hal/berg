@@ -54,15 +54,21 @@ npm run develop
 ```
 
 - If you want to execute whole testsuite, navigate to `packages/testsuite` and from within that directory execute `npm test`
+
   - It is also possible to run on specific browser by supplying `--browser` argument, e.g
+
   ```
   npm test -- --browser=chrome
   ```
+
   - It is also possible to reduce the amount of specs executed by passing `--specs` flag. This flag must be relative to the `packages/testsuite` directory and supports glob patterns, e.g to execute only `ejb` related tests, run
+
   ```
   npm test -- --specs="cypress/e2e/ejb/*.cy.ts"
   ```
+
   - If you wish to run the test suite against custom HAL or WildFly images, you can use `HAL_IMAGE` and `WILDFLY_IMAGE` environment variables to specify custom images, e.g
+
   ```
   HAL_IMAGE=quay.io/myorg/hal WILDFLY_IMAGE=quay.io/myorg/wildfly npm test ...
   ```
