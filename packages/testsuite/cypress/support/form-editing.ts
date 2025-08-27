@@ -264,7 +264,7 @@ declare global {
        */
       flip(formId: string, attributeName: string, value: boolean): Chainable<void>;
       /**
-       * Set text value to form input.
+       * Set text value to form input. The ID of the form input is concatenated like: cy.get("#" + formId + "-" + attributeName + "-editing");
        * @category Data inserting
        *
        * @param formId - The ID of section which contain form inputs.
