@@ -27,52 +27,58 @@ Cypress.Commands.add("cancelForm", (formId) => {
 });
 
 Cypress.Commands.add("resetForm", (formId, managementApi, address) => {
-  const resetButton = "#" + formId + ' a.clickable[data-operation="reset"';
-  cy.get(resetButton).click();
-  cy.get("body").then(($body) => {
-    if ($body.find(".modal-footer .btn-hal.btn-primary").length) {
-      cy.get(".modal-footer .btn-hal.btn-primary").click({ force: true });
-      cy.verifySuccess();
-    } else {
-      cy.get(".toast-notifications-list-pf .alert-warning")
-        .contains("None of the attributes could be reset.")
-        .should("be.visible");
-    }
-  });
-  cy.task("execute:cli", {
-    managementApi: `${managementApi}/management`,
-    operation: "read-resource-description",
-    address: address,
-  }).then((result) => {
-    expect((result as { outcome: string }).outcome).to.equal("success");
-    const attributes = (
-      result as {
-        result: { attributes: { [key: string]: { default?: string } } };
-      }
-    ).result.attributes;
-    const attributesWithDefaultValues = Object.keys(attributes)
-      .filter((key: string) => Object.prototype.hasOwnProperty.call(attributes[key], "default"))
-      .map((key) => {
-        const obj: {
-          [index: string]: undefined | string | number | boolean;
-        } = {};
-        obj["name"] = key;
-        obj["defaultValue"] = attributes[key].default;
-        return obj;
+  const resetButton = `#${formId} a.clickable[data-operation="reset"]`;
+  cy.isEAP(managementApi).then((isEAP) => {
+    if (isEAP) {
+      cy.get(resetButton).click();
+      cy.get("body").then(($body) => {
+        if ($body.find(".modal-footer .btn-hal.btn-primary").length) {
+          cy.get(".modal-footer .btn-hal.btn-primary").click({ force: true });
+          cy.verifySuccess();
+        } else {
+          cy.get(".toast-notifications-list-pf .alert-warning")
+            .contains("None of the attributes could be reset.")
+            .should("be.visible");
+        }
       });
-    attributesWithDefaultValues.forEach((attributeWithDefaultValue) => {
       cy.task("execute:cli", {
         managementApi: `${managementApi}/management`,
-        operation: "read-attribute",
+        operation: "read-resource-description",
         address: address,
-        name: attributeWithDefaultValue.name,
       }).then((result) => {
         expect((result as { outcome: string }).outcome).to.equal("success");
-        expect((result as { result: string | number | boolean }).result).to.equal(
-          attributeWithDefaultValue.defaultValue
-        );
+        const attributes = (
+          result as {
+            result: { attributes: { [key: string]: { default?: string } } };
+          }
+        ).result.attributes;
+        const attributesWithDefaultValues = Object.keys(attributes)
+          .filter((key: string) => Object.prototype.hasOwnProperty.call(attributes[key], "default"))
+          .map((key) => {
+            const obj: {
+              [index: string]: undefined | string | number | boolean;
+            } = {};
+            obj["name"] = key;
+            obj["defaultValue"] = attributes[key].default;
+            return obj;
+          });
+        attributesWithDefaultValues.forEach((attributeWithDefaultValue) => {
+          cy.task("execute:cli", {
+            managementApi: `${managementApi}/management`,
+            operation: "read-attribute",
+            address: address,
+            name: attributeWithDefaultValue.name,
+          }).then((result) => {
+            expect((result as { outcome: string }).outcome).to.equal("success");
+            expect((result as { result: string | number | boolean }).result).to.equal(
+              attributeWithDefaultValue.defaultValue
+            );
+          });
+        });
       });
-    });
+    } else {
+      cy.contains(resetButton).should("not.exist");
+    }
   });
 });
 
