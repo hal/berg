@@ -8,6 +8,7 @@
   "dependencies": {
     "@berg/berg": "^1.0.0",
     "@berg/commands": "^1.0.0",
+    "axios": "1.11.0",
     "wait-port": "^1.0.4"
   },
   "scripts": {
@@ -21,7 +22,7 @@
     "@types/command-line-args": "5.2.0",
     "@types/mochawesome": "6.2.1",
     "command-line-args": "5.2.1",
-    "cypress": "12.8.1",
+    "cypress": "^15.2.0",
     "cypress-multi-reporters": "1.6.3",
     "mocha-junit-reporter": "2.2.0",
     "mochawesome": "7.1.3",
