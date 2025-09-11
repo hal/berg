@@ -29,7 +29,7 @@ jobs:
       - name: Install Firefox
         uses: browser-actions/setup-firefox@v1
         with:
-          firefox-version: "latest-esr"
+          firefox-version: "latest"
       - name: "Run npm install"
         run: "npm install"
       - name: "Run compile"
@@ -39,4 +39,4 @@ jobs:
         run: "cd packages/testsuite && npm test"
       - name: "Run specific test"
         if: "${{ github.event.inputs.spec != '' }}"
-        run: "cd packages/testsuite && npm test -- --specs=${{ inputs.spec }}"
+        run: "cd packages/testsuite && npx cypress run --spec=${{ inputs.spec }}"

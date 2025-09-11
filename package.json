@@ -32,6 +32,7 @@
     "@typescript-eslint/parser": "5.55.0",
     "axios": "^1.11.0",
     "copyfiles": "2.4.1",
+    "cypress": "^15.2.0",
     "del": "7.0.0",
     "del-cli": "5.0.0",
     "eslint": "8.36.0",
@@ -44,7 +45,6 @@
     "typescript": "5.0.2"
   },
   "dependencies": {
-    "cypress": "15.2.0",
     "portscanner": "2.1.1"
   }
 }

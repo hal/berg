@@ -38,4 +38,4 @@ jobs:
         run: |
           cd packages/testsuite
           SPECS=$(echo ${{ steps.changed-files-specific.outputs.all_changed_files }} | sed "s|packages/testsuite/||g")
-          KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:24.0 npm run test-compiled -- --browser=chrome --specs=$SPECS
+          KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:24.0 npx cypress run --browser=chrome --spec=$SPECS

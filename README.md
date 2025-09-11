@@ -25,7 +25,7 @@ TestContainers (https://github.com/testcontainers/testcontainers-node) serves to
 Following tools are required to run the test suite
 
 - [NodeJS](https://nodejs.org/en/) as a runtime environment
-  - recommended version is 16, in other versions you can get errors like `Unable to detect compiler type`
+  - recommended version is 22
   - [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) is recommended optional tool to install & manage multiple Node environments
 - [npx](https://github.com/npm/npx) CLI tool used to exeute binaries from project's `node_modules` directly (instead of providing absolute/relative path to the commannds). It is used in multiple build steps.
 - [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Note that when using Podman as container runtime you may need to export following environment variables and start podman socket:
@@ -58,13 +58,13 @@ npm run develop
   - It is also possible to run on specific browser by supplying `--browser` argument, e.g
 
   ```
-  npm test -- --browser=chrome
+  npx cypress run --browser=chrome
   ```
 
   - It is also possible to reduce the amount of specs executed by passing `--specs` flag. This flag must be relative to the `packages/testsuite` directory and supports glob patterns, e.g to execute only `ejb` related tests, run
 
   ```
-  npm test -- --specs="cypress/e2e/ejb/*.cy.ts"
+  npx cypress run --spec="cypress/e2e/homepage/*.cy.ts"
   ```
 
   - If you wish to run the test suite against custom HAL or WildFly images, you can use `HAL_IMAGE` and `WILDFLY_IMAGE` environment variables to specify custom images, e.g

@@ -63,7 +63,7 @@ jobs:
       - name: Install Firefox
         uses: browser-actions/setup-firefox@v1
         with:
-          firefox-version: "latest-esr"
+          firefox-version: "latest"
       - name: "Check docker status"
         run: "systemctl status docker"
       - name: "Run npm install"
@@ -71,7 +71,7 @@ jobs:
       - name: "Run compile"
         run: "npm run compile"
       - name: "Run test(s)"
-        run: "cd packages/testsuite && npm test -- --browser=chrome --specs=cypress/e2e/${{ matrix.specs }}/*.cy.ts"
+        run: "cd packages/testsuite && npx cypress run --browser=chrome --spec=cypress/e2e/${{ matrix.specs }}/*.cy.ts"
       - name: "Archive test report(s) and video(s)"
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
