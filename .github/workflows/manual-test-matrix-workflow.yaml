@@ -50,7 +50,7 @@ jobs:
       - name: "Setup NodeJS"
         uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "22"
       - name: "Setup JDK"
         uses: actions/setup-java@v4
         with:
@@ -91,7 +91,7 @@ jobs:
       - name: "Setup NodeJS"
         uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "22"
       - name: "Install necessary tools"
         run: npm install -g copyfiles gh-pages@3.0.0 mochawesome-merge mochawesome-report-generator
       - name: "Generate Mochawesome Report"
