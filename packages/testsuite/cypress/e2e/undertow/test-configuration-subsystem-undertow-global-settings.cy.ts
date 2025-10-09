@@ -102,7 +102,7 @@ describe("TESTS: Configuration => Subsystem => Undertow => Global settings", () 
       testValues.statisticsEnabledExpression,
       {
         selector: expressionFormInputSelector,
-      }
+      },
     );
 
     cy.saveForm(globalSettingsForm.formId);
@@ -111,7 +111,7 @@ describe("TESTS: Configuration => Subsystem => Undertow => Global settings", () 
       managementEndpoint,
       address,
       "statistics-enabled",
-      testValues.statisticsEnabledExpression
+      testValues.statisticsEnabledExpression,
     );
   });
 

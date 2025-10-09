@@ -51,7 +51,7 @@ describe("TESTS: Configuration => Subsystem => Undertow => Global settings", () 
                 /subsystem=opentelemetry:add(),
                 /subsystem=microprofile-telemetry:add(),
                 /subsystem=microprofile-reactive-messaging-smallrye/opentelemetry-tracing=config:add(),
-                reload"`
+                reload"`,
         );
       });
   });
@@ -63,7 +63,7 @@ describe("TESTS: Configuration => Subsystem => Undertow => Global settings", () 
   beforeEach(() => {
     cy.navigateTo(
       managementEndpoint,
-      "generic-subsystem;address=%255C0subsystem%255C2microprofile-reactive-messaging-smallrye"
+      "generic-subsystem;address=%255C0subsystem%255C2microprofile-reactive-messaging-smallrye",
     );
     // the form takes a brief moment to initialize
     cy.wait(200);

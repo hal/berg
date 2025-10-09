@@ -167,7 +167,7 @@ describe("TESTS: Access secured by Elytron OIDC client, performed in Web Console
     cy.executeInWildflyContainer(
       `"/core-service=management/management-interface=http-interface:write-attribute(name=http-authentication-factory,value=management-http-authentication),
         /core-service=management/management-interface=http-interface:write-attribute(name=http-upgrade,value={sasl-authentication-factory=management-sasl-authentication,enabled=true}),
-        reload"`
+        reload"`,
     );
     cy.visit(`/?connect=${wildfly}#home`);
     cy.origin(keycloak, () => {

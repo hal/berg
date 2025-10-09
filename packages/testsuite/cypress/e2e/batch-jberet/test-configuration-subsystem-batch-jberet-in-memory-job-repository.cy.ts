@@ -32,7 +32,7 @@ describe("TESTS: Configuration => Subsystem => Batch => In Memory", () => {
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "batch-jberet", "in-memory-job-repository", inMemoryJobRepositories.create.name],
-      true
+      true,
     );
   });
 
@@ -50,7 +50,7 @@ describe("TESTS: Configuration => Subsystem => Batch => In Memory", () => {
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "batch-jberet", "in-memory-job-repository", inMemoryJobRepositories.remove.name],
-      false
+      false,
     );
   });
 });

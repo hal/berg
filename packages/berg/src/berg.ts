@@ -15,7 +15,7 @@ export class Berg {
     if (!Berg._instance) {
       const network = await new Network().start();
       const halContainer = await new GenericContainer(
-        process.env.HAL_IMAGE || "quay.io/halconsole/hal-development:latest"
+        process.env.HAL_IMAGE || "quay.io/halconsole/hal-development:latest",
       )
         .withPullPolicy(PullPolicy.alwaysPull())
         .withExposedPorts(9090)

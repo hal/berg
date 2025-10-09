@@ -45,14 +45,14 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     cy.text(
       "elytron-service-loader-http-server-mechanism-factory-add",
       "name",
-      serviceLoaderHttpServiceMechanismFactories.create.name
+      serviceLoaderHttpServiceMechanismFactories.create.name,
     );
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
       address.concat(serviceLoaderHttpServiceMechanismFactories.create.name),
-      true
+      true,
     );
   });
 
@@ -62,13 +62,13 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     cy.get("#elytron-service-loader-http-server-mechanism-factory-item").click();
     cy.removeFromTable(
       serviceLoaderHttpServerMechanismFactoryTableId,
-      serviceLoaderHttpServiceMechanismFactories.remove.name
+      serviceLoaderHttpServiceMechanismFactories.remove.name,
     );
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
       address.concat(serviceLoaderHttpServiceMechanismFactories.remove.name),
-      false
+      false,
     );
   });
 
@@ -78,12 +78,12 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     cy.get("#elytron-service-loader-http-server-mechanism-factory-item").click();
     cy.selectInTable(
       serviceLoaderHttpServerMechanismFactoryTableId,
-      serviceLoaderHttpServiceMechanismFactories.reset.name
+      serviceLoaderHttpServiceMechanismFactories.reset.name,
     );
     cy.resetForm(
       configurationFormId,
       managementEndpoint,
-      address.concat(serviceLoaderHttpServiceMechanismFactories.reset.name)
+      address.concat(serviceLoaderHttpServiceMechanismFactories.reset.name),
     );
   });
 
@@ -93,7 +93,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     cy.get("#elytron-service-loader-http-server-mechanism-factory-item").click();
     cy.selectInTable(
       serviceLoaderHttpServerMechanismFactoryTableId,
-      serviceLoaderHttpServiceMechanismFactories.update.name
+      serviceLoaderHttpServiceMechanismFactories.update.name,
     );
     cy.editForm(configurationFormId);
     cy.text(configurationFormId, "module", "sample");
@@ -103,7 +103,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
       managementEndpoint,
       address.concat(serviceLoaderHttpServiceMechanismFactories.update.name),
       "module",
-      "sample"
+      "sample",
     );
   });
 });

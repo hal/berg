@@ -67,7 +67,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "ee", "managed-thread-factory", threadFactories.create.name],
-      true
+      true,
     );
   });
 
@@ -93,7 +93,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "ee", "managed-thread-factory", threadFactories.remove.name],
-      false
+      false,
     );
   });
 
@@ -110,7 +110,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
       managementEndpoint,
       ["subsystem", "ee", "managed-thread-factory", threadFactories.update.name],
       "context-service",
-      contextServices.update.name
+      contextServices.update.name,
     );
   });
 
@@ -127,7 +127,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
       managementEndpoint,
       ["subsystem", "ee", "managed-thread-factory", threadFactories.update.name],
       "jndi-name",
-      "java:jboss/updatedJndiName"
+      "java:jboss/updatedJndiName",
     );
   });
 
@@ -144,7 +144,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Thread Factorie
       managementEndpoint,
       ["subsystem", "ee", "managed-thread-factory", threadFactories.update.name],
       "priority",
-      3
+      3,
     );
   });
 });

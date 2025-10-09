@@ -63,7 +63,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
           MSSQL_SA_PASSWORD: sqlserverPassword,
         },
       },
-      { timeout: 360_000 }
+      { timeout: 360_000 },
     );
     cy.startWildflyContainer()
       .then((result) => {
@@ -76,7 +76,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
             .withResource("/home/fixtures/jdbc-drivers/mssql-jdbc-11.2.1.jre11.jar")
             .withDependencies(["javax.api"])
             .build()
-            .toCLICommand()
+            .toCLICommand(),
         );
       })
       .then(() => {
@@ -96,7 +96,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
               .withUsername(sqlserverUser)
               .withPassword(sqlserverPassword)
               .build()
-              .toCLICommand()
+              .toCLICommand(),
           );
           cy.executeInWildflyContainer(
             new AddXADataSourceBuilder()
@@ -111,7 +111,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
               .withXaDataSourceProperty("encrypt", "true")
               .withXaDataSourceProperty("trustServerCertificate", "true")
               .build()
-              .toCLICommand()
+              .toCLICommand(),
           );
         });
       });
@@ -124,7 +124,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
   it("Should list created datasources in the column", () => {
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get("#ds-configuration li.finder-item").should("have.length", 3);
     cy.get("#non-xa-dsc-" + "ExampleDS".toLowerCase()).should("be.visible");
@@ -136,14 +136,14 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
     const id = "#non-xa-dsc-" + sqlserverDSToAdd.name.toLowerCase();
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get(id).should("be.visible");
     cy.get(id).click();
     cy.get(id + " button.btn.btn-finder.dropdown-toggle").click();
     cy.get(id + ' a.clickable:contains("Test Connection")').click();
     cy.get('span:contains("Successfully tested connection for data source ' + sqlserverDSToAdd.name + '")').should(
-      "be.visible"
+      "be.visible",
     );
   });
 
@@ -151,7 +151,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
     const id = "#non-xa-dsc-" + sqlserverDSToAdd.name.toLowerCase();
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get(id).should("be.visible");
     cy.get(id).click();
@@ -166,7 +166,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
     const id = "#non-xa-dsc-" + sqlserverDSToAdd.name.toLowerCase();
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get(id).should("be.visible");
     cy.get(id).click();
@@ -179,7 +179,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
     const id = "#non-xa-dsc-" + sqlserverDSToAdd.name.toLowerCase();
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get(id).should("be.visible");
     cy.get(id).click();
@@ -192,7 +192,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
   it("Creates SQLServer datasource via Wizard", () => {
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get("#ds-configuration-add-actions").click();
     cy.get("#ds-configuration-add").click({ force: true });
@@ -231,7 +231,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
   it("Creates SQLServer XA datasource via Wizard", () => {
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get("#ds-configuration-add-actions").click();
     cy.get("#xa-data-source-add").click({ force: true });
@@ -262,7 +262,7 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
     });
     cy.get(".tag-manager-container .tm-tag").should(
       "have.length",
-      Object.entries(sqlserverDefaultXADS.xaProperties).length
+      Object.entries(sqlserverDefaultXADS.xaProperties).length,
     );
     cy.get(".modal-footer .btn-primary").click();
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "5");

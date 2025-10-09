@@ -67,7 +67,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.create.name],
-      true
+      true,
     );
   });
 
@@ -93,7 +93,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.remove.name],
-      false
+      false,
     );
   });
 
@@ -110,7 +110,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "context-service",
-      contextServices.update.name
+      contextServices.update.name,
     );
   });
 
@@ -127,7 +127,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "core-threads",
-      3
+      3,
     );
   });
 
@@ -144,7 +144,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "hung-task-termination-period",
-      3000
+      3000,
     );
   });
 
@@ -161,7 +161,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "hung-task-threshold",
-      3000
+      3000,
     );
   });
 
@@ -178,7 +178,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "jndi-name",
-      "java:jboss/updatedJndiName"
+      "java:jboss/updatedJndiName",
     );
   });
 
@@ -195,7 +195,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "keepalive-time",
-      3000
+      3000,
     );
   });
 
@@ -220,7 +220,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
         managementEndpoint,
         ["subsystem", "ee", "managed-executor-service", executors.update.name],
         "long-running-tasks",
-        !value
+        !value,
       );
     });
   });
@@ -238,7 +238,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "max-threads",
-      3
+      3,
     );
   });
 
@@ -255,7 +255,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "queue-length",
-      3
+      3,
     );
   });
 
@@ -278,7 +278,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "reject-policy",
-      "RETRY_ABORT"
+      "RETRY_ABORT",
     );
   });
 
@@ -295,7 +295,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Executor", () =
       managementEndpoint,
       ["subsystem", "ee", "managed-executor-service", executors.update.name],
       "thread-priority",
-      3
+      3,
     );
   });
 });

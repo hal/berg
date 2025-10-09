@@ -108,7 +108,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
       managementEndpoint,
       ["subsystem", "distributable-web", "routing", "infinispan"],
       "cache",
-      cacheToUpdate
+      cacheToUpdate,
     );
   });
 
@@ -126,7 +126,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Routing", ()
       managementEndpoint,
       ["subsystem", "distributable-web", "routing", "infinispan"],
       "cache-container",
-      cacheContainers.update.name
+      cacheContainers.update.name,
     );
   });
 

@@ -47,7 +47,7 @@ describe("TESTS: Configuration => Subsystem => Security Manager => Maximum Permi
       managementEndpoint,
       address,
       maximumPermissionsAttrubuteName,
-      maximumPermissions.delete
+      maximumPermissions.delete,
     );
     cy.removeFromTable(maximumPermissionsTableId, maximumPermissions.delete.class);
     cy.verifySuccess();
@@ -56,7 +56,7 @@ describe("TESTS: Configuration => Subsystem => Security Manager => Maximum Permi
       managementEndpoint,
       address,
       maximumPermissionsAttrubuteName,
-      maximumPermissions.delete
+      maximumPermissions.delete,
     );
   });
 
@@ -80,7 +80,7 @@ describe("TESTS: Configuration => Subsystem => Security Manager => Maximum Permi
       managementEndpoint,
       address,
       maximumPermissionsAttrubuteName,
-      maximumPermissions.create
+      maximumPermissions.create,
     );
   });
 
@@ -107,7 +107,7 @@ describe("TESTS: Configuration => Subsystem => Security Manager => Maximum Permi
       managementEndpoint,
       address,
       maximumPermissionsAttrubuteName,
-      maximumPermissions.update
+      maximumPermissions.update,
     );
   });
 });

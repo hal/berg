@@ -23,7 +23,7 @@ describe("TESTS: Runtime => Server => Open Ports", () => {
     cy.readAttributeAsObjectList(
       `${managementEndpoint}/management`,
       ["socket-binding-group", "standard-sockets", "socket-binding", "*"],
-      "bound-port"
+      "bound-port",
     ).then((objects) => {
       const boundPorts = objects
         .map((obj) => {

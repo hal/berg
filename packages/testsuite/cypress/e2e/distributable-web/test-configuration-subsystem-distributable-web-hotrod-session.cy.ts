@@ -58,7 +58,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
           {
             host: outBoundSocketBinding.host,
             port: outBoundSocketBinding.port,
-          }
+          },
         );
         cy.task("execute:cli", {
           operation: "composite",
@@ -112,7 +112,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
           {
             granularity: hotRodSessionManagements.delete.granularity,
             "remote-cache-container": hotRodSessionManagements.delete["remote-cache-container"],
-          }
+          },
         );
         cy.addAddress(
           managementEndpoint,
@@ -120,7 +120,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
           {
             granularity: hotRodSessionManagements.update.granularity,
             "remote-cache-container": hotRodSessionManagements.update["remote-cache-container"],
-          }
+          },
         );
         cy.addAddress(
           managementEndpoint,
@@ -128,7 +128,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
           {
             granularity: hotRodSessionManagements.reset.granularity,
             "remote-cache-container": hotRodSessionManagements.reset["remote-cache-container"],
-          }
+          },
         );
       });
   });
@@ -145,14 +145,14 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
     cy.text(
       "dw-hotrod-session-management-table-add",
       "remote-cache-container",
-      hotRodSessionManagements.create["remote-cache-container"]
+      hotRodSessionManagements.create["remote-cache-container"],
     );
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "distributable-web", "hotrod-session-management", hotRodSessionManagements.create.name],
-      true
+      true,
     );
   });
 
@@ -180,7 +180,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
       managementEndpoint,
       ["subsystem", "distributable-web", "hotrod-session-management", hotRodSessionManagements.update.name],
       "cache-configuration",
-      "example"
+      "example",
     );
   });
 
@@ -202,7 +202,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
       managementEndpoint,
       ["subsystem", "distributable-web", "hotrod-session-management", hotRodSessionManagements.update.name],
       granularity,
-      "ATTRIBUTE"
+      "ATTRIBUTE",
     );
   });
 
@@ -218,7 +218,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
       managementEndpoint,
       ["subsystem", "distributable-web", "hotrod-session-management", hotRodSessionManagements.update.name],
       "remote-cache-container",
-      remoteCacheContainers.update.name
+      remoteCacheContainers.update.name,
     );
   });
 
@@ -226,7 +226,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "distributable-web", "hotrod-session-management", hotRodSessionManagements.delete.name],
-      true
+      true,
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-hotrod-session-management-item").click();
@@ -235,7 +235,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => HotRod Sessi
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "distributable-web", "hotrod-session-management", hotRodSessionManagements.delete.name],
-      false
+      false,
     );
   });
 });
