@@ -16,7 +16,7 @@ jobs:
       - name: "Setup NodeJS"
         uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "22"
       - name: "Setup JDK"
         uses: actions/setup-java@v4
         with:
@@ -36,7 +36,7 @@ jobs:
         run: "npm run compile"
       - name: "Run all tests"
         if: "${{ github.event.inputs.spec == '' }}"
-        run: "cd packages/testsuite && npm test"
+        run: "npm run test:compiled"
       - name: "Run specific test"
         if: "${{ github.event.inputs.spec != '' }}"
-        run: "cd packages/testsuite && npm test -- --specs=${{ inputs.spec }}"
+        run: "npm run test:compiled -- --specs=${{ inputs.spec }}"
