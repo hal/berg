@@ -50,7 +50,7 @@ jobs:
       - name: "Setup NodeJS"
         uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "22"
       - name: "Setup JDK"
         uses: actions/setup-java@v4
         with:
@@ -71,7 +71,7 @@ jobs:
       - name: "Run compile"
         run: "npm run compile"
       - name: "Run test(s)"
-        run: "cd packages/testsuite && npm test -- --browser=chrome --specs=cypress/e2e/${{ matrix.specs }}/*.cy.ts"
+        run: "npm run test:compiled -- --browser=chrome --specs=packages/testsuite/cypress/e2e/${{ matrix.specs }}/*.cy.ts"
       - name: "Archive test report(s) and video(s)"
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
@@ -91,13 +91,13 @@ jobs:
       - name: "Setup NodeJS"
         uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "22"
       - name: "Install necessary tools"
         run: npm install -g copyfiles gh-pages@3.0.0 mochawesome-merge mochawesome-report-generator
       - name: "Generate Mochawesome Report"
-        run: mochawesome-merge "./*-artifacts/results/cypress/e2e/*.json" > mochawesome.json
+        run: mochawesome-merge "./*-artifacts/results/packages/testsuite/cypress/e2e/*.json" > mochawesome.json
       - name: "Copy video assets"
-        run: copyfiles -u 3 "./*-artifacts/cypress/videos/*.mp4" mochawesome-report/assets/videos
+        run: copyfiles -u 3 "./*-artifacts/packages/testsuite/cypress/videos/*.mp4" mochawesome-report/assets/videos
       - name: "Create GH Pages content"
         run: marge mochawesome.json -f index.html
       - name: "Get time info"

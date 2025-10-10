@@ -7,6 +7,6 @@
   "mochawesomeReporterOptions": {
     "reportDir": "results",
     "html": false,
-    "reportFilename": "cypress/e2e/[name]_[status]"
+    "reportFilename": "packages/testsuite/cypress/e2e/[name]_[status]"
   }
 }

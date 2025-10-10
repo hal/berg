@@ -14,7 +14,7 @@ jobs:
       - name: "Setup NodeJS"
         uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: "22"
       - name: "Setup JDK"
         uses: actions/setup-java@v4
         with:
@@ -36,6 +36,5 @@ jobs:
       - name: "Run tests of modified files"
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
-          cd packages/testsuite
-          SPECS=$(echo ${{ steps.changed-files-specific.outputs.all_changed_files }} | sed "s|packages/testsuite/||g")
-          KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:24.0 npm run test-compiled -- --browser=chrome --specs=$SPECS
+          SPECS="${{ steps.changed-files-specific.outputs.all_changed_files }}"
+          KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:24.0 npm run test -- --browser=chrome --specs=$SPECS

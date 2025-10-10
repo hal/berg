@@ -44,7 +44,7 @@ Cypress.Commands.add(
       expect((result as { outcome: string }).outcome).to.equal("success");
       expect((result as { result: object[] | string[] }).result).to.not.deep.include(expectedValue);
     });
-  }
+  },
 );
 
 Cypress.Commands.add("validateAddress", (managementEndpoint, address, expectedValue) => {
@@ -114,7 +114,7 @@ declare global {
         formId: string,
         attributeName: string,
         elementName: string,
-        className: string
+        className: string,
       ): Chainable<void>;
       /**
        * Verify the specific configuration is saved.
@@ -129,7 +129,7 @@ declare global {
         managementEndpoint: string,
         address: string[],
         attributeName: string,
-        expectedValue: string | number | boolean
+        expectedValue: string | number | boolean,
       ): void;
       /**
        * Verify a list attribute contain expected value.
@@ -144,7 +144,7 @@ declare global {
         managementEndpoint: string,
         address: string[],
         attributeName: string,
-        expectedValue: object | string
+        expectedValue: object | string,
       ): void;
       /**
        * Verify a list attribute contain expected value.
@@ -159,7 +159,7 @@ declare global {
         managementEndpoint: string,
         address: string[],
         attributeName: string,
-        expectedValue: object | string
+        expectedValue: object | string,
       ): void;
       /**
        * Verify a subsystem configuration was created or removed.
@@ -192,7 +192,7 @@ declare global {
         managementEndpoint: string,
         address: string[],
         attributeName: string,
-        expectedValue: string
+        expectedValue: string,
       ): void;
       /**
        * Verify the forbiden error message is displayd

@@ -17,7 +17,6 @@ Cypress.Commands.add("skipIfNot", (expression: Cypress.Chainable<boolean>, conte
 });
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
       /**

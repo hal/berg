@@ -41,7 +41,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "batch-jberet", "thread-factory", threadFactories.create.name],
-      true
+      true,
     );
   });
 
@@ -53,7 +53,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "batch-jberet", "thread-factory", threadFactories.remove.name],
-      false
+      false,
     );
   });
 
@@ -69,7 +69,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
       managementEndpoint,
       ["subsystem", "batch-jberet", "thread-factory", threadFactories.edit.name],
       groupName,
-      "newValue"
+      "newValue",
     );
   });
 
@@ -85,7 +85,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
       managementEndpoint,
       ["subsystem", "batch-jberet", "thread-factory", threadFactories.edit.name],
       priority,
-      10
+      10,
     );
   });
 
@@ -101,7 +101,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Factory", () => {
       managementEndpoint,
       ["subsystem", "batch-jberet", "thread-factory", threadFactories.edit.name],
       threadNamePattern,
-      "newValue"
+      "newValue",
     );
   });
 

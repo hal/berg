@@ -53,19 +53,33 @@ in the root directory to download all of the NPM dependencies specified in `pack
 npm run develop
 ```
 
-- If you want to execute whole testsuite, navigate to `packages/testsuite` and from within that directory execute `npm test`
-  - It is also possible to run on specific browser by supplying `--browser` argument, e.g
-  ```
-  npm test -- --browser=chrome
-  ```
-  - It is also possible to reduce the amount of specs executed by passing `--specs` flag. This flag must be relative to the `packages/testsuite` directory and supports glob patterns, e.g to execute only `ejb` related tests, run
-  ```
-  npm test -- --specs="cypress/e2e/ejb/*.cy.ts"
-  ```
-  - If you wish to run the test suite against custom HAL or WildFly images, you can use `HAL_IMAGE` and `WILDFLY_IMAGE` environment variables to specify custom images, e.g
-  ```
-  HAL_IMAGE=quay.io/myorg/hal WILDFLY_IMAGE=quay.io/myorg/wildfly npm test ...
-  ```
+- If you want to execute whole testsuite execute `npm test`
+
+- It is also possible to run on specific browser by supplying `--browser` argument, e.g
+
+```
+npm test -- --browser=chrome
+```
+
+- It is possible to reduce the amount of specs executed by passing `--specs` flag. It also supports glob patterns, e.g to execute only `homepage` related tests, run
+
+```
+npm test -- --specs="packages/testsuite/cypress/e2e/homepage/test-homepage.cy.ts"
+or
+npm test -- --specs="packages/testsuite/cypress/e2e/homepage/*.cy.ts"
+```
+
+- If you want to run tests without cleaning and a resources compilations (useful for CI), use
+
+```
+npm run test:compiled -- --specs="packages/testsuite/cypress/e2e/homepage/test-homepage.cy.ts"
+```
+
+- If you wish to run the test suite against custom HAL or WildFly images, you can use `HAL_IMAGE` and `WILDFLY_IMAGE` environment variables to specify custom images, e.g
+
+```
+HAL_IMAGE=quay.io/myorg/hal WILDFLY_IMAGE=quay.io/myorg/wildfly npm test ...
+```
 
 - For debugging purposes videos (and screenshots) of failed tests are stored after the test run (works only with chrome).
 

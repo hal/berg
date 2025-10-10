@@ -2,13 +2,14 @@ import { Berg } from "@berg/berg";
 import * as cypress from "cypress";
 import commandLineArgs from "command-line-args";
 import { OptionDefinition } from "command-line-args";
+import path from "path";
 
 const optionDefinitions: OptionDefinition[] = [
   { name: "browser", type: String, defaultValue: "firefox" },
   {
     name: "specs",
     type: String,
-    defaultValue: "cypress/e2e/**/*.cy.ts",
+    defaultValue: "packages/testsuite/cypress/e2e/**/*.cy.ts",
   },
 ];
 
@@ -16,8 +17,11 @@ const optionDefinitions: OptionDefinition[] = [
   const options = commandLineArgs(optionDefinitions);
   console.log(options);
   const berg = await Berg.getInstance();
+  const projectRoot = path.resolve(__dirname, "..", "..", "..");
   const testRunResult = await cypress.run({
     browser: options.browser as string,
+    project: projectRoot,
+    configFile: path.join(projectRoot, "cypress.config.ts"),
     env: {
       NETWORK_NAME: berg.getNetwork().getName(),
       HAL_CONTAINER_PORT: berg.getHalContainer().getMappedPort(9090),
@@ -30,7 +34,10 @@ const optionDefinitions: OptionDefinition[] = [
     },
   });
   await berg.stop();
-  if (testRunResult.status == "failed" || testRunResult.totalFailed > 0) {
+  if ("status" in testRunResult && testRunResult.status === "failed") {
+    process.exit(1);
+  }
+  if ("totalFailed" in testRunResult && testRunResult.totalFailed > 0) {
     process.exit(1);
   }
 })();

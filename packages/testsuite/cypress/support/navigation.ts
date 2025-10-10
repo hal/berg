@@ -51,7 +51,6 @@ Cypress.Commands.add("confirmYesInWizard", () => {
 });
 
 export {};
-/* eslint @typescript-eslint/no-namespace: off */
 declare global {
   namespace Cypress {
     interface Chainable {

@@ -29,7 +29,7 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
           .withResource("/home/fixtures/modules/process-state-listener-1.0-SNAPSHOT.jar")
           .withDependencies(["org.wildfly.extension.core-management-client"])
           .build()
-          .toCLICommand()
+          .toCLICommand(),
       ).then(() => {
         cy.addAddress(
           managementEndpoint,
@@ -37,7 +37,7 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
           {
             class: processStateListeners.delete.class,
             module: processStateListeners.delete.module,
-          }
+          },
         );
       });
     });
@@ -59,7 +59,7 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "core-management", "process-state-listener", processStateListeners.create.name],
-      true
+      true,
     );
   });
 
@@ -67,7 +67,7 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "core-management", "process-state-listener", processStateListeners.delete.name],
-      true
+      true,
     );
     cy.navigateTo(managementEndpoint, "core-management");
     cy.get("#core-mgmt-prc-state-item").click();
@@ -76,7 +76,7 @@ describe("TESTS: Configuration => Subsystem => Subsystem => Core Management => P
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "core-management", "process-state-listener", processStateListeners.delete.name],
-      false
+      false,
     );
   });
 });

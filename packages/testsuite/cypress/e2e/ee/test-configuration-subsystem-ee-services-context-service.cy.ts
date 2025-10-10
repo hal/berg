@@ -70,7 +70,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Context Service
       managementEndpoint,
       ["subsystem", "ee", "context-service", contextServices.update.name],
       "jndi-name",
-      "java:jboss/updated"
+      "java:jboss/updated",
     );
   });
 

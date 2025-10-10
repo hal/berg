@@ -75,7 +75,7 @@ describe("TESTS: Configuration => Subsystem => Security Manager => Minimum Permi
       managementEndpoint,
       address,
       mininumPermissionsAttrubuteName,
-      mininumPermissions.create
+      mininumPermissions.create,
     );
   });
 
@@ -102,7 +102,7 @@ describe("TESTS: Configuration => Subsystem => Security Manager => Minimum Permi
       managementEndpoint,
       address,
       mininumPermissionsAttrubuteName,
-      mininumPermissions.update
+      mininumPermissions.update,
     );
   });
 
@@ -111,7 +111,7 @@ describe("TESTS: Configuration => Subsystem => Security Manager => Minimum Permi
       managementEndpoint,
       address,
       mininumPermissionsAttrubuteName,
-      mininumPermissions.delete
+      mininumPermissions.delete,
     );
     cy.removeFromTable(mininumPermissionsTableId, mininumPermissions.delete.class);
     cy.verifySuccess();
@@ -120,7 +120,7 @@ describe("TESTS: Configuration => Subsystem => Security Manager => Minimum Permi
       managementEndpoint,
       address,
       mininumPermissionsAttrubuteName,
-      mininumPermissions.delete
+      mininumPermissions.delete,
     );
   });
 });

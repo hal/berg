@@ -48,7 +48,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
           ["subsystem", "infinispan", "cache-container", cacheContainers.default.name],
           {
             module: "org.wildfly.clustering.ejb.infinispan",
-          }
+          },
         );
         cy.addAddress(managementEndpoint, [
           "subsystem",
@@ -160,7 +160,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Passiv
       managementEndpoint,
       address.concat(passivations.update.name),
       "cache-container",
-      cacheContainers.update.name
+      cacheContainers.update.name,
     );
   });
 

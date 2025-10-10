@@ -35,7 +35,7 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "batch-jberet", "jdbc-job-repository", jdbcJobRepositories.create.name],
-      true
+      true,
     );
   });
 
@@ -43,7 +43,7 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
     cy.addAddress(
       managementEndpoint,
       ["subsystem", "batch-jberet", "jdbc-job-repository", jdbcJobRepositories.remove.name],
-      { "data-source": jdbcJobRepositories.remove.dataSource }
+      { "data-source": jdbcJobRepositories.remove.dataSource },
     );
     cy.navigateTo(managementEndpoint, "batch-jberet-configuration");
     cy.get("#batch-jdbc-job-repo-item").click();
@@ -52,7 +52,7 @@ describe("TESTS: Configuration => Subsystem => Batch => JDBC", () => {
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "batch-jberet", "jdbc-job-repository", jdbcJobRepositories.remove.name],
-      false
+      false,
     );
   });
 });

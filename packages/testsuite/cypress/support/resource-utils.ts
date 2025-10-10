@@ -10,7 +10,7 @@ Cypress.Commands.add("createOutboundSocketBinding", (managementEndpoint, socketB
   cy.addAddress(
     managementEndpoint,
     ["socket-binding-group", "standard-sockets", "remote-destination-outbound-socket-binding", socketBinding.name],
-    socketBinding
+    socketBinding,
   );
 });
 
@@ -168,7 +168,7 @@ declare global {
         mailSession: {
           mailSessionName: string;
           jndiName: string;
-        }
+        },
       ): Chainable<void>;
       /**
        * Create a outbound socket binding.
@@ -183,7 +183,7 @@ declare global {
           name: string;
           host: string;
           port: string;
-        }
+        },
       ): Chainable<void>;
       /**
        * Create a generic resource. The resource can't exist otherwise it fail.
@@ -283,7 +283,7 @@ declare global {
         managementEndpoint: string,
         address: string[],
         name: string,
-        value: string | boolean | number | object | object[]
+        value: string | boolean | number | object | object[],
       ): Chainable<object[]>;
 
       /**

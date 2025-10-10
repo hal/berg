@@ -19,7 +19,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Container", (
           ["subsystem", "ejb3", "application-security-domain", securityDomainToUpdate],
           {
             "security-domain": "ApplicationDomain",
-          }
+          },
         );
         cy.addAddress(managementEndpoint, ["subsystem", "ejb3", "cache", cacheToUpdate]);
         cy.addAddress(managementEndpoint, ["subsystem", "ejb3", "strict-max-bean-instance-pool", slsbToUpdate]);

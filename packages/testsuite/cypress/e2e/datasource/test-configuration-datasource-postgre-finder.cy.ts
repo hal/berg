@@ -48,7 +48,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
           POSTGRES_DB: postgresDatabaseName,
         },
       },
-      { timeout: 120_000 }
+      { timeout: 120_000 },
     );
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
@@ -58,7 +58,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
           .withResource("/home/fixtures/jdbc-drivers/postgresql-42.5.1.jar")
           .withDependencies(["javax.api"])
           .build()
-          .toCLICommand()
+          .toCLICommand(),
       ).then(() => {
         cy.task("execute:cli", {
           managementApi: managementEndpoint + "/management",
@@ -76,7 +76,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
               .withUsername(postgresUser)
               .withPassword(postgresPassword)
               .build()
-              .toCLICommand()
+              .toCLICommand(),
           );
           cy.executeInWildflyContainer(
             new AddXADataSourceBuilder()
@@ -89,7 +89,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
               .withXaDataSourceProperty("serverName", postgresContainerName)
               .withXaDataSourceProperty("databaseName", postgresDatabaseName)
               .build()
-              .toCLICommand()
+              .toCLICommand(),
           );
         });
       });
@@ -103,7 +103,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
   it("Should list created datasources in the column", () => {
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get("#ds-configuration li.finder-item").should("have.length", 3);
     cy.get("#non-xa-dsc-" + "ExampleDS".toLowerCase()).should("be.visible");
@@ -115,14 +115,14 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
     const id = "#non-xa-dsc-" + postgresDSToAdd.name.toLowerCase();
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get(id).should("be.visible");
     cy.get(id).click();
     cy.get(id + " button.btn.btn-finder.dropdown-toggle").click();
     cy.get(id + ' a.clickable:contains("Test Connection")').click();
     cy.get('span:contains("Successfully tested connection for data source ' + postgresDSToAdd.name + '")').should(
-      "be.visible"
+      "be.visible",
     );
   });
 
@@ -130,7 +130,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
     const id = "#non-xa-dsc-" + postgresDSToAdd.name.toLowerCase();
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get(id).should("be.visible");
     cy.get(id).click();
@@ -145,7 +145,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
     const id = "#non-xa-dsc-" + postgresDSToAdd.name.toLowerCase();
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get(id).should("be.visible");
     cy.get(id).click();
@@ -158,7 +158,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
     const id = "#non-xa-dsc-" + postgresDSToAdd.name.toLowerCase();
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get(id).should("be.visible");
     cy.get(id).click();
@@ -171,7 +171,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
   it("Creates PostgreSQL datasource via Wizard", () => {
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get("#ds-configuration-add-actions").click();
     cy.get("#ds-configuration-add").click({ force: true });
@@ -210,7 +210,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
   it("Creates PostgreSQL XA datasource via Wizard", () => {
     cy.navigateTo(
       managementEndpoint,
-      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources"
+      "configuration;path=configuration~subsystems!css~datasources!data-source-driver~datasources",
     );
     cy.get("#ds-configuration-add-actions").click();
     cy.get("#xa-data-source-add").click({ force: true });
@@ -241,7 +241,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL (Finder)", () => {
     });
     cy.get(".tag-manager-container .tm-tag").should(
       "have.length",
-      Object.entries(postgresDefaultXADS.xaProperties).length
+      Object.entries(postgresDefaultXADS.xaProperties).length,
     );
     cy.get(".modal-footer .btn-primary").click();
     cy.get(".wizard-pf-steps .wizard-pf-step.active .wizard-pf-step-number").should("have.text", "5");

@@ -46,7 +46,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     cy.text(
       "elytron-provider-http-server-mechanism-factory-add",
       "name",
-      providerHttpServiceMechanismFactories.create.name
+      providerHttpServiceMechanismFactories.create.name,
     );
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
@@ -70,7 +70,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     cy.resetForm(
       configurationFormId,
       managementEndpoint,
-      address.concat(providerHttpServiceMechanismFactories.reset.name)
+      address.concat(providerHttpServiceMechanismFactories.reset.name),
     );
   });
 
@@ -87,7 +87,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
       managementEndpoint,
       address.concat(providerHttpServiceMechanismFactories.update.name),
       "providers",
-      "pl-to-update"
+      "pl-to-update",
     );
   });
 });
