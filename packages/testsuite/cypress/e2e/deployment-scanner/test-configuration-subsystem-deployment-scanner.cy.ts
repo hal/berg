@@ -83,7 +83,7 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
         managementEndpoint,
         address.concat(deploymentScanners.update.name),
         autoDeployExploded,
-        !value
+        !value,
       );
     });
   });
@@ -156,7 +156,7 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
       managementEndpoint,
       address.concat(deploymentScanners.update.name),
       relativeTo,
-      "jboss.server.base.dir"
+      "jboss.server.base.dir",
     );
   });
 
@@ -179,7 +179,7 @@ describe("TESTS: Configuration => Subsystem => Deployment Scanner", () => {
         managementEndpoint,
         address.concat(deploymentScanners.update.name),
         runtimeFailureCausesRollback,
-        !value
+        !value,
       );
     });
   });

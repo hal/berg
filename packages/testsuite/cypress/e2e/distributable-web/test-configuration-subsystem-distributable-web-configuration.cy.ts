@@ -48,7 +48,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
           {
             host: outBoundSocketBinding.host,
             port: outBoundSocketBinding.port,
-          }
+          },
         );
         cy.task("execute:cli", {
           operation: "composite",
@@ -79,7 +79,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
           {
             granularity: hotRodSessionManagements.create.granularity,
             "remote-cache-container": hotRodSessionManagements.create["remote-cache-container"],
-          }
+          },
         );
         cy.addAddress(
           managementEndpoint,
@@ -91,7 +91,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
           ],
           {
             "remote-cache-container": hotRodSingleSignOnManagements.create["remote-cache-container"],
-          }
+          },
         );
       });
   });
@@ -107,7 +107,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
       managementEndpoint,
       ["subsystem", "distributable-web"],
       "default-session-management",
-      hotRodSessionManagements.create.name
+      hotRodSessionManagements.create.name,
     );
   });
 
@@ -122,7 +122,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Configuratio
       managementEndpoint,
       ["subsystem", "distributable-web"],
       "default-single-sign-on-management",
-      hotRodSingleSignOnManagements.create.name
+      hotRodSingleSignOnManagements.create.name,
     );
   });
 

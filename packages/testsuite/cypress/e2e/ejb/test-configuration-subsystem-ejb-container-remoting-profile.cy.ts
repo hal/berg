@@ -35,13 +35,13 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
           managementEndpoint,
           address.concat(remotingProfiles.reset.name),
           "local-receiver-pass-by-value",
-          true
+          true,
         );
         cy.writeAttribute(
           managementEndpoint,
           address.concat(remotingProfiles.reset.name),
           "exclude-local-receiver",
-          true
+          true,
         );
         cy.writeAttribute(managementEndpoint, address.concat(remotingProfiles.reset.name), "static-ejb-discovery", [
           {
@@ -90,7 +90,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
         managementEndpoint,
         address.concat(remotingProfiles.update.name),
         "exclude-local-receiver",
-        !value
+        !value,
       );
     });
   });
@@ -116,7 +116,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
         managementEndpoint,
         address.concat(remotingProfiles.update.name),
         "local-receiver-pass-by-value",
-        !value
+        !value,
       );
     });
   });
@@ -142,7 +142,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
         "app-name": "someAppName",
         "module-name": "someModule",
         "distinct-name": "someDistinctName",
-      }
+      },
     );
   });
 
@@ -173,7 +173,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
         "app-name": "anotherApp",
         "module-name": "anotherModule",
         "distinct-name": "anotherDistinctName",
-      }
+      },
     );
   });
 
@@ -197,13 +197,13 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
       managementEndpoint,
       address.concat(remotingProfiles.reset.name),
       "local-receiver-pass-by-value",
-      false
+      false,
     );
     cy.verifyAttribute(
       managementEndpoint,
       address.concat(remotingProfiles.reset.name),
       "exclude-local-receiver",
-      false
+      false,
     );
     cy.verifyListAttributeDoesNotContain(
       managementEndpoint,
@@ -214,7 +214,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
         "app-name": "someAppName",
         "module-name": "someModule",
         "distinct-name": "someDistinctName",
-      }
+      },
     );
   });
 });

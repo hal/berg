@@ -59,7 +59,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "batch-jberet", "thread-pool", threadPools.remove.name],
-      false
+      false,
     );
   });
 
@@ -75,7 +75,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
       managementEndpoint,
       ["subsystem", "batch-jberet", "thread-pool", threadPools.edit.name],
       "max-threads",
-      5
+      5,
     );
   });
 
@@ -91,7 +91,7 @@ describe("TESTS: Configuration => Subsystem => Batch => Thread Pool", () => {
       managementEndpoint,
       ["subsystem", "batch-jberet", "thread-pool", threadPools.edit.name],
       "thread-factory",
-      threadFactoryEdit
+      threadFactoryEdit,
     );
   });
 

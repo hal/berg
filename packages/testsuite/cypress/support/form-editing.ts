@@ -69,7 +69,7 @@ Cypress.Commands.add("resetForm", (formId, managementApi, address) => {
       }).then((result) => {
         expect((result as { outcome: string }).outcome).to.equal("success");
         expect((result as { result: string | number | boolean }).result).to.equal(
-          attributeWithDefaultValue.defaultValue
+          attributeWithDefaultValue.defaultValue,
         );
       });
     });
@@ -102,27 +102,20 @@ Cypress.Commands.add("removeSingletonResource", (formId) => {
   cy.get('div.modal-footer > button.btn.btn-hal.btn-primary:contains("Yes")').click();
 });
 
-/* eslint @typescript-eslint/unbound-method: off */
 Cypress.Commands.add("flip", (formId, attributeName, value) => {
-  cy.formInput(formId, attributeName)
-    .wait(1000)
-    .should(($input) => {
-      if (value) {
-        expect($input).to.be.checked;
-      } else {
-        expect($input).to.not.be.checked;
-      }
-    });
+  if (value) {
+    cy.formInput(formId, attributeName).wait(1000).should("be.checked");
+  } else {
+    cy.formInput(formId, attributeName).wait(1000).should("not.be.checked");
+  }
   cy.get('div[data-form-item-group="' + formId + "-" + attributeName + '-editing"] .bootstrap-switch-label:visible')
     .click()
     .wait(1000);
-  cy.formInput(formId, attributeName).should(($input) => {
-    if (value) {
-      expect($input).to.not.be.checked;
-    } else {
-      expect($input).to.be.checked;
-    }
-  });
+  if (value) {
+    cy.formInput(formId, attributeName).should("not.be.checked");
+  } else {
+    cy.formInput(formId, attributeName).should("be.checked");
+  }
 });
 
 Cypress.Commands.add(
@@ -143,7 +136,7 @@ Cypress.Commands.add(
     formInput.trigger("change");
     // lose focus of current input to close suggestions which can hide buttons.
     formInput.blur();
-  }
+  },
 );
 
 Cypress.Commands.add("textExpression", (formId, attributeName, value, options = { selector: "" }) => {
@@ -185,7 +178,6 @@ Cypress.Commands.add("selectInDropdownMenu", (formId, attributeName, value) => {
 });
 
 export {};
-/* eslint @typescript-eslint/no-namespace: off */
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -277,7 +269,7 @@ declare global {
         formId: string,
         attributeName: string,
         value: string | number,
-        options?: { selector?: string; parseSpecialCharSequences?: boolean }
+        options?: { selector?: string; parseSpecialCharSequences?: boolean },
       ): Chainable<void>;
       /**
        * Set text value to form input.
@@ -293,7 +285,7 @@ declare global {
         formId: string,
         attributeName: string,
         value: string | number,
-        options?: { selector?: string }
+        options?: { selector?: string },
       ): Chainable<void>;
       /**
        * Clear all selected list attribute items from the form input.

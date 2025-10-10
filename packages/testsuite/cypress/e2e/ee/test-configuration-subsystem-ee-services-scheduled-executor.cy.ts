@@ -44,21 +44,21 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
           ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
           {
             "jndi-name": scheduledExecutors.update["jndi-name"],
-          }
+          },
         );
         cy.addAddress(
           managementEndpoint,
           ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.reset.name],
           {
             "jndi-name": scheduledExecutors.reset["jndi-name"],
-          }
+          },
         );
         cy.addAddress(
           managementEndpoint,
           ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.remove.name],
           {
             "jndi-name": scheduledExecutors.remove["jndi-name"],
-          }
+          },
         );
       });
   });
@@ -79,7 +79,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.create.name],
-      true
+      true,
     );
   });
 
@@ -105,7 +105,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.remove.name],
-      false
+      false,
     );
   });
 
@@ -122,7 +122,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "context-service",
-      contextServices.update.name
+      contextServices.update.name,
     );
   });
 
@@ -139,7 +139,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "core-threads",
-      3
+      3,
     );
   });
 
@@ -156,7 +156,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "hung-task-termination-period",
-      3000
+      3000,
     );
   });
 
@@ -173,7 +173,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "hung-task-threshold",
-      3000
+      3000,
     );
   });
 
@@ -190,7 +190,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "jndi-name",
-      "java:jboss/updatedJndiName"
+      "java:jboss/updatedJndiName",
     );
   });
 
@@ -207,7 +207,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "keepalive-time",
-      3000
+      3000,
     );
   });
 
@@ -232,7 +232,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
         managementEndpoint,
         ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
         "long-running-tasks",
-        !value
+        !value,
       );
     });
   });
@@ -256,7 +256,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "reject-policy",
-      "RETRY_ABORT"
+      "RETRY_ABORT",
     );
   });
 
@@ -273,7 +273,7 @@ describe("TESTS: Configuration => Subsystem => EE => Services => Scheduled Execu
       managementEndpoint,
       ["subsystem", "ee", "managed-scheduled-executor-service", scheduledExecutors.update.name],
       "thread-priority",
-      3
+      3,
     );
   });
 });

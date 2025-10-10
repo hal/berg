@@ -87,7 +87,7 @@ describe("TESTS: Configuration => Subsystems => IO => Buffer Pool", () => {
         cy.saveForm(bufferPoolForm.idUpdate);
         cy.verifySuccess();
         cy.verifyAttribute(managementEndpoint, address, bufferPoolForm.directBuffers, !defaultValue);
-      }
+      },
     );
   });
 

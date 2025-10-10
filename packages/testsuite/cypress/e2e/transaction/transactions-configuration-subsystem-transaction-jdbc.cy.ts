@@ -50,7 +50,7 @@ describe("TESTS: Configuration => Sybsystem => Transaction => Path", () => {
             .withConnectionUrl(nonEmptyDS.connectionUrl)
             .withDriverName(nonEmptyDS.driverName)
             .build()
-            .toCLICommand()
+            .toCLICommand(),
         );
         cy.executeInWildflyContainer(
           new AddDataSourceBuilder()
@@ -59,7 +59,7 @@ describe("TESTS: Configuration => Sybsystem => Transaction => Path", () => {
             .withConnectionUrl(nonEmptyDSUpdated.connectionUrl)
             .withDriverName(nonEmptyDSUpdated.driverName)
             .build()
-            .toCLICommand()
+            .toCLICommand(),
         );
       });
   });

@@ -108,7 +108,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
           ],
           {
             "cache-container": infinispanSingleSignOnManagements.update["cache-container"],
-          }
+          },
         );
         cy.addAddress(
           managementEndpoint,
@@ -120,7 +120,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
           ],
           {
             "cache-container": infinispanSingleSignOnManagements.delete["cache-container"],
-          }
+          },
         );
         cy.addAddress(
           managementEndpoint,
@@ -132,7 +132,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
           ],
           {
             "cache-container": infinispanSingleSignOnManagements.reset["cache-container"],
-          }
+          },
         );
       });
   });
@@ -149,7 +149,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.text(
       "dw-infinispan-sso-management-table-add",
       "cache-container",
-      infinispanSingleSignOnManagements.create["cache-container"]
+      infinispanSingleSignOnManagements.create["cache-container"],
     );
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
@@ -161,7 +161,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         "infinispan-single-sign-on-management",
         infinispanSingleSignOnManagements.create.name,
       ],
-      true
+      true,
     );
   });
 
@@ -182,7 +182,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         infinispanSingleSignOnManagements.update.name,
       ],
       "cache",
-      cacheToUpdate
+      cacheToUpdate,
     );
   });
 
@@ -203,7 +203,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         infinispanSingleSignOnManagements.update.name,
       ],
       "cache-container",
-      cacheContainers.update.name
+      cacheContainers.update.name,
     );
   });
 
@@ -228,7 +228,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         "infinispan-single-sign-on-management",
         infinispanSingleSignOnManagements.delete.name,
       ],
-      true
+      true,
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-sso-management-item").click();
@@ -242,7 +242,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
         "infinispan-single-sign-on-management",
         infinispanSingleSignOnManagements.delete.name,
       ],
-      false
+      false,
     );
   });
 });

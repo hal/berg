@@ -32,7 +32,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL", () => {
           POSTGRES_DB: postgresDatabaseName,
         },
       },
-      { timeout: 120_000 }
+      { timeout: 120_000 },
     );
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
@@ -42,7 +42,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL", () => {
           .withResource("/home/fixtures/jdbc-drivers/postgresql-42.5.1.jar")
           .withDependencies(["javax.api"])
           .build()
-          .toCLICommand()
+          .toCLICommand(),
       ).then(() => {
         cy.task("execute:cli", {
           managementApi: managementEndpoint + "/management",
@@ -60,7 +60,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL", () => {
               .withUsername(postgresUser)
               .withPassword(postgresPassword)
               .build()
-              .toCLICommand()
+              .toCLICommand(),
           );
           cy.executeInWildflyContainer(
             new AddXADataSourceBuilder()
@@ -73,7 +73,7 @@ describe("TESTS: Configuration => Datasource => PostgreSQL", () => {
               .withXaDataSourceProperty("serverName", postgresContainerName)
               .withXaDataSourceProperty("databaseName", postgresDatabaseName)
               .build()
-              .toCLICommand()
+              .toCLICommand(),
           );
         });
       });

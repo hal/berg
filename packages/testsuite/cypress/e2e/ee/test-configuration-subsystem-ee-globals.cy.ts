@@ -92,7 +92,7 @@ describe("TESTS: Configuration => Subsystem => EE => Globals", () => {
       managementEndpoint,
       ["subsystem", "ee", "global-directory", globalDirectory.name],
       "path",
-      "updated-path"
+      "updated-path",
     );
   });
 

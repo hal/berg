@@ -198,14 +198,14 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.text(
       "dw-infinispan-session-management-table-add",
       "cache-container",
-      infinispanSessionManagements.create["cache-container"]
+      infinispanSessionManagements.create["cache-container"],
     );
     cy.confirmAddResourceWizard();
     cy.verifySuccess();
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.create.name],
-      true
+      true,
     );
   });
 
@@ -221,7 +221,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
       managementEndpoint,
       ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.update.name],
       "cache",
-      cacheToUpdate
+      cacheToUpdate,
     );
   });
 
@@ -237,7 +237,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
       managementEndpoint,
       ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.update.name],
       "cache-container",
-      cacheContainers.update.name
+      cacheContainers.update.name,
     );
   });
 
@@ -258,7 +258,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
       managementEndpoint,
       ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.update.name],
       granularity,
-      "ATTRIBUTE"
+      "ATTRIBUTE",
     );
   });
 
@@ -278,7 +278,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.delete.name],
-      true
+      true,
     );
     cy.navigateTo(managementEndpoint, "distributable-web");
     cy.get("#dw-infinispan-session-management-item").click();
@@ -287,7 +287,7 @@ describe("TESTS: Configuration => Subsystem => Distributable Web => Infinispan S
     cy.validateAddress(
       managementEndpoint,
       ["subsystem", "distributable-web", "infinispan-session-management", infinispanSessionManagements.delete.name],
-      false
+      false,
     );
   });
 });

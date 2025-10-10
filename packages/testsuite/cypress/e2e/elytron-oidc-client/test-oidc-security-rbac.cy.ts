@@ -20,7 +20,7 @@ describe("TESTS: Access secured by Elytron OIDC client with RBAC", () => {
             /core-service=management/access=authorization:write-attribute(name=use-identity-roles,value=true),
             /core-service=management/access=authorization/role-mapping=Administrator:add(),
             /core-service=management/access=authorization/role-mapping=Administrator/include=userwithmappedrole:add(name=userwithmappedrole,type=USER),
-            reload"`
+            reload"`,
           );
         });
       });
@@ -84,7 +84,7 @@ describe("TESTS: Access secured by Elytron OIDC client with RBAC", () => {
     verifyNotLoggedIn(keycloak);
     cy.executeInWildflyContainer(
       `"/core-service=management/access=authorization/role-mapping=Administrator/exclude=userwithexcludedrole:add(name=userwithexcludedrole,type=USER),
-      reload"`
+      reload"`,
     ).then(() => {
       logIn("userwithexcludedrole", "password");
       cy.verifyErrorMessage("Status 403 - Forbidden.");

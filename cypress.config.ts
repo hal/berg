@@ -3,7 +3,7 @@ import { defineConfig } from "cypress";
 import { PullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
 import { Environment } from "testcontainers/build/types";
 import { findAPortNotInUse } from "portscanner";
-import fs from "fs";
+import * as fs from "fs";
 
 export default defineConfig({
   defaultCommandTimeout: 16000,
@@ -14,6 +14,8 @@ export default defineConfig({
   video: true,
   videoCompression: false,
   e2e: {
+    supportFile: "packages/testsuite/cypress/support/e2e.ts",
+    specPattern: "packages/testsuite/cypress/e2e/**/*.cy.ts",
     setupNodeEvents(on, config) {
       const startedContainers: Map<string, StartedTestContainer> = new Map<string, StartedTestContainer>();
       const startedContainersManagementPorts: Map<string, number> = new Map<string, number>();
@@ -22,13 +24,13 @@ export default defineConfig({
           return new Promise((resolve, reject) => {
             let portOffset = 0;
             const wildfly = new GenericContainer(
-              process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest"
+              process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest",
             )
               .withPullPolicy(PullPolicy.alwaysPull())
               .withName(name as string)
               .withCopyDirectoriesToContainer([
                 {
-                  source: __dirname + "/cypress/fixtures",
+                  source: __dirname + "/packages/testsuite/cypress/fixtures",
                   target: "/home/fixtures",
                   mode: parseInt("0777", 8),
                 },
@@ -121,7 +123,7 @@ export default defineConfig({
                       const interval = setInterval(() => {
                         if (new Date().getTime() - startTime > 10000) {
                           clearInterval(interval);
-                          reject();
+                          reject(new Error("Timeout waiting for WildFly to start"));
                         }
                         axios
                           .post(managementApi, {
@@ -143,9 +145,9 @@ export default defineConfig({
                     });
                 }
               })
-              .catch((err) => {
+              .catch((err: unknown) => {
                 console.log(err);
-                reject(err);
+                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
               });
           });
         },
@@ -161,7 +163,7 @@ export default defineConfig({
               })
               .withBindMounts([
                 {
-                  source: __dirname + "/cypress/fixtures/realm-configuration.json",
+                  source: __dirname + "/packages/testsuite/cypress/fixtures/realm-configuration.json",
                   target: "/opt/keycloak/data/import/realm-configuration.json",
                   mode: "z",
                 },
@@ -181,9 +183,9 @@ export default defineConfig({
                   console.log(`Keycloak is ready: ${keycloakServer}`);
                   resolve(keycloakServer);
                 })
-                .catch((err) => {
+                .catch((err: unknown) => {
                   console.log(err);
-                  reject(err);
+                  reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
                 });
             });
           });
@@ -195,7 +197,7 @@ export default defineConfig({
             .withNetworkAliases(name as string)
             .withNetworkMode(config.env.NETWORK_NAME as string)
             .withWaitStrategy(
-              Wait.forLogMessage(new RegExp(".*PostgreSQL init process complete; ready for start up.*"))
+              Wait.forLogMessage(new RegExp(".*PostgreSQL init process complete; ready for start up.*")),
             )
             .withExposedPorts(5432)
             .withEnvironment(environmentProperties as Environment);
@@ -207,9 +209,9 @@ export default defineConfig({
                 startedContainers.set("postgres", postgreContainer);
                 resolve(postgreContainer);
               })
-              .catch((err) => {
+              .catch((err: unknown) => {
                 console.log(err);
-                reject(err);
+                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
               });
           });
         },
@@ -230,9 +232,9 @@ export default defineConfig({
                 startedContainers.set("mysql", mysqlContainer);
                 resolve(mysqlContainer);
               })
-              .catch((err) => {
+              .catch((err: unknown) => {
                 console.log(err);
-                reject(err);
+                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
               });
           });
         },
@@ -253,15 +255,15 @@ export default defineConfig({
                 startedContainers.set("mariadb", mariadbContainer);
                 resolve(mariadbContainer);
               })
-              .catch((err) => {
+              .catch((err: unknown) => {
                 console.log(err);
-                reject(err);
+                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
               });
           });
         },
         "start:sqlserver:container": ({ name, environmentProperties }) => {
           const sqlserverContainerBuilder = new GenericContainer(
-            process.env.MSSQL_IMAGE || "mcr.microsoft.com/mssql/server:2022-latest"
+            process.env.MSSQL_IMAGE || "mcr.microsoft.com/mssql/server:2022-latest",
           )
             .withPullPolicy(PullPolicy.alwaysPull())
             .withName(name as string)
@@ -278,9 +280,9 @@ export default defineConfig({
                 startedContainers.set("sqlserver", sqlServerContainer);
                 resolve(sqlServerContainer);
               })
-              .catch((err) => {
+              .catch((err: unknown) => {
                 console.log(err);
-                reject(err);
+                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
               });
           });
         },
@@ -292,7 +294,7 @@ export default defineConfig({
             managementPort = managementPort ?? 9990;
             containerToExec
               ?.exec([
-                "/bin/bash",
+                "/bin/sh",
                 "-c",
                 `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPort} --commands=${
                   command as string
@@ -303,10 +305,10 @@ export default defineConfig({
                   resolve(value);
                 } else {
                   console.log(value);
-                  reject(value);
+                  reject(new Error(`Command failed with exit code ${value.exitCode}: ${value.output || ""}`));
                 }
               })
-              .catch((err: { response: { data: string } }) => reject(err.response.data));
+              .catch((err: { response: { data: string } }) => reject(new Error(err.response.data)));
           });
         },
         "execute:cli": ({ managementApi, operation, address, ...args }) => {
@@ -321,7 +323,7 @@ export default defineConfig({
                 resolve(response.data);
               })
               .catch((err: { response: { data: string } }) => {
-                reject(err.response.data);
+                reject(new Error(err.response.data));
               });
           }).catch((error) => {
             console.log(error);
