@@ -1,9 +1,64 @@
-import axios from "axios";
 import { defineConfig } from "cypress";
-import { PullPolicy, GenericContainer, StartedTestContainer, StoppedTestContainer, Wait } from "testcontainers";
-import { Environment } from "testcontainers/build/types";
-import { findAPortNotInUse } from "portscanner";
-import * as fs from "fs";
+import { StartedTestContainer, StoppedTestContainer } from "testcontainers";
+import { existsSync, unlinkSync } from "fs";
+import {
+  createWildflyContainer,
+  createExecuteInContainer,
+  createKeycloakContainer,
+  createPostgresContainer,
+  createMysqlContainer,
+  createMariadbContainer,
+  createSqlserverContainer,
+  createExecuteCli,
+} from "./config/tasks";
+
+// WildFly configuration
+export const DEFAULT_WILDFLY_CONFIG = "standalone-insecure.xml";
+export const WILDFLY_MANAGEMENT_PORT = 9990;
+export const WILDFLY_STARTUP_TIMEOUT = 333000;
+export const WILDFLY_PORT_RANGE = { min: 8080, max: 8180 };
+export const WILDFLY_READY_TIMEOUT_MS = 10000;
+export const WILDFLY_POLL_INTERVAL_MS = 500;
+
+// Keycloak configuration
+export const KEYCLOAK_PORT_RANGE = { min: 8888, max: 8988 };
+export const KEYCLOAK_ADMIN_USER = "admin";
+export const KEYCLOAK_ADMIN_PASSWORD = "admin";
+
+// Database ports
+export const POSTGRES_PORT = 5432;
+export const MYSQL_PORT = 3306;
+export const MARIADB_PORT = 3306;
+export const SQLSERVER_PORT = 1433;
+
+// Default Docker images
+export const DEFAULT_WILDFLY_IMAGE = "quay.io/halconsole/wildfly-development:latest";
+export const DEFAULT_KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak:latest";
+export const DEFAULT_POSTGRES_IMAGE = "postgres";
+export const DEFAULT_MYSQL_IMAGE = "mysql";
+export const DEFAULT_MARIADB_IMAGE = "mariadb";
+export const DEFAULT_SQLSERVER_IMAGE = "mcr.microsoft.com/mssql/server:2022-latest";
+
+// Wait strategy log messages
+export const WILDFLY_STARTED_MSG = /.*(WildFly.*|JBoss EAP.*)started in.*/;
+export const KEYCLOAK_STARTED_MSG = /.*(Keycloak.*) started in.*/;
+export const POSTGRES_STARTED_MSG = ".*PostgreSQL init process complete; ready for start up.*";
+export const MYSQL_STARTED_MSG = ".*MySQL init process done. Ready for start up.*";
+export const MARIADB_STARTED_MSG = ".*MariaDB init process done. Ready for start up.*";
+export const SQLSERVER_STARTED_MSG = ".*SQL Server is now ready for client connections.*";
+
+// Paths
+export const FIXTURES_PATH = __dirname + "/packages/testsuite/cypress/fixtures";
+export const JBOSS_CLI_PATH = "$JBOSS_HOME/bin/jboss-cli.sh";
+
+// File permissions
+export const FIXTURES_DIRECTORY_MODE = parseInt("0777", 8);
+
+// Management interface address
+export const MANAGEMENT_INTERFACE_ADDRESS = ["core-service", "management", "management-interface", "http-interface"];
+
+// Network
+export const LOCALHOST_IP = "127.0.0.1";
 
 export default defineConfig({
   defaultCommandTimeout: 16000,
@@ -19,319 +74,21 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       const startedContainers: Map<string, StartedTestContainer> = new Map<string, StartedTestContainer>();
       const startedContainersManagementPorts: Map<string, number> = new Map<string, number>();
+
       on("task", {
-        "start:wildfly:container": ({ name, configuration, useNetworkHostMode }) => {
-          return new Promise((resolve, reject) => {
-            let portOffset = 0;
-            const wildfly = new GenericContainer(
-              process.env.WILDFLY_IMAGE || "quay.io/halconsole/wildfly-development:latest",
-            )
-              .withPullPolicy(PullPolicy.alwaysPull())
-              .withName(name as string)
-              .withCopyDirectoriesToContainer([
-                {
-                  source: __dirname + "/packages/testsuite/cypress/fixtures",
-                  target: "/home/fixtures",
-                  mode: parseInt("0777", 8),
-                },
-              ])
-              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(WildFly.*|JBoss EAP.*)started in.*")))
-              .withStartupTimeout(333000);
-            if (useNetworkHostMode === true) {
-              console.log("host mode");
-              findAPortNotInUse(8080, 8180)
-                .then((freePort) => {
-                  portOffset = freePort - 8080;
-                  wildfly
-                    .withNetworkMode("host")
-                    .withExtraHosts([{ host: require("os").hostname(), ipAddress: "127.0.0.1" }])
-                    .withCommand([
-                      "-c",
-                      configuration || "standalone-insecure.xml",
-                      `-Djboss.socket.binding.port-offset=${portOffset.toString()}`,
-                      "-Djboss.node.name=localhost",
-                    ] as string[]);
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            } else {
-              console.log(`default network mode, network name: ${config.env.NETWORK_NAME as string}`);
-              wildfly
-                .withNetworkMode(config.env.NETWORK_NAME as string)
-                .withNetworkAliases("wildfly")
-                .withExposedPorts(9990)
-                .withCommand(["-c", configuration || "standalone-insecure.xml"] as string[]);
-            }
-            wildfly
-              .start()
-              .then((wildflyContainer) => {
-                const managementPortWithOffset = portOffset + 9990;
-                startedContainers.set(name as string, wildflyContainer);
-                if (useNetworkHostMode === true) {
-                  startedContainersManagementPorts.set(name as string, portOffset + 9990);
-                  return wildflyContainer
-                    .exec([
-                      `/bin/sh`,
-                      `-c`,
-                      `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="/core-service=management/management-interface=http-interface:list-add(name=allowed-origins,value=http://localhost:${
-                        config.env.HAL_CONTAINER_PORT as string
-                      }"`,
-                    ])
-                    .then((result) => {
-                      console.log(result.output);
-                      return wildflyContainer.exec([
-                        `/bin/sh`,
-                        `-c`,
-                        `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="reload"`,
-                      ]);
-                    })
-                    .then((result) => {
-                      console.log(result.output);
-                      wildflyContainer
-                        .exec([
-                          `/bin/sh`,
-                          `-c`,
-                          `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="read-attribute server-state"`,
-                        ])
-                        .then((response) => {
-                          console.log(response.output);
-                          if (response.output.includes("running")) {
-                            const wildflyServer = `http://localhost:${managementPortWithOffset}`;
-                            console.log(`WildFly server is ready: ${wildflyServer}`);
-                            resolve(wildflyServer);
-                          }
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    });
-                } else {
-                  const managementApi = `http://localhost:${wildflyContainer.getMappedPort(9990)}/management`;
-                  return axios
-                    .post(managementApi, {
-                      operation: "list-add",
-                      address: ["core-service", "management", "management-interface", "http-interface"],
-                      name: "allowed-origins",
-                      value: `http://localhost:${config.env.HAL_CONTAINER_PORT as string}`,
-                    })
-                    .then(() => {
-                      return axios.post(managementApi, {
-                        operation: "reload",
-                      });
-                    })
-                    .then(() => {
-                      const startTime = new Date().getTime();
-                      const interval = setInterval(() => {
-                        if (new Date().getTime() - startTime > 10000) {
-                          clearInterval(interval);
-                          reject(new Error("Timeout waiting for WildFly to start"));
-                        }
-                        axios
-                          .post(managementApi, {
-                            operation: "read-attribute",
-                            name: "server-state",
-                          })
-                          .then((response) => {
-                            if ((response as { data: { result: string } }).data.result == "running") {
-                              clearInterval(interval);
-                              const wildflyServer = `http://localhost:${wildflyContainer.getMappedPort(9990)}`;
-                              console.log(`WildFly server is ready: ${wildflyServer}`);
-                              resolve(wildflyServer);
-                            }
-                          })
-                          .catch(() => {
-                            console.log("WildFly server is not ready yet");
-                          });
-                      }, 500);
-                    });
-                }
-              })
-              .catch((err: unknown) => {
-                console.log(err);
-                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
-              });
-          });
-        },
-        "start:keycloak:container": ({ name }) => {
-          return findAPortNotInUse(8888, 8988).then((freePort: number) => {
-            const keycloak = new GenericContainer(process.env.KEYCLOAK_IMAGE || "quay.io/keycloak/keycloak:latest")
-              .withName(name as string)
-              .withNetworkMode("host")
-              .withWaitStrategy(Wait.forLogMessage(new RegExp(".*(Keycloak.*) started in.*")))
-              .withEnvironment({
-                KEYCLOAK_ADMIN: "admin",
-                KEYCLOAK_ADMIN_PASSWORD: "admin",
-              })
-              .withBindMounts([
-                {
-                  source: __dirname + "/packages/testsuite/cypress/fixtures/realm-configuration.json",
-                  target: "/opt/keycloak/data/import/realm-configuration.json",
-                  mode: "z",
-                },
-              ])
-              .withCommand([
-                "start-dev",
-                "--db=dev-mem",
-                `--http-port=${freePort.toString()}`,
-                "--import-realm",
-              ] as string[]);
-            return new Promise((resolve, reject) => {
-              keycloak
-                .start()
-                .then((keycloakContainer) => {
-                  startedContainers.set(name as string, keycloakContainer);
-                  const keycloakServer = `http://localhost:${freePort ?? "unknown port"}`;
-                  console.log(`Keycloak is ready: ${keycloakServer}`);
-                  resolve(keycloakServer);
-                })
-                .catch((err: unknown) => {
-                  console.log(err);
-                  reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
-                });
-            });
-          });
-        },
-        "start:postgres:container": ({ name, environmentProperties }) => {
-          const postgreContainerBuilder = new GenericContainer(process.env.POSTGRES_IMAGE || "postgres")
-            .withPullPolicy(PullPolicy.alwaysPull())
-            .withName(name as string)
-            .withNetworkAliases(name as string)
-            .withNetworkMode(config.env.NETWORK_NAME as string)
-            .withWaitStrategy(
-              Wait.forLogMessage(new RegExp(".*PostgreSQL init process complete; ready for start up.*")),
-            )
-            .withExposedPorts(5432)
-            .withEnvironment(environmentProperties as Environment);
-          return new Promise((resolve, reject) => {
-            postgreContainerBuilder
-              .start()
-              .then((postgreContainer) => {
-                console.log("PostgreSQL started successfully");
-                startedContainers.set("postgres", postgreContainer);
-                resolve(postgreContainer);
-              })
-              .catch((err: unknown) => {
-                console.log(err);
-                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
-              });
-          });
-        },
-        "start:mysql:container": ({ name, environmentProperties }) => {
-          const mysqlContainerBuilder = new GenericContainer(process.env.MYSQL_IMAGE || "mysql")
-            .withPullPolicy(PullPolicy.alwaysPull())
-            .withName(name as string)
-            .withNetworkAliases(name as string)
-            .withExposedPorts(3306)
-            .withEnvironment(environmentProperties as Environment)
-            .withNetworkMode(config.env.NETWORK_NAME as string)
-            .withWaitStrategy(Wait.forLogMessage(new RegExp(".*MySQL init process done. Ready for start up.*")));
-          return new Promise((resolve, reject) => {
-            mysqlContainerBuilder
-              .start()
-              .then((mysqlContainer) => {
-                console.log("MySQL started successfully");
-                startedContainers.set("mysql", mysqlContainer);
-                resolve(mysqlContainer);
-              })
-              .catch((err: unknown) => {
-                console.log(err);
-                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
-              });
-          });
-        },
-        "start:mariadb:container": ({ name, environmentProperties }) => {
-          const mariadbContainerBuilder = new GenericContainer(process.env.MARIADB_IMAGE || "mariadb")
-            .withPullPolicy(PullPolicy.alwaysPull())
-            .withName(name as string)
-            .withNetworkAliases(name as string)
-            .withExposedPorts(3306)
-            .withNetworkMode(config.env.NETWORK_NAME as string)
-            .withEnvironment(environmentProperties as Environment)
-            .withWaitStrategy(Wait.forLogMessage(new RegExp(".*MariaDB init process done. Ready for start up.*")));
-          return new Promise((resolve, reject) => {
-            mariadbContainerBuilder
-              .start()
-              .then((mariadbContainer) => {
-                console.log("Mariadb started successfully");
-                startedContainers.set("mariadb", mariadbContainer);
-                resolve(mariadbContainer);
-              })
-              .catch((err: unknown) => {
-                console.log(err);
-                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
-              });
-          });
-        },
-        "start:sqlserver:container": ({ name, environmentProperties }) => {
-          const sqlserverContainerBuilder = new GenericContainer(
-            process.env.MSSQL_IMAGE || "mcr.microsoft.com/mssql/server:2022-latest",
-          )
-            .withPullPolicy(PullPolicy.alwaysPull())
-            .withName(name as string)
-            .withNetworkAliases(name as string)
-            .withNetworkMode(config.env.NETWORK_NAME as string)
-            .withExposedPorts(1433)
-            .withEnvironment(environmentProperties as Environment)
-            .withWaitStrategy(Wait.forLogMessage(new RegExp(".*SQL Server is now ready for client connections.*")));
-          return new Promise((resolve, reject) => {
-            sqlserverContainerBuilder
-              .start()
-              .then((sqlServerContainer) => {
-                console.log("SQL server started successfully");
-                startedContainers.set("sqlserver", sqlServerContainer);
-                resolve(sqlServerContainer);
-              })
-              .catch((err: unknown) => {
-                console.log(err);
-                reject(err instanceof Error ? err : new Error(JSON.stringify(err)));
-              });
-          });
-        },
-        "execute:in:container": ({ containerName, command }) => {
-          return new Promise((resolve, reject) => {
-            console.log(`CLI commands: ${command as string}`);
-            const containerToExec = startedContainers.get(containerName as string);
-            let managementPort = startedContainersManagementPorts.get(containerName as string);
-            managementPort = managementPort ?? 9990;
-            containerToExec
-              ?.exec([
-                "/bin/sh",
-                "-c",
-                `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPort} --commands=${
-                  command as string
-                }`,
-              ])
-              .then((value) => {
-                if (value.exitCode === 0) {
-                  resolve(value);
-                } else {
-                  console.log(value);
-                  reject(new Error(`Command failed with exit code ${value.exitCode}: ${value.output || ""}`));
-                }
-              })
-              .catch((err: { response: { data: string } }) => reject(new Error(err.response.data)));
-          });
-        },
-        "execute:cli": ({ managementApi, operation, address, ...args }) => {
-          return new Promise((resolve, reject) => {
-            axios
-              .post(managementApi as string, {
-                operation: operation as string,
-                address: address as string[],
-                ...args,
-              })
-              .then((response) => {
-                resolve(response.data);
-              })
-              .catch((err: { response: { data: string } }) => {
-                reject(new Error(err.response.data));
-              });
-          }).catch((error) => {
-            console.log(error);
-            throw new Error(JSON.stringify(error));
-          });
-        },
+        "start:wildfly:container": createWildflyContainer(
+          startedContainers,
+          startedContainersManagementPorts,
+          config.env.NETWORK_NAME as string,
+          config.env.HAL_CONTAINER_PORT as string,
+        ),
+        "start:keycloak:container": createKeycloakContainer(startedContainers),
+        "start:postgres:container": createPostgresContainer(startedContainers, config.env.NETWORK_NAME as string),
+        "start:mysql:container": createMysqlContainer(startedContainers, config.env.NETWORK_NAME as string),
+        "start:mariadb:container": createMariadbContainer(startedContainers, config.env.NETWORK_NAME as string),
+        "start:sqlserver:container": createSqlserverContainer(startedContainers, config.env.NETWORK_NAME as string),
+        "execute:in:container": createExecuteInContainer(startedContainers, startedContainersManagementPorts),
+        "execute:cli": createExecuteCli(),
         "stop:containers": () => {
           const promises: Promise<StoppedTestContainer>[] = [];
           startedContainers.forEach((container, key) => {
@@ -343,12 +100,14 @@ export default defineConfig({
           return Promise.all(promises);
         },
       });
+
       on("after:spec", (spec: Cypress.Spec, results: CypressCommandLine.RunResult) => {
         // Keep videos only for failed specs
-        if (results && results.video && results.stats.failures === 0 && fs.existsSync(results.video)) {
-          fs.unlinkSync(results.video);
+        if (results && results.video && results.stats.failures === 0 && existsSync(results.video)) {
+          unlinkSync(results.video);
         }
       });
+
       return config;
     },
   },
