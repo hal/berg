@@ -44,10 +44,12 @@ export default defineConfig({
                   portOffset = freePort - 8080;
                   wildfly
                     .withNetworkMode("host")
+                    .withExtraHosts([{ host: require("os").hostname(), ipAddress: "127.0.0.1" }])
                     .withCommand([
                       "-c",
                       configuration || "standalone-insecure.xml",
                       `-Djboss.socket.binding.port-offset=${portOffset.toString()}`,
+                      "-Djboss.node.name=localhost",
                     ] as string[]);
                 })
                 .catch((error) => {
@@ -70,7 +72,7 @@ export default defineConfig({
                   startedContainersManagementPorts.set(name as string, portOffset + 9990);
                   return wildflyContainer
                     .exec([
-                      `/bin/bash`,
+                      `/bin/sh`,
                       `-c`,
                       `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="/core-service=management/management-interface=http-interface:list-add(name=allowed-origins,value=http://localhost:${
                         config.env.HAL_CONTAINER_PORT as string
@@ -79,7 +81,7 @@ export default defineConfig({
                     .then((result) => {
                       console.log(result.output);
                       return wildflyContainer.exec([
-                        `/bin/bash`,
+                        `/bin/sh`,
                         `-c`,
                         `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="reload"`,
                       ]);
@@ -88,7 +90,7 @@ export default defineConfig({
                       console.log(result.output);
                       wildflyContainer
                         .exec([
-                          `/bin/bash`,
+                          `/bin/sh`,
                           `-c`,
                           `$JBOSS_HOME/bin/jboss-cli.sh --connect --controller=localhost:${managementPortWithOffset} --command="read-attribute server-state"`,
                         ])
