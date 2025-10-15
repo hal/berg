@@ -12,9 +12,7 @@ export default [
   {
     languageOptions: {
       parserOptions: {
-        projectService: {
-          allowDefaultProject: ["cypress.config.ts"],
-        },
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },

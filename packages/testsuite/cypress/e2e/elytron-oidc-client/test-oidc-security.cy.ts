@@ -48,9 +48,13 @@ describe("TESTS: Access secured by Elytron OIDC client", () => {
   }
 
   function verifyNotLoggedIn(keycloak: string): void {
-    cy.url().should(`include`, keycloak);
-    cy.get("#username").should("exist");
-    cy.get("#password").should("exist");
-    cy.get("#kc-login").should("exist");
+    cy.url().should("include", keycloak);
+    cy.origin(keycloak, () => {
+      // Wait for Keycloak login page to fully load
+      cy.wait(1000);
+      cy.get("#username").should("exist");
+      cy.get("#password").should("exist");
+      cy.get("#kc-login").should("exist");
+    });
   }
 });
