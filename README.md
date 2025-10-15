@@ -25,7 +25,7 @@ TestContainers (https://github.com/testcontainers/testcontainers-node) serves to
 Following tools are required to run the test suite
 
 - [NodeJS](https://nodejs.org/en/) as a runtime environment
-  - recommended version is 16, in other versions you can get errors like `Unable to detect compiler type`
+  - recommended version is 22.
   - [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) is recommended optional tool to install & manage multiple Node environments
 - [npx](https://github.com/npm/npx) CLI tool used to exeute binaries from project's `node_modules` directly (instead of providing absolute/relative path to the commannds). It is used in multiple build steps.
 - [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Note that when using Podman as container runtime you may need to export following environment variables and start podman socket:

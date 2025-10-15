@@ -1,6 +1,7 @@
 {
   "files": [],
   "references": [
+    { "path": "tsconfig.root.json" },
     { "path": "packages/resources" },
     { "path": "packages/commands" },
     { "path": "packages/berg" },

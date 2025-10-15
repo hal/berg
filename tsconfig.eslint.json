@@ -1,6 +1,6 @@
 {
   // extend your base config to share compilerOptions, etc
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     // ensure that nobody can accidentally use this config for a build
     "noEmit": true
@@ -10,6 +10,7 @@
     "src",
     "test",
     "cypress",
-    "cypress.config.ts"
+    "cypress.config.ts",
+    "config"
   ]
 }
