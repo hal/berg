@@ -11,11 +11,9 @@ jobs:
       matrix:
         specs:
           [
-            "datasource",
-            "interface",
-            "path",
             "batch-jberet",
             "core-management",
+            "datasource",
             "deployment-scanner",
             "distributable-web",
             "ee",
@@ -23,22 +21,24 @@ jobs:
             "elytron",
             "elytron-oidc-client",
             "health",
+            "homepage",
+            "interface",
             "io",
             "jmx",
             "jpa",
             "jsf",
             "mail",
-            "microprofile",
             "metrics",
+            "microprofile",
+            "path",
             "runtime",
             "security-manager",
+            "smoke",
             "system-property",
             "transaction",
-            "weld",
-            "homepage",
-            "smoke",
-            "update-manager",
             "undertow",
+            "update-manager",
+            "weld",
           ]
         exclude:
           - specs: "update-manager"
@@ -57,7 +57,7 @@ jobs:
           distribution: "adopt"
           java-version: "17"
       - name: Install Chrome
-        uses: browser-actions/setup-chrome@v1
+        uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: stable
       - name: Install Firefox
@@ -71,15 +71,15 @@ jobs:
       - name: "Run compile"
         run: "npm run compile"
       - name: "Run test(s)"
-        run: "npm run test:compiled -- --browser=firefox --specs=packages/testsuite/cypress/e2e/${{ matrix.specs }}"
+        run: "npm run test:compiled -- --browser=chrome --specs=packages/testsuite/cypress/e2e/${{ matrix.specs }}"
       - name: "Archive test report(s) and video(s)"
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: "${{ github.run_id}}-${{ strategy.job-index }}-artifacts"
           path: |
-            packages/testsuite/results
-            packages/testsuite/cypress/videos
+            results
+            cypress/videos
   process_report:
     name: "Collect results & deploy GH pages"
     needs: test_matrix
@@ -97,7 +97,7 @@ jobs:
       - name: "Generate Mochawesome Report"
         run: mochawesome-merge "./*-artifacts/results/packages/testsuite/cypress/e2e/*.json" > mochawesome.json
       - name: "Copy video assets"
-        run: copyfiles -u 3 "./*-artifacts/packages/testsuite/cypress/videos/*.mp4" mochawesome-report/assets/videos
+        run: copyfiles -u 2 "./*-artifacts/cypress/videos/*.mp4" mochawesome-report/assets/videos
       - name: "Create GH Pages content"
         run: marge mochawesome.json -f index.html
       - name: "Get time info"

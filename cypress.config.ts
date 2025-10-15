@@ -17,7 +17,7 @@ export const DEFAULT_WILDFLY_CONFIG = "standalone-insecure.xml";
 export const WILDFLY_MANAGEMENT_PORT = 9990;
 export const WILDFLY_STARTUP_TIMEOUT = 333000;
 export const WILDFLY_PORT_RANGE = { min: 8080, max: 8180 };
-export const WILDFLY_READY_TIMEOUT_MS = 10000;
+export const WILDFLY_READY_TIMEOUT_MS = 60000;
 export const WILDFLY_POLL_INTERVAL_MS = 500;
 
 // Keycloak configuration
@@ -67,7 +67,8 @@ export default defineConfig({
     configFile: "reporter-config.json",
   },
   video: true,
-  videoCompression: false,
+  videoCompression: 32,
+  screenshotOnRunFailure: true,
   e2e: {
     supportFile: "packages/testsuite/cypress/support/e2e.ts",
     specPattern: "packages/testsuite/cypress/e2e/**/*.cy.ts",

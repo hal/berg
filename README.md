@@ -54,11 +54,14 @@ npm run develop
 ```
 
 - If you want to execute whole testsuite execute `npm test`
-
 - It is also possible to run on specific browser by supplying `--browser` argument, e.g
+- Chrome is the default browser and is recommended for video recording. Firefox may produce black videos.
+- For debugging purposes, you can run tests in headed mode (visible browser window) by adding `--headed` flag:
 
 ```
-npm test -- --browser=chrome
+npm test -- --browser=firefox --headed
+or
+npm test -- --browser=chrome --headed --specs="packages/testsuite/cypress/e2e/homepage/test-homepage.cy.ts"
 ```
 
 - It is possible to reduce the amount of specs executed by passing `--specs` flag. It also supports glob patterns, e.g to execute only `homepage` related tests, run
@@ -81,7 +84,7 @@ npm run test:compiled -- --specs="packages/testsuite/cypress/e2e/homepage/test-h
 HAL_IMAGE=quay.io/myorg/hal WILDFLY_IMAGE=quay.io/myorg/wildfly npm test ...
 ```
 
-- For debugging purposes videos (and screenshots) of failed tests are stored after the test run (works only with chrome).
+- For debugging purposes, videos and screenshots of failed tests are stored after the test run in `cypress/videos` and `cypress/screenshots` directories. Video recording works best with Chrome browser.
 
 ## Available environment properties
 
