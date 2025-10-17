@@ -30,7 +30,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@cypress/xvfb": "1.2.4",
     "@types/command-line-args": "5.2.3",
     "@types/mochawesome": "6.2.4",
     "@types/portscanner": "2.1.4",

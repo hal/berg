@@ -5,12 +5,13 @@ import { OptionDefinition } from "command-line-args";
 import path from "path";
 
 const optionDefinitions: OptionDefinition[] = [
-  { name: "browser", type: String, defaultValue: "firefox" },
+  { name: "browser", type: String, defaultValue: "chrome" },
   {
     name: "specs",
     type: String,
     defaultValue: "packages/testsuite/cypress/e2e/**/*.cy.ts",
   },
+  { name: "headed", type: Boolean, defaultValue: false },
 ];
 
 (async () => {
@@ -20,6 +21,7 @@ const optionDefinitions: OptionDefinition[] = [
   const projectRoot = path.resolve(__dirname, "..", "..", "..");
   const testRunResult = await cypress.run({
     browser: options.browser as string,
+    headed: options.headed as boolean,
     project: projectRoot,
     configFile: path.join(projectRoot, "cypress.config.ts"),
     env: {
