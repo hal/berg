@@ -62,6 +62,7 @@ export const LOCALHOST_IP = "127.0.0.1";
 
 export default defineConfig({
   defaultCommandTimeout: 16000,
+  taskTimeout: 600000,
   reporter: require.resolve("cypress-multi-reporters/index.js"),
   reporterOptions: {
     configFile: "reporter-config.json",

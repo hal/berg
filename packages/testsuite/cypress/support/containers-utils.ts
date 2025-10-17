@@ -6,7 +6,7 @@ Cypress.Commands.add("startWildflyContainer", (options = { useNetworkHostMode: f
       configuration: "standalone-insecure.xml",
       useNetworkHostMode: options.useNetworkHostMode,
     },
-    { timeout: 240_000 },
+    { timeout: 600_000 },
   );
 });
 
@@ -18,7 +18,7 @@ Cypress.Commands.add("startWildflyContainerSecured", () => {
       configuration: "standalone.xml",
       useNetworkHostMode: true,
     },
-    { timeout: 240_000 },
+    { timeout: 600_000 },
   );
 });
 
