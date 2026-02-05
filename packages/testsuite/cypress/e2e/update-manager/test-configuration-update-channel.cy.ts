@@ -108,4 +108,50 @@ describe("TESTS: Update Manager => Channels", () => {
     cy.verifySuccess();
     cy.get("#update-manager-channel > ul > #" + channels.gav.name).should("not.exist");
   });
+
+  /**
+   * Check whether there is some item that starts with 'JBoss EAP' text
+   */
+  const isJbossEapChannelPrinted = ($items: JQuery<HTMLElement>): boolean => {
+    for (let i = 0; i < $items.length; i++) {
+      const text = $items[i].innerText.trim();
+      if (text.startsWith('JBoss EAP')) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  /**
+   * Get channel versions from first revision on updates section
+   *
+   * Make sure that there is at least one channel that starts with "JBoss EAP"
+   */
+  it("Check channel version in installation manager", () => {
+    // navigate to Updates section of web-console
+    cy.navigateToUpdateManagerPage(managementEndpoint, ["update-manager", "updates"]);
+
+    // click on last printed revision (first revision in history)
+    cy.get('#update-manager-update ul li').last().click();
+
+    // try to find EAP channel
+    cy.contains('li.list-group-item', 'Channel Versions')
+      .find('.value ul li')
+      .should(($items) => {
+        expect(isJbossEapChannelPrinted($items), '"JBoss EAP" channel not printed').to.equal(true);
+      });
+  });
+
+  /**
+   * Get channel versions from first revision on runtimes section
+   *
+   * Make sure that there is at least one channel that starts with "JBoss EAP"
+   */
+  it("Check channel version in runtimes", () => {
+    cy.navigateTo(managementEndpoint, "runtime;path=standalone-server-column~standalone-host-server");
+    cy.get('#standalone-server-column ul li').first().click();
+    cy.get('#channel-versions li .value').should(($items) => {
+      expect(isJbossEapChannelPrinted($items), '"JBoss EAP" channel not printed').to.equal(true);
+    });
+  });
 });
