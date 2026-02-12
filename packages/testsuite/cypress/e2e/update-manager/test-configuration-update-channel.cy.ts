@@ -115,7 +115,7 @@ describe("TESTS: Update Manager => Channels", () => {
   const isJbossEapChannelPrinted = ($items: JQuery<HTMLElement>): boolean => {
     for (let i = 0; i < $items.length; i++) {
       const text = $items[i].innerText.trim();
-      if (text.startsWith('JBoss EAP')) {
+      if (text.startsWith("JBoss EAP")) {
         return true;
       }
     }
@@ -132,11 +132,11 @@ describe("TESTS: Update Manager => Channels", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, ["update-manager", "updates"]);
 
     // click on last printed revision (first revision in history)
-    cy.get('#update-manager-update ul li').last().click();
+    cy.get("#update-manager-update ul li").last().click();
 
     // try to find EAP channel
-    cy.contains('li.list-group-item', 'Channel Versions')
-      .find('.value ul li')
+    cy.contains("li.list-group-item", "Channel Versions")
+      .find(".value ul li")
       .should(($items) => {
         expect(isJbossEapChannelPrinted($items), '"JBoss EAP" channel not printed').to.equal(true);
       });
@@ -149,8 +149,8 @@ describe("TESTS: Update Manager => Channels", () => {
    */
   it("Check channel version in runtimes", () => {
     cy.navigateTo(managementEndpoint, "runtime;path=standalone-server-column~standalone-host-server");
-    cy.get('#standalone-server-column ul li').first().click();
-    cy.get('#channel-versions li .value').should(($items) => {
+    cy.get("#standalone-server-column ul li").first().click();
+    cy.get("#channel-versions li .value").should(($items) => {
       expect(isJbossEapChannelPrinted($items), '"JBoss EAP" channel not printed').to.equal(true);
     });
   });
