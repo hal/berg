@@ -18,7 +18,7 @@
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-ee-with-tools</artifactId>
-                <version>36.0.0.Final</version>
+                <version>39.0.1.Final</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
