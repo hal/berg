@@ -27,7 +27,9 @@ describe("TESTS: Access secured by Elytron OIDC client", () => {
 
   it("Logs in successfully and logs out", () => {
     logIn("userwithoutrole", "password");
-    cy.url().should(`include`, `localhost:${Cypress.env("HAL_CONTAINER_PORT") as string}`);
+    cy.env(["HAL_CONTAINER_PORT"]).then((env) => {
+      cy.url().should(`include`, `localhost:${env["HAL_CONTAINER_PORT"] as string}`);
+    });
     cy.verifyUserName("userwithoutrole");
     cy.logoutFromWebConsole();
     verifyNotLoggedIn(keycloak);
