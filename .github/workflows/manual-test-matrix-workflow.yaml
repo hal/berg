@@ -88,7 +88,7 @@ jobs:
         with:
           name: "${{ github.run_id}}-${{ strategy.job-index }}-artifacts"
           path: |
-            packages/testsuite/results
+            results
             packages/testsuite/cypress/videos
   process_report:
     name: "Collect results & deploy GH pages"
@@ -104,6 +104,8 @@ jobs:
           node-version: "22"
       - name: "Install necessary tools"
         run: npm install -g copyfiles gh-pages@3.0.0 mochawesome-merge mochawesome-report-generator
+      - name: "List downloaded artifacts"
+        run: find . -name "*.json" -path "*/results/*" | head -50
       - name: "Generate Mochawesome Report"
         run: mochawesome-merge "./*-artifacts/results/packages/testsuite/cypress/e2e/*.json" > mochawesome.json
       - name: "Copy video assets"

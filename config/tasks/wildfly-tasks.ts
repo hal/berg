@@ -76,27 +76,29 @@ export function createExecuteInContainer(
       return Promise.reject(new Error(`Container ${containerName} not found`));
     }
 
-    return containerToExec
-      .exec([
-        "/bin/sh",
-        "-c",
-        `${JBOSS_CLI_PATH} --connect --controller=localhost:${managementPort} --commands=${command}`,
-      ])
-      .then((value) => {
-        if (value.exitCode === 0) {
-          return value;
-        } else {
-          logger.debug(value);
-          throw new Error(`Command failed with exit code ${value.exitCode}: ${value.output || ""}`);
-        }
-      })
-      // Only container.exec() errors and plain Errors from the .then() block can reach here.
-      // AxiosErrorResponse is not possible — Axios is not used in this function.
-      .catch((err: unknown) => {
-        if (err instanceof Error) {
-          throw err;
-        }
-        throw new Error(String(err));
-      });
+    return (
+      containerToExec
+        .exec([
+          "/bin/sh",
+          "-c",
+          `${JBOSS_CLI_PATH} --connect --controller=localhost:${managementPort} --commands=${command}`,
+        ])
+        .then((value) => {
+          if (value.exitCode === 0) {
+            return value;
+          } else {
+            logger.debug(value);
+            throw new Error(`Command failed with exit code ${value.exitCode}: ${value.output || ""}`);
+          }
+        })
+        // Only container.exec() errors and plain Errors from the .then() block can reach here.
+        // AxiosErrorResponse is not possible — Axios is not used in this function.
+        .catch((err: unknown) => {
+          if (err instanceof Error) {
+            throw err;
+          }
+          throw new Error(String(err));
+        })
+    );
   };
 }
