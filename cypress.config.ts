@@ -61,6 +61,7 @@ export const MANAGEMENT_INTERFACE_ADDRESS = ["core-service", "management", "mana
 export const LOCALHOST_IP = "127.0.0.1";
 
 export default defineConfig({
+  allowCypressEnv: false,
   defaultCommandTimeout: 16000,
   reporter: require.resolve("cypress-multi-reporters/index.js"),
   reporterOptions: {
