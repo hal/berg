@@ -68,7 +68,9 @@ Cypress.Commands.add("resetForm", (formId, managementApi, address) => {
         name: attributeWithDefaultValue.name,
       }).then((result) => {
         expect((result as { outcome: string }).outcome).to.equal("success");
-        expect((result as { result: string | number | boolean }).result).to.equal(
+        // Use deep.equal() for proper comparison of arrays (e.g., ['*'] vs ['*'])
+        // since equal() uses reference equality which fails for different array instances
+        expect((result as { result: string | number | boolean | string[] }).result).to.deep.equal(
           attributeWithDefaultValue.defaultValue,
         );
       });
