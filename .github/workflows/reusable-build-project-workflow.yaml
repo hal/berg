@@ -36,7 +36,13 @@ jobs:
         run: "npm run compile"
       - name: "Run all tests"
         if: "${{ github.event.inputs.spec == '' }}"
+        env:
+          DEBUG: testcontainers*
+          TESTCONTAINERS_RYUK_DISABLED: true
         run: "npm run test:compiled"
       - name: "Run specific test"
         if: "${{ github.event.inputs.spec != '' }}"
+        env:
+          DEBUG: testcontainers*
+          TESTCONTAINERS_RYUK_DISABLED: true
         run: "npm run test:compiled -- --specs=${{ inputs.spec }}"

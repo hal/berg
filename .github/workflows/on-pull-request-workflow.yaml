@@ -35,6 +35,9 @@ jobs:
             packages/testsuite/cypress/e2e/**/*.cy.ts
       - name: "Run tests of modified files"
         if: steps.changed-files-specific.outputs.any_changed == 'true'
+        env:
+          DEBUG: testcontainers*
+          TESTCONTAINERS_RYUK_DISABLED: true
         run: |
           SPECS="${{ steps.changed-files-specific.outputs.all_changed_files }}"
           KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:24.0 npm run test -- --browser=chrome --specs=$SPECS
