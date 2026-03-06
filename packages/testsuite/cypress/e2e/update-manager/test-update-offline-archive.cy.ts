@@ -3,7 +3,6 @@ describe("TESTS: Update Manager => Updates => Offline using archive", () => {
   const timeoutTime = 120000;
 
   const address = ["update-manager", "updates"];
-  const zipFile = Cypress.env("UPDATE_ZIP") as string;
   const artifactToBeUpdated = "software.amazon.awssdk:aws-core";
 
   before(function () {
@@ -21,9 +20,11 @@ describe("TESTS: Update Manager => Updates => Offline using archive", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
     cy.get("#update-manager-update-add-actions").click();
     cy.get("#update-manager-update-offline").click();
-    cy.get("input#upload-file-input").selectFile(zipFile, {
-      action: "drag-drop",
-      force: true,
+    cy.env(["UPDATE_ZIP"]).then((env) => {
+      cy.get("input#upload-file-input").selectFile(env["UPDATE_ZIP"] as string, {
+        action: "drag-drop",
+        force: true,
+      });
     });
     cy.confirmNextInWizard();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);

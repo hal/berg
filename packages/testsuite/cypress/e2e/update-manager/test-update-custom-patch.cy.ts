@@ -3,7 +3,6 @@ describe("TESTS: Update Manager => Updates => Custom patches", () => {
   const timeoutTime = 120000;
 
   const address = ["update-manager", "updates"];
-  const zipFile = Cypress.env("PATCH_ZIP") as string;
   const artifactToBeUpdated = "software.amazon.awssdk:aws-core";
 
   before(function () {
@@ -21,9 +20,14 @@ describe("TESTS: Update Manager => Updates => Custom patches", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
     cy.get("#update-manager-update-add-actions").click();
     cy.get("#update-manager-update-patch").click();
-    cy.get("input#update-manager-update-patch-form-custom-patch-file-editing").selectFile(zipFile, {
-      action: "drag-drop",
-      force: true,
+    cy.env(["PATCH_ZIP"]).then((env) => {
+      cy.get("input#update-manager-update-patch-form-custom-patch-file-editing").selectFile(
+        env["PATCH_ZIP"] as string,
+        {
+          action: "drag-drop",
+          force: true,
+        },
+      );
     });
     cy.text("update-manager-update-patch-form", "manifest", "org.jboss.qe.eap:one-off-1");
     cy.confirmNextInWizard();
