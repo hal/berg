@@ -1,4 +1,4 @@
-import { PullPolicy, GenericContainer, Network, StartedNetwork, StartedTestContainer } from "testcontainers";
+import { PullPolicy, GenericContainer, Network, StartedNetwork, StartedTestContainer, Wait } from "testcontainers";
 
 export class Berg {
   private static _instance: Berg;
@@ -21,6 +21,7 @@ export class Berg {
         .withExposedPorts(9090)
         .withNetworkMode(network.getName())
         .withNetworkAliases("hal")
+        .withWaitStrategy(Wait.forLogMessage("/.*started.*/i"))
         .start();
       Berg._instance = new Berg(network, halContainer);
     }
