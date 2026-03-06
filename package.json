@@ -31,6 +31,7 @@
   "license": "ISC",
   "devDependencies": {
     "@cypress/xvfb": "1.2.4",
+    "@eslint/js": "^10.0.1",
     "@types/command-line-args": "5.2.3",
     "@types/mochawesome": "6.2.5",
     "@types/portscanner": "2.1.4",
