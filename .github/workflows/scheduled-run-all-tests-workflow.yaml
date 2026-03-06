@@ -30,6 +30,8 @@ jobs:
             "jsf",
             "mail",
             "metrics",
+            "micrometer",
+            "opentelemetry",
             "runtime",
             "security-manager",
             "system-property",

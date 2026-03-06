@@ -6,6 +6,11 @@ on:
         type: string
         required: false
         description: "Comma delimited test spec file(s) to run."
+      verbose:
+        type: boolean
+        required: false
+        default: false
+        description: "Enable verbose Berg logging"
 jobs:
   build_project_job:
     name: "Build Project"
@@ -36,7 +41,15 @@ jobs:
         run: "npm run compile"
       - name: "Run all tests"
         if: "${{ github.event.inputs.spec == '' }}"
+        env:
+          TESTCONTAINERS_RYUK_DISABLED: true
+          BERG_VERBOSE: ${{ inputs.verbose }}
+          DEBUG: ${{ inputs.verbose && 'testcontainers*' || '' }}
         run: "npm run test:compiled"
       - name: "Run specific test"
         if: "${{ github.event.inputs.spec != '' }}"
+        env:
+          TESTCONTAINERS_RYUK_DISABLED: true
+          BERG_VERBOSE: ${{ inputs.verbose }}
+          DEBUG: ${{ inputs.verbose && 'testcontainers*' || '' }}
         run: "npm run test:compiled -- --specs=${{ inputs.spec }}"
