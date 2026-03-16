@@ -1,14 +1,17 @@
-Cypress.Commands.add("startWildflyContainer", (options = { useNetworkHostMode: false }) => {
-  return cy.task(
-    "start:wildfly:container",
-    {
-      name: Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_"),
-      configuration: "standalone-insecure.xml",
-      useNetworkHostMode: options.useNetworkHostMode,
-    },
-    { timeout: 240_000 },
-  );
-});
+Cypress.Commands.add(
+  "startWildflyContainer",
+  (options = { useNetworkHostMode: false, configuration: "standalone-insecure.xml" }) => {
+    return cy.task(
+      "start:wildfly:container",
+      {
+        name: Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_"),
+        configuration: options.configuration || "standalone-insecure.xml",
+        useNetworkHostMode: options.useNetworkHostMode,
+      },
+      { timeout: 240_000 },
+    );
+  },
+);
 
 Cypress.Commands.add("startWildflyContainerSecured", () => {
   return cy.task(
@@ -43,9 +46,12 @@ declare global {
        * Start a Wildfly container. This command is executed in before method in most of the test cases/specifications.
        * Unsecured management interface is used and web console doesn't require any authentication.
        *
+       * @param options.useNetworkHostMode - Whether to use network host mode
+       * @param options.configuration - Configuration file to use (default: standalone-insecure.xml)
+       *
        * @category Containers util
        */
-      startWildflyContainer(options?: { useNetworkHostMode?: boolean }): Chainable<unknown>;
+      startWildflyContainer(options?: { useNetworkHostMode?: boolean; configuration?: string }): Chainable<unknown>;
       /**
        * Start a Wildfly container wich is secured. This is not for a common use.
        *
