@@ -8,7 +8,7 @@ import {
   WILDFLY_MANAGEMENT_PORT,
   JBOSS_CLI_PATH,
 } from "../../cypress.config";
-import { StartWildflyContainerParams, ExecuteInContainerParams, AxiosErrorResponse } from "../interfaces";
+import { StartWildflyContainerParams, ExecuteInContainerParams } from "../interfaces";
 import { getHostnameMapping, handleContainerError, calculateManagementPort, logger } from "../helpers";
 import { configureWildflyNetworkMode, configureWildflyPostStart } from "../containers";
 
@@ -90,8 +90,13 @@ export function createExecuteInContainer(
           throw new Error(`Command failed with exit code ${value.exitCode}: ${value.output || ""}`);
         }
       })
-      .catch((err: AxiosErrorResponse) => {
-        throw new Error(err.response.data);
+      // Only container.exec() errors and plain Errors from the .then() block can reach here.
+      // AxiosErrorResponse is not possible — Axios is not used in this function.
+      .catch((err: unknown) => {
+        if (err instanceof Error) {
+          throw err;
+        }
+        throw new Error(String(err));
       });
   };
 }

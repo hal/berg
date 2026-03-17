@@ -1,6 +1,6 @@
 import { defineConfig } from "cypress";
 import { StartedTestContainer, StoppedTestContainer } from "testcontainers";
-import { existsSync, unlinkSync } from "fs";
+import { existsSync, unlinkSync, readdirSync } from "fs";
 import {
   createWildflyContainer,
   createExecuteInContainer,
@@ -91,6 +91,15 @@ export default defineConfig({
         "start:sqlserver:container": createSqlserverContainer(startedContainers, config.env.NETWORK_NAME as string),
         "execute:in:container": createExecuteInContainer(startedContainers, startedContainersManagementPorts),
         "execute:cli": createExecuteCli(),
+        "resolve:jdbc:driver": (prefix: string) => {
+          const jdbcDir = FIXTURES_PATH + "/jdbc-drivers";
+          const files = readdirSync(jdbcDir);
+          const match = files.find((f) => f.startsWith(prefix) && f.endsWith(".jar"));
+          if (!match) {
+            throw new Error(`No JDBC driver jar found matching prefix "${prefix}" in ${jdbcDir}`);
+          }
+          return `/home/fixtures/jdbc-drivers/${match}`;
+        },
         "stop:containers": () => {
           const promises: Promise<StoppedTestContainer | void>[] = [];
           startedContainers.forEach((container, key) => {

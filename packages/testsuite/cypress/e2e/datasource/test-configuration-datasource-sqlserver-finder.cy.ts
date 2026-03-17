@@ -70,14 +70,16 @@ describe("TESTS: Configuration => Datasource => SQL Server (Finder)", () => {
         managementEndpoint = result as string;
       })
       .then(() => {
-        cy.executeInWildflyContainer(
-          new AddModuleCommandBuilder()
-            .withName(sqlserverDriverModuleName)
-            .withResource("/home/fixtures/jdbc-drivers/mssql-jdbc-11.2.1.jre11.jar")
-            .withDependencies(["javax.api"])
-            .build()
-            .toCLICommand(),
-        );
+        cy.task("resolve:jdbc:driver", "mssql-jdbc").then((driverPath) => {
+          cy.executeInWildflyContainer(
+            new AddModuleCommandBuilder()
+              .withName(sqlserverDriverModuleName)
+              .withResource(driverPath as string)
+              .withDependencies(["javax.api"])
+              .build()
+              .toCLICommand(),
+          );
+        });
       })
       .then(() => {
         cy.task("execute:cli", {

@@ -53,47 +53,51 @@ describe("TESTS: Configuration => Datasource => MySQL (Finder)", () => {
     );
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
-      cy.executeInWildflyContainer(
-        new AddModuleCommandBuilder()
-          .withName(mysqlDriverModuleName)
-          .withResource("/home/fixtures/jdbc-drivers/mysql-connector-j-8.0.31.jar")
-          .withDependencies(["javax.api"])
-          .build()
-          .toCLICommand(),
-      ).then(() => {
-        cy.task("execute:cli", {
-          managementApi: managementEndpoint + "/management",
-          operation: "add",
-          address: ["subsystem", "datasources", "jdbc-driver", mysqlDriver],
-          "driver-module-name": mysqlDriverModuleName,
-          "driver-xa-datasource-class-name": "com.mysql.cj.jdbc.MysqlXADataSource",
-        }).then(() => {
+      cy.task("resolve:jdbc:driver", "mysql-connector-j")
+        .then((driverPath) => {
           cy.executeInWildflyContainer(
-            new AddDataSourceBuilder()
-              .withName(mysqlDSToAdd.name)
-              .withJndiName(mysqlDSToAdd.jndiName)
-              .withConnectionUrl(mysqlDSToAdd.connectionUrl)
-              .withDriverName(mysqlDriver)
-              .withUsername(mysqlUser)
-              .withPassword(mysqlPassword)
+            new AddModuleCommandBuilder()
+              .withName(mysqlDriverModuleName)
+              .withResource(driverPath as string)
+              .withDependencies(["javax.api"])
               .build()
               .toCLICommand(),
           );
-          cy.executeInWildflyContainer(
-            new AddXADataSourceBuilder()
-              .withName(xaMySQLDSToAdd.name)
-              .withJndiName(xaMySQLDSToAdd.jndiName)
-              .withUsername(mysqlUser)
-              .withPassword(mysqlPassword)
-              .withDriverName(mysqlDriver)
-              .withXaDataSourceClass("com.mysql.cj.jdbc.MysqlXADataSource")
-              .withXaDataSourceProperty("serverName", mysqlContainerName)
-              .withXaDataSourceProperty("databaseName", mysqlDatabaseName)
-              .build()
-              .toCLICommand(),
-          );
+        })
+        .then(() => {
+          cy.task("execute:cli", {
+            managementApi: managementEndpoint + "/management",
+            operation: "add",
+            address: ["subsystem", "datasources", "jdbc-driver", mysqlDriver],
+            "driver-module-name": mysqlDriverModuleName,
+            "driver-xa-datasource-class-name": "com.mysql.cj.jdbc.MysqlXADataSource",
+          }).then(() => {
+            cy.executeInWildflyContainer(
+              new AddDataSourceBuilder()
+                .withName(mysqlDSToAdd.name)
+                .withJndiName(mysqlDSToAdd.jndiName)
+                .withConnectionUrl(mysqlDSToAdd.connectionUrl)
+                .withDriverName(mysqlDriver)
+                .withUsername(mysqlUser)
+                .withPassword(mysqlPassword)
+                .build()
+                .toCLICommand(),
+            );
+            cy.executeInWildflyContainer(
+              new AddXADataSourceBuilder()
+                .withName(xaMySQLDSToAdd.name)
+                .withJndiName(xaMySQLDSToAdd.jndiName)
+                .withUsername(mysqlUser)
+                .withPassword(mysqlPassword)
+                .withDriverName(mysqlDriver)
+                .withXaDataSourceClass("com.mysql.cj.jdbc.MysqlXADataSource")
+                .withXaDataSourceProperty("serverName", mysqlContainerName)
+                .withXaDataSourceProperty("databaseName", mysqlDatabaseName)
+                .build()
+                .toCLICommand(),
+            );
+          });
         });
-      });
     });
   });
 
