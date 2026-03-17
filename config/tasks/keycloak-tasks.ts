@@ -9,7 +9,7 @@ import {
   FIXTURES_PATH,
 } from "../../cypress.config";
 import { StartKeycloakContainerParams } from "../interfaces";
-import { buildLocalhostUrl, buildKeycloakStartCommand, handleContainerError } from "../helpers";
+import { buildLocalhostUrl, buildKeycloakStartCommand, handleContainerError, logger } from "../helpers";
 
 export function createKeycloakContainer(startedContainers: Map<string, StartedTestContainer>) {
   return ({ name }: StartKeycloakContainerParams) => {
@@ -35,7 +35,7 @@ export function createKeycloakContainer(startedContainers: Map<string, StartedTe
         .then((keycloakContainer) => {
           startedContainers.set(name, keycloakContainer);
           const keycloakServer = buildLocalhostUrl(freePort);
-          console.log(`Keycloak is ready: ${keycloakServer}`);
+          logger.info(`Keycloak is ready: ${keycloakServer}`);
           return keycloakServer;
         })
         .catch((err: unknown) => {

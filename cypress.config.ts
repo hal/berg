@@ -11,6 +11,7 @@ import {
   createSqlserverContainer,
   createExecuteCli,
 } from "./config/tasks";
+import { logger } from "./config/helpers";
 
 // WildFly configuration
 export const DEFAULT_WILDFLY_CONFIG = "standalone-insecure.xml";
@@ -91,12 +92,16 @@ export default defineConfig({
         "execute:in:container": createExecuteInContainer(startedContainers, startedContainersManagementPorts),
         "execute:cli": createExecuteCli(),
         "stop:containers": () => {
-          const promises: Promise<StoppedTestContainer>[] = [];
+          const promises: Promise<StoppedTestContainer | void>[] = [];
           startedContainers.forEach((container, key) => {
-            console.log("Stopping container for test " + key);
+            logger.info("Stopping container for test " + key);
             startedContainers.delete(key);
             startedContainersManagementPorts.delete(key);
-            promises.push(container.stop());
+            promises.push(
+              container.stop().catch((err: unknown) => {
+                logger.error(`Failed to stop container ${key}: ${err instanceof Error ? err.message : String(err)}`);
+              }),
+            );
           });
           return Promise.all(promises);
         },

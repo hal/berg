@@ -11,7 +11,7 @@ import {
   MANAGEMENT_INTERFACE_ADDRESS,
 } from "../../cypress.config";
 import { WildflyManagementResponse } from "../interfaces";
-import { buildLocalhostUrl } from "../helpers";
+import { buildLocalhostUrl, logger } from "../helpers";
 
 export function pollWildflyState(managementApi: string, container: StartedTestContainer): Promise<string> {
   const startTime = new Date().getTime();
@@ -34,7 +34,7 @@ export function pollWildflyState(managementApi: string, container: StartedTestCo
           }
         })
         .catch(() => {
-          console.log("WildFly server is not ready yet");
+          logger.debug("WildFly server is not ready yet");
         });
     }, WILDFLY_POLL_INTERVAL_MS);
   });
@@ -61,7 +61,7 @@ export function configureWildflyNetworkMode(
   networkName?: string,
 ): Promise<{ portOffset: number }> {
   if (useHostMode) {
-    console.log("host mode");
+    logger.debug("host mode");
     return findAPortNotInUse(WILDFLY_PORT_RANGE.min, WILDFLY_PORT_RANGE.max).then((freePort) => {
       const portOffset = freePort - WILDFLY_PORT_RANGE.min;
       wildfly
@@ -75,7 +75,7 @@ export function configureWildflyNetworkMode(
       return { portOffset };
     });
   } else {
-    console.log(`default network mode, network name: ${networkName}`);
+    logger.debug(`default network mode, network name: ${networkName}`);
     wildfly
       .withNetworkMode(networkName!)
       .withNetworkAliases("wildfly")

@@ -28,11 +28,9 @@ Following tools are required to run the test suite
   - recommended version is 22.
   - [Node Version Manager (nvm)](https://github.com/nvm-sh/nvm) is recommended optional tool to install & manage multiple Node environments
 - [npx](https://github.com/npm/npx) CLI tool used to exeute binaries from project's `node_modules` directly (instead of providing absolute/relative path to the commannds). It is used in multiple build steps.
-- [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Note that when using Podman as container runtime you may need to export following environment variables and start podman socket:
+- [Podman](https://podman.io) | [Docker](https://www.docker.com) as a container runtime used by TestContainers. Podman is auto-detected: `DOCKER_HOST`, `TESTCONTAINERS_RYUK_DISABLED`, and `podman.socket` are configured automatically. To override, set the environment variables manually before running the test suite:
   - `export TESTCONTAINERS_RYUK_DISABLED=true`
   - `export DOCKER_HOST=unix:///run/user/$UID/podman/podman.sock`
-    - the path can be found by command `podman info --debug` and look for `path` in `remoteSocket` section.
-  - `systemctl --user start podman.socket`
 - Java. Yes we'll need Java to write deployments/applications that will be deployed onto the running WildFly container.
 - [Maven](https://maven.apache.org). Yes, we'll need Maven to ease up the development of the deployed applications & downloading needed JDBC drivers for datasource & drivers UI tests. Maven is mostly used embedded by [node-maven](https://github.com/headcr4sh/node-maven) JS wrapper to execute Maven & Java related tasks into the build automation.
 
@@ -96,6 +94,7 @@ Following is a table of supported environment properties that can be used when r
 | `MYSQL_IMAGE`    | `docker.io/library/mysql:latest`                | MySQL image to be used for datasource tests                                                   |
 | `MARIADB_IMAGE`  | `docker.io/library/mariadb:latest`              | MariaDB image to be used for datasource tests                                                 |
 | `MSSQL_IMAGE`    | `mcr.microsoft.com/mssql/server:2022-latest`    | Microsoft SQL Server image to be used for datasource tests                                    |
+| `BERG_VERBOSE`   | `false`                                         | Enable verbose Berg logging (debug messages for container setup, CLI commands, etc.)          |
 
 ## Custom method documentation
 
