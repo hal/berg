@@ -1,5 +1,10 @@
 on:
   workflow_dispatch:
+    inputs:
+      verbose:
+        type: boolean
+        description: "Enable verbose Berg logging"
+        default: false
 name: "Manual matrix test execution"
 concurrency:
   group: ${{ github.ref }}
@@ -30,6 +35,8 @@ jobs:
             "mail",
             "microprofile",
             "metrics",
+            "micrometer",
+            "opentelemetry",
             "runtime",
             "security-manager",
             "system-property",
@@ -71,6 +78,9 @@ jobs:
       - name: "Run compile"
         run: "npm run compile"
       - name: "Run test(s)"
+        env:
+          BERG_VERBOSE: ${{ inputs.verbose }}
+          DEBUG: ${{ inputs.verbose && 'testcontainers*' || '' }}
         run: "npm run test:compiled -- --browser=firefox --specs=packages/testsuite/cypress/e2e/${{ matrix.specs }}"
       - name: "Archive test report(s) and video(s)"
         if: ${{ !cancelled() }}

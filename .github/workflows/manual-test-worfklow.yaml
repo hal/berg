@@ -4,9 +4,14 @@ on:
       spec:
         type: string
         description: "Spec to run"
+      verbose:
+        type: boolean
+        description: "Enable verbose Berg logging"
+        default: false
 name: "Manual job execution"
 jobs:
   call-reusable-workflow:
     uses: "./.github/workflows/reusable-build-project-workflow.yaml"
     with:
       spec: ${{ inputs.spec }}
+      verbose: ${{ inputs.verbose }}

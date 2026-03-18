@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ExecuteCliParams, AxiosErrorResponse } from "../interfaces";
+import { logger } from "../helpers";
 
 export function createExecuteCli() {
   return ({ managementApi, operation, address, ...args }: ExecuteCliParams) => {
@@ -11,7 +12,7 @@ export function createExecuteCli() {
       })
       .then((response) => response.data as unknown)
       .catch((err: AxiosErrorResponse) => {
-        console.log(err);
+        logger.error(err);
         throw new Error(err.response.data);
       });
   };

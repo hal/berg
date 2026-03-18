@@ -1,3 +1,4 @@
+import "./container-runtime";
 import { PullPolicy, GenericContainer, Network, StartedNetwork, StartedTestContainer } from "testcontainers";
 
 export class Berg {

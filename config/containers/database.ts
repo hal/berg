@@ -1,6 +1,6 @@
 import { PullPolicy, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
 import { DatabaseConfig } from "../interfaces";
-import { handleContainerError } from "../helpers";
+import { handleContainerError, logger } from "../helpers";
 
 export function startDatabaseContainer(
   config: DatabaseConfig,
@@ -18,7 +18,7 @@ export function startDatabaseContainer(
   return containerBuilder
     .start()
     .then((container) => {
-      console.log(config.successMessage);
+      logger.debug(config.successMessage);
       startedContainersMap.set(config.containerMapKey, container);
       return container;
     })

@@ -52,47 +52,51 @@ describe("TESTS: Configuration => Datasource => MariaDB (Finder)", () => {
     );
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
-      cy.executeInWildflyContainer(
-        new AddModuleCommandBuilder()
-          .withName(mariadbDriverModuleName)
-          .withResource("/home/fixtures/jdbc-drivers/mariadb-java-client-3.1.0.jar")
-          .withDependencies(["javax.api"])
-          .build()
-          .toCLICommand(),
-      ).then(() => {
-        cy.task("execute:cli", {
-          managementApi: managementEndpoint + "/management",
-          operation: "add",
-          address: ["subsystem", "datasources", "jdbc-driver", mariadbDriver],
-          "driver-module-name": mariadbDriverModuleName,
-          "driver-xa-datasource-class-name": "org.mariadb.jdbc.MariaDbDataSource",
-        }).then(() => {
+      cy.task("resolve:jdbc:driver", "mariadb-java-client")
+        .then((driverPath) => {
           cy.executeInWildflyContainer(
-            new AddDataSourceBuilder()
-              .withName(mariadbDSToAdd.name)
-              .withJndiName(mariadbDSToAdd.jndiName)
-              .withConnectionUrl(mariadbDSToAdd.connectionUrl)
-              .withDriverName(mariadbDriver)
-              .withUsername(mariadbUser)
-              .withPassword(mariadbPassword)
+            new AddModuleCommandBuilder()
+              .withName(mariadbDriverModuleName)
+              .withResource(driverPath as string)
+              .withDependencies(["javax.api"])
               .build()
               .toCLICommand(),
           );
-          cy.executeInWildflyContainer(
-            new AddXADataSourceBuilder()
-              .withName(xaMariaDBToAdd.name)
-              .withJndiName(xaMariaDBToAdd.jndiName)
-              .withUsername(mariadbUser)
-              .withPassword(mariadbPassword)
-              .withDriverName(mariadbDriver)
-              .withXaDataSourceClass("org.mariadb.jdbc.MariaDbDataSource")
-              .withXaDataSourceProperty("serverName", mariadbContainerName)
-              .withXaDataSourceProperty("databaseName", mariadbDatabaseName)
-              .build()
-              .toCLICommand(),
-          );
+        })
+        .then(() => {
+          cy.task("execute:cli", {
+            managementApi: managementEndpoint + "/management",
+            operation: "add",
+            address: ["subsystem", "datasources", "jdbc-driver", mariadbDriver],
+            "driver-module-name": mariadbDriverModuleName,
+            "driver-xa-datasource-class-name": "org.mariadb.jdbc.MariaDbDataSource",
+          }).then(() => {
+            cy.executeInWildflyContainer(
+              new AddDataSourceBuilder()
+                .withName(mariadbDSToAdd.name)
+                .withJndiName(mariadbDSToAdd.jndiName)
+                .withConnectionUrl(mariadbDSToAdd.connectionUrl)
+                .withDriverName(mariadbDriver)
+                .withUsername(mariadbUser)
+                .withPassword(mariadbPassword)
+                .build()
+                .toCLICommand(),
+            );
+            cy.executeInWildflyContainer(
+              new AddXADataSourceBuilder()
+                .withName(xaMariaDBToAdd.name)
+                .withJndiName(xaMariaDBToAdd.jndiName)
+                .withUsername(mariadbUser)
+                .withPassword(mariadbPassword)
+                .withDriverName(mariadbDriver)
+                .withXaDataSourceClass("org.mariadb.jdbc.MariaDbDataSource")
+                .withXaDataSourceProperty("serverName", mariadbContainerName)
+                .withXaDataSourceProperty("databaseName", mariadbDatabaseName)
+                .build()
+                .toCLICommand(),
+            );
+          });
         });
-      });
     });
   });
 

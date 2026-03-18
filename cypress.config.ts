@@ -1,6 +1,6 @@
 import { defineConfig } from "cypress";
 import { StartedTestContainer, StoppedTestContainer } from "testcontainers";
-import { existsSync, unlinkSync } from "fs";
+import { existsSync, unlinkSync, readdirSync } from "fs";
 import {
   createWildflyContainer,
   createExecuteInContainer,
@@ -11,6 +11,7 @@ import {
   createSqlserverContainer,
   createExecuteCli,
 } from "./config/tasks";
+import { logger } from "./config/helpers";
 
 // WildFly configuration
 export const DEFAULT_WILDFLY_CONFIG = "standalone-insecure.xml";
@@ -61,6 +62,7 @@ export const MANAGEMENT_INTERFACE_ADDRESS = ["core-service", "management", "mana
 export const LOCALHOST_IP = "127.0.0.1";
 
 export default defineConfig({
+  allowCypressEnv: false,
   defaultCommandTimeout: 16000,
   reporter: require.resolve("cypress-multi-reporters/index.js"),
   reporterOptions: {
@@ -89,13 +91,26 @@ export default defineConfig({
         "start:sqlserver:container": createSqlserverContainer(startedContainers, config.env.NETWORK_NAME as string),
         "execute:in:container": createExecuteInContainer(startedContainers, startedContainersManagementPorts),
         "execute:cli": createExecuteCli(),
+        "resolve:jdbc:driver": (prefix: string) => {
+          const jdbcDir = FIXTURES_PATH + "/jdbc-drivers";
+          const files = readdirSync(jdbcDir);
+          const match = files.find((f) => f.startsWith(prefix) && f.endsWith(".jar"));
+          if (!match) {
+            throw new Error(`No JDBC driver jar found matching prefix "${prefix}" in ${jdbcDir}`);
+          }
+          return `/home/fixtures/jdbc-drivers/${match}`;
+        },
         "stop:containers": () => {
-          const promises: Promise<StoppedTestContainer>[] = [];
+          const promises: Promise<StoppedTestContainer | void>[] = [];
           startedContainers.forEach((container, key) => {
-            console.log("Stopping container for test " + key);
+            logger.info("Stopping container for test " + key);
             startedContainers.delete(key);
             startedContainersManagementPorts.delete(key);
-            promises.push(container.stop());
+            promises.push(
+              container.stop().catch((err: unknown) => {
+                logger.error(`Failed to stop container ${key}: ${err instanceof Error ? err.message : String(err)}`);
+              }),
+            );
           });
           return Promise.all(promises);
         },

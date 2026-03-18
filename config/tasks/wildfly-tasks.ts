@@ -8,8 +8,8 @@ import {
   WILDFLY_MANAGEMENT_PORT,
   JBOSS_CLI_PATH,
 } from "../../cypress.config";
-import { StartWildflyContainerParams, ExecuteInContainerParams, AxiosErrorResponse } from "../interfaces";
-import { getHostnameMapping, handleContainerError, calculateManagementPort } from "../helpers";
+import { StartWildflyContainerParams, ExecuteInContainerParams } from "../interfaces";
+import { getHostnameMapping, handleContainerError, calculateManagementPort, logger } from "../helpers";
 import { configureWildflyNetworkMode, configureWildflyPostStart } from "../containers";
 
 export function createWildflyContainer(
@@ -53,7 +53,7 @@ export function createWildflyContainer(
         );
       })
       .then((wildflyServer) => {
-        console.log(`WildFly server is ready: ${wildflyServer}`);
+        logger.info(`WildFly server is ready: ${wildflyServer}`);
         return wildflyServer;
       })
       .catch((err: unknown) => {
@@ -67,7 +67,7 @@ export function createExecuteInContainer(
   startedContainersManagementPorts: Map<string, number>,
 ) {
   return ({ containerName, command }: ExecuteInContainerParams) => {
-    console.log(`CLI commands: ${command}`);
+    logger.debug(`CLI commands: ${command}`);
     const containerToExec = startedContainers.get(containerName);
     let managementPort = startedContainersManagementPorts.get(containerName);
     managementPort = managementPort ?? WILDFLY_MANAGEMENT_PORT;
@@ -86,12 +86,17 @@ export function createExecuteInContainer(
         if (value.exitCode === 0) {
           return value;
         } else {
-          console.log(value);
+          logger.debug(value);
           throw new Error(`Command failed with exit code ${value.exitCode}: ${value.output || ""}`);
         }
       })
-      .catch((err: AxiosErrorResponse) => {
-        throw new Error(err.response.data);
+      // Only container.exec() errors and plain Errors from the .then() block can reach here.
+      // AxiosErrorResponse is not possible — Axios is not used in this function.
+      .catch((err: unknown) => {
+        if (err instanceof Error) {
+          throw err;
+        }
+        throw new Error(String(err));
       });
   };
 }
