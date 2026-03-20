@@ -28,11 +28,11 @@ Cypress.Commands.add("closeWizard", () => {
 });
 
 Cypress.Commands.add("confirmNextInWizard", () => {
-  cy.get('div.modal-footer > button.btn.btn-primary:contains("Next")').click({ force: true });
+  cy.get('div.modal-footer > button.btn.btn-primary:contains("Next")').should("be.visible").click();
 });
 
 Cypress.Commands.add("confirmFinishInWizard", () => {
-  cy.get('div.modal-footer > button.btn.btn-primary:contains("Finish")').click({ force: true });
+  cy.get('div.modal-footer > button.btn.btn-primary:contains("Finish")').should("be.visible").click();
 });
 
 Cypress.Commands.add("navigateToUpdateManagerPage", (managementEndpoint, address) => {
