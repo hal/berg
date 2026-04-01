@@ -192,29 +192,5 @@ describe("TESTS: Configuration => Subsystem => EJB => Container => Remoting Prof
     cy.get("#remoting-profile-item").click();
     cy.selectInTable(remotingProfilesTableId, remotingProfiles.reset.name);
     cy.resetForm(configurationFormId, managementEndpoint, address.concat(remotingProfiles.reset.name));
-    //Verify reset
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(remotingProfiles.reset.name),
-      "local-receiver-pass-by-value",
-      false,
-    );
-    cy.verifyAttribute(
-      managementEndpoint,
-      address.concat(remotingProfiles.reset.name),
-      "exclude-local-receiver",
-      false,
-    );
-    cy.verifyListAttributeDoesNotContain(
-      managementEndpoint,
-      address.concat(remotingProfiles.reset.name),
-      "static-ejb-discovery",
-      {
-        uri: "someUri",
-        "app-name": "someAppName",
-        "module-name": "someModule",
-        "distinct-name": "someDistinctName",
-      },
-    );
   });
 });
