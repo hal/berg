@@ -57,5 +57,11 @@
     "cypress": "15.11.0",
     "portscanner": "^2.2.0",
     "testcontainers": "^11.7.1"
+  },
+  "overrides": {
+    "mocha": {
+      "diff": "^8.0.3",
+      "serialize-javascript": "^7.0.5"
+    }
   }
 }
