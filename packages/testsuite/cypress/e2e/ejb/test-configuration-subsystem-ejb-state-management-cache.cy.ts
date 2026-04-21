@@ -100,7 +100,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Cache"
     cy.get("#ejb3-state-item").click();
     cy.get("#ejb3-cache-item").click();
     cy.selectInTable(cacheTableId, caches.update.name);
-    cy.editForm(configurationFormId);
+    cy.editForm(configurationFormId, { waitForData: false });
     cy.formInput(configurationFormId, "aliases").clear().type("another-alias{enter}").trigger("change");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
@@ -112,7 +112,7 @@ describe("TESTS: Configuration => Subsystem => EJB => State Management => Cache"
     cy.get("#ejb3-state-item").click();
     cy.get("#ejb3-cache-item").click();
     cy.selectInTable(cacheTableId, caches.update.name);
-    cy.editForm(configurationFormId);
+    cy.editForm(configurationFormId, { waitForData: false });
     cy.text(configurationFormId, "passivation-store", passivations.update.name);
     cy.saveForm(configurationFormId);
     cy.verifySuccess();

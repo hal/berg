@@ -79,7 +79,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
     cy.get("#http-factories-item").click();
     cy.get("#elytron-provider-http-server-mechanism-factory-item").click();
     cy.selectInTable(providerHttpServerMechanismFactoryTableId, providerHttpServiceMechanismFactories.update.name);
-    cy.editForm(configurationFormId);
+    cy.editForm(configurationFormId, { waitForData: false });
     cy.text(configurationFormId, "providers", "pl-to-update");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
