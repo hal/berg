@@ -25,6 +25,18 @@ Cypress.Commands.add("startWildflyContainerSecured", () => {
   );
 });
 
+Cypress.Commands.add("startWildflyContainerHa", () => {
+  return cy.task(
+    "start:wildfly:container",
+    {
+      name: Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_"),
+      configuration: "standalone-ha-insecure.xml",
+      useNetworkHostMode: true,
+    },
+    { timeout: 240_000 },
+  );
+});
+
 Cypress.Commands.add("startKeycloakContainer", () => {
   return cy.task("start:keycloak:container", {
     name: `keycloak_${Cypress.spec.name.replace(/\.cy\.ts/g, "").replace(/-/g, "_")}`,
@@ -67,6 +79,16 @@ declare global {
        *
        */
       startWildflyContainerSecured(): Chainable<unknown>;
+      /**
+       * Start a Wildfly container with standalone-ha-incsecure.xml configuration. This command is could be executed in before method of the test cases/specifications.
+       * Unsecured management interface is used and web console doesn't require any authentication.
+       *
+       * @param options.useNetworkHostMode - Whether to use network host mode
+       * @param options.configuration - Configuration file to use (default: standalone-insecure.xml)
+       *
+       * @category Containers util
+       */
+      startWildflyContainerHa(): Chainable<unknown>;
       /**
        * Start a Keycloak container. This command typically needs to be executed in `before` method of a test spec.
        *
