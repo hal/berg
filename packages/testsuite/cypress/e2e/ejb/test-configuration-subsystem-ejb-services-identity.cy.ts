@@ -36,7 +36,7 @@ describe("TESTS: Configuration => Subsystem => EJB => Services => Identity", () 
     cy.navigateTo(managementEndpoint, "ejb3-configuration");
     cy.get("#ejb3-service-item").click();
     cy.get("#ejb3-service-identity-item").click();
-    cy.editForm(configurationFormId);
+    cy.editForm(configurationFormId, { waitForData: false });
     cy.formInput(configurationFormId, "outflow-security-domains")
       .clear()
       .type(`${securityDomainToUpdate}{enter}`)

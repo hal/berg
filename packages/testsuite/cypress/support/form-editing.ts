@@ -1,5 +1,9 @@
-Cypress.Commands.add("editForm", (formId) => {
+Cypress.Commands.add("editForm", (formId, { waitForData = true } = {}) => {
   const editButton = "#" + formId + ' a.clickable[data-operation="edit"]';
+  if (waitForData) {
+    // Wait for form data to load: find readonly spans without "empty" CSS class and with actual text content
+    cy.get(`#${formId}-readonly`).find("span[id$='-readonly']:not(.empty):not(:empty)").should("exist");
+  }
   cy.get(`#${formId}-editing`).should("not.be.visible");
   cy.get(editButton).click();
   // Workaround - JBEAP-25005,JBEAP-25046 - the form is sometimes not loaded in time and Cypress is not able to recover
@@ -189,7 +193,7 @@ declare global {
        *
        * @param formId - The ID of section which need to be edit.
        */
-      editForm(formId: string): Chainable<void>;
+      editForm(formId: string, options?: { waitForData?: boolean }): Chainable<void>;
       /**
        * Click on "Save" button to save current data in form.
        * @category Form Editing

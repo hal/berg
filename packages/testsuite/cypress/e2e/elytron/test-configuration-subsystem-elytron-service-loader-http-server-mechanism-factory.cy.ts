@@ -95,7 +95,7 @@ describe("TESTS: Configuration => Subsystem => Security => Settings => Factories
       serviceLoaderHttpServerMechanismFactoryTableId,
       serviceLoaderHttpServiceMechanismFactories.update.name,
     );
-    cy.editForm(configurationFormId);
+    cy.editForm(configurationFormId, { waitForData: false });
     cy.text(configurationFormId, "module", "sample");
     cy.saveForm(configurationFormId);
     cy.verifySuccess();
