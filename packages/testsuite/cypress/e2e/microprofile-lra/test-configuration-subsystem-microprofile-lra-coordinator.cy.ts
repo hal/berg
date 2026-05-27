@@ -28,7 +28,6 @@ describe("TESTS: Configuration => Subsystem => MicroProfile LRA Coordinator", ()
   before(function () {
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
-      cy.skipIf(cy.isEAP(managementEndpoint), this);
       cy.addAddress(managementEndpoint, ["extension", "org.wildfly.extension.microprofile.lra-coordinator"], {});
       cy.addAddress(managementEndpoint, address, {});
       cy.addAddress(managementEndpoint, ["system-property", serverAttr.expressionProperty], {

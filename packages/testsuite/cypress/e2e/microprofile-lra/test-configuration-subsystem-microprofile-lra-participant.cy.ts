@@ -36,7 +36,6 @@ describe("TESTS: Configuration => Subsystem => MicroProfile LRA Participant", ()
   before(function () {
     cy.startWildflyContainer().then((result) => {
       managementEndpoint = result as string;
-      cy.skipIf(cy.isEAP(managementEndpoint), this);
       cy.addAddress(managementEndpoint, ["extension", "org.wildfly.extension.microprofile.lra-participant"], {});
       cy.addAddress(managementEndpoint, address, {});
       cy.addAddress(managementEndpoint, ["system-property", coordinatorUrlAttr.expressionProperty], {
