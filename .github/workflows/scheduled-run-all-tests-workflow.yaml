@@ -31,6 +31,7 @@ jobs:
             "mail",
             "metrics",
             "micrometer",
+            "microprofile-lra",
             "opentelemetry",
             "runtime",
             "security-manager",

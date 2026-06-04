@@ -36,6 +36,7 @@ jobs:
             "microprofile",
             "metrics",
             "micrometer",
+            "microprofile-lra",
             "opentelemetry",
             "runtime",
             "security-manager",
