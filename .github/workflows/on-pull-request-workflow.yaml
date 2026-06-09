@@ -21,9 +21,13 @@ jobs:
           distribution: "adopt"
           java-version: "17"
       - name: Install Dependencies
-        run: npm install
+        run: npm install --ignore-scripts --before="$(date -d '7 days ago' --iso-8601=seconds)"
+      - name: Install Cypress binary
+        run: npx cypress install
       - name: Compile TypeScript
         run: npm run compile
+      - name: Download resources
+        run: npm run resources
       - name: Lint
         run: npm run lint
       - name: Get changed files
