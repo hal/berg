@@ -43,4 +43,4 @@ jobs:
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
           SPECS="${{ steps.changed-files-specific.outputs.all_changed_files }}"
-          KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:24.0 npm run test -- --browser=chrome --specs=$SPECS
+          KEYCLOAK_IMAGE=quay.io/keycloak/keycloak:latest npm run test -- --browser=chrome --specs=$SPECS
