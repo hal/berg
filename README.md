@@ -46,6 +46,7 @@ npm install
 in the root directory to download all of the NPM dependencies specified in `package.json`
 
 > **Security note:** To protect against npm supply chain attacks, it is recommended to use the following flags:
+>
 > - `--ignore-scripts` — prevents pre/post install scripts of dependencies from executing (main attack vector)
 > - `--before` — limits package resolution to versions published more than 7 days ago, relying on security teams removing compromised packages within that window
 >
@@ -54,6 +55,7 @@ in the root directory to download all of the NPM dependencies specified in `pack
 > ```
 >
 > Note: `--ignore-scripts` also skips the project's own `postinstall` hook and the Cypress binary download. Run the following steps manually afterwards:
+>
 > ```
 > npx cypress install
 > npm run compile
