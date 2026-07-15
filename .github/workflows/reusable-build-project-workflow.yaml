@@ -36,7 +36,7 @@ jobs:
         with:
           firefox-version: "latest-esr"
       - name: "Run npm install"
-        run: "npm install --ignore-scripts --before=\"$(date -d '7 days ago' --iso-8601=seconds)\""
+        run: 'npm install --ignore-scripts --before="$(date -d ''7 days ago'' --iso-8601=seconds)"'
       - name: "Install Cypress binary"
         run: "npx cypress install"
       - name: "Run compile"
