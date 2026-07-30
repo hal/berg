@@ -115,6 +115,8 @@ Cypress.Commands.add("flip", (formId, attributeName, value) => {
     cy.formInput(formId, attributeName).wait(1000).should("not.be.checked");
   }
   cy.get('div[data-form-item-group="' + formId + "-" + attributeName + '-editing"]')
+    .filter(":visible")
+    .first()
     .scrollIntoView()
     .find(".bootstrap-switch-label")
     .click()
