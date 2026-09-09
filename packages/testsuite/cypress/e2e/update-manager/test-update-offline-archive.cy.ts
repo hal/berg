@@ -18,8 +18,9 @@ describe("TESTS: Update Manager => Updates => Offline using archive", () => {
 
   it("Ofline update from zip", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
-    cy.get("#update-manager-update-add-actions").click();
-    cy.get("#update-manager-update-offline").click();
+    cy.get("#update-manager-update-update").click();
+    cy.get("input[type='radio'][name='type'][value='OFFLINE']").check();
+    cy.confirmNextInWizard();
     cy.env(["UPDATE_ZIP"]).then((env) => {
       cy.get("input#upload-file-input").selectFile(env["UPDATE_ZIP"] as string, {
         action: "drag-drop",

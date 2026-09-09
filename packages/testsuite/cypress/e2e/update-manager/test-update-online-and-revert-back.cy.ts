@@ -18,8 +18,9 @@ describe("TESTS: Update Manager => Updates => Online updates => Revert", () => {
 
   it("Online update", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
-    cy.get("#update-manager-update-add-actions").click();
-    cy.get("#update-manager-update-online").click();
+    cy.get("#update-manager-update-update").click();
+    cy.get("input[type='radio'][name='type'][value='ONLINE']").check();
+    cy.confirmNextInWizard();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);
     cy.confirmNextInWizard();
     cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Server candidate prepared");

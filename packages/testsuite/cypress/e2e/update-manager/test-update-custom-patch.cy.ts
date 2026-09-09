@@ -18,10 +18,11 @@ describe("TESTS: Update Manager => Updates => Custom patches", () => {
 
   it("Update server by custom patch", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
-    cy.get("#update-manager-update-add-actions").click();
-    cy.get("#update-manager-update-patch").click();
+    cy.get("#update-manager-update-update").click();
+    cy.get("input[type='radio'][name='type'][value='CUSTOM_PATCH']").check();
+    cy.confirmNextInWizard();
     cy.env(["PATCH_ZIP"]).then((env) => {
-      cy.get("input#update-manager-update-patch-form-custom-patch-file-editing").selectFile(
+      cy.get("input#update-manager-properties-form-custom-patch-file-editing").selectFile(
         env["PATCH_ZIP"] as string,
         {
           action: "drag-drop",
@@ -29,7 +30,7 @@ describe("TESTS: Update Manager => Updates => Custom patches", () => {
         },
       );
     });
-    cy.text("update-manager-update-patch-form", "manifest", "org.jboss.qe.eap:one-off-1");
+    cy.text("update-manager-properties-form", "manifest", "org.jboss.qe.eap:one-off-1");
     cy.confirmNextInWizard();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);
     cy.confirmNextInWizard();
