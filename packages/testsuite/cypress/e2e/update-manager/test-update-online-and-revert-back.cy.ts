@@ -33,8 +33,8 @@ describe("TESTS: Update Manager => Updates => Online updates => Revert", () => {
 
   it("Revert the update", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
-    cy.get("#update-manager-update > ul > li").first().click();
-    cy.get("#update-manager-update > ul > li > a.clickable.btn.btn-finder").first().click();
+    cy.get("#update-manager-update > ul > li").eq(1).click();
+    cy.get("#update-manager-update > ul > li").eq(1).find("a.clickable.btn.btn-finder").click();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);
     cy.confirmNextInWizard();
     cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Server candidate prepared");
