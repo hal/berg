@@ -22,7 +22,7 @@ describe("TESTS: Update Manager => Updates => Offline using archive", () => {
     cy.get("input[type='radio'][name='type'][value='OFFLINE_WITH_REPO']").check();
     cy.confirmNextInWizard();
     cy.env(["UPDATE_ZIP"]).then((env) => {
-      cy.get("input#upload-file-input").selectFile(env["UPDATE_ZIP"] as string, {
+      cy.get("input#update-manager-properties-form-maven-repo-files-editing").selectFile(env["UPDATE_ZIP"] as string, {
         action: "drag-drop",
         force: true,
       });
