@@ -23,9 +23,9 @@ describe("TESTS: Update Manager => Updates => Online updates => Revert", () => {
     cy.confirmNextInWizard();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Server candidate prepared");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Server candidate prepared", { timeout: timeoutTime });
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Updates applied");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Updates applied", { timeout: timeoutTime });
     cy.confirmFinishInWizard();
     // After the update there should be visible 3 items in history
     cy.get("#update-manager-update > ul > li").should("have.length", 3);
@@ -37,9 +37,9 @@ describe("TESTS: Update Manager => Updates => Online updates => Revert", () => {
     cy.get("#update-manager-update > ul > li").eq(1).find("a.clickable.btn.btn-finder").click();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Server candidate prepared");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Server candidate prepared", { timeout: timeoutTime });
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Updates applied");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Updates applied", { timeout: timeoutTime });
     cy.confirmFinishInWizard();
     // After the update there should be visible 4 items in history
     cy.get("#update-manager-update > ul > li").should("have.length", 4);
