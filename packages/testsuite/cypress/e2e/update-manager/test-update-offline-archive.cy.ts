@@ -18,10 +18,11 @@ describe("TESTS: Update Manager => Updates => Offline using archive", () => {
 
   it("Ofline update from zip", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
-    cy.get("#update-manager-update-add-actions").click();
-    cy.get("#update-manager-update-offline").click();
+    cy.get("#update-manager-update-update").click();
+    cy.get("input[type='radio'][name='type'][value='OFFLINE_WITH_REPO']").check();
+    cy.confirmNextInWizard();
     cy.env(["UPDATE_ZIP"]).then((env) => {
-      cy.get("input#upload-file-input").selectFile(env["UPDATE_ZIP"] as string, {
+      cy.get("input#update-manager-properties-form-maven-repo-files-editing").selectFile(env["UPDATE_ZIP"] as string, {
         action: "drag-drop",
         force: true,
       });
@@ -29,9 +30,9 @@ describe("TESTS: Update Manager => Updates => Offline using archive", () => {
     cy.confirmNextInWizard();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Server candidate prepared");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Server candidate prepared", { timeout: timeoutTime });
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Updates applied");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Updates applied", { timeout: timeoutTime });
     cy.confirmFinishInWizard();
     // After the update there should be visible 3 items in history
     cy.get("#update-manager-update > ul > li").should("have.length", 3);

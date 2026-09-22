@@ -18,13 +18,14 @@ describe("TESTS: Update Manager => Updates => Online updates => Revert", () => {
 
   it("Online update", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
-    cy.get("#update-manager-update-add-actions").click();
-    cy.get("#update-manager-update-online").click();
+    cy.get("#update-manager-update-update").click();
+    cy.get("input[type='radio'][name='type'][value='ONLINE']").check();
+    cy.confirmNextInWizard();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Server candidate prepared");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Server candidate prepared", { timeout: timeoutTime });
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Updates applied");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Updates applied", { timeout: timeoutTime });
     cy.confirmFinishInWizard();
     // After the update there should be visible 3 items in history
     cy.get("#update-manager-update > ul > li").should("have.length", 3);
@@ -32,13 +33,13 @@ describe("TESTS: Update Manager => Updates => Online updates => Revert", () => {
 
   it("Revert the update", () => {
     cy.navigateToUpdateManagerPage(managementEndpoint, address);
-    cy.get("#update-manager-update > ul > li").first().click();
-    cy.get("#update-manager-update > ul > li > a.clickable.btn.btn-finder").first().click();
+    cy.get("#update-manager-update > ul > li").eq(1).click();
+    cy.get("#update-manager-update > ul > li").eq(1).find("a.clickable.btn.btn-finder").click();
     cy.get("#update-manager-list-updates", { timeout: timeoutTime }).should("be.visible").contains(artifactToBeUpdated);
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Server candidate prepared");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Server candidate prepared", { timeout: timeoutTime });
     cy.confirmNextInWizard();
-    cy.get("div.blank-slate-pf.wizard-pf-complete", { timeout: timeoutTime }).contains("Updates applied");
+    cy.contains("div.blank-slate-pf.wizard-pf-complete", "Updates applied", { timeout: timeoutTime });
     cy.confirmFinishInWizard();
     // After the update there should be visible 4 items in history
     cy.get("#update-manager-update > ul > li").should("have.length", 4);
